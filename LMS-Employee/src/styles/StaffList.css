@@ -1,0 +1,166 @@
+.staff-list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.staff-list-header {
+  background: var(--white);
+  padding: 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.staff-list-header h2 {
+  color: var(--main-color);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.staff-list-header p {
+  color: var(--sub-color);
+  margin: 0;
+}
+
+.staff-filters {
+  background: var(--white);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--point-color);
+}
+
+.department-filter {
+  padding: 10px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--white);
+  cursor: pointer;
+}
+
+.staff-grid {
+  flex: 1;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.staff-card {
+  background: var(--white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 15px;
+}
+
+.staff-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.staff-card.inactive {
+  opacity: 0.6;
+}
+
+.staff-avatar {
+  font-size: 32px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--light-gray);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.staff-info {
+  flex: 1;
+}
+
+.staff-name {
+  color: var(--main-color);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.staff-position {
+  color: var(--point-color);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.staff-department {
+  color: var(--sub-color);
+  font-size: 13px;
+  margin: 0 0 8px 0;
+}
+
+.staff-email {
+  color: var(--sub-color);
+  font-size: 13px;
+  margin: 0 0 12px 0;
+}
+
+.staff-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.join-date {
+  color: var(--sub-color);
+  font-size: 12px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status.active {
+  background-color: rgba(26, 188, 156, 0.1);
+  color: var(--point-color);
+}
+
+.status.inactive {
+  background-color: rgba(149, 165, 166, 0.1);
+  color: var(--sub-color);
+}
+
+.no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--sub-color);
+}

@@ -1,0 +1,58 @@
+.course-management {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-overview {
+  padding: 40px;
+  text-align: center;
+  background: var(--light-gray);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.course-overview h2 {
+  color: var(--main-color);
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.course-overview p {
+  color: var(--sub-color);
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.overview-stats {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+}
+
+.overview-stats .stat-card {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  min-width: 150px;
+}
+
+.overview-stats .stat-card h3 {
+  color: var(--main-color);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.overview-stats .stat-number {
+  color: var(--point-color);
+  font-size: 32px;
+  font-weight: bold;
+  display: block;
+}

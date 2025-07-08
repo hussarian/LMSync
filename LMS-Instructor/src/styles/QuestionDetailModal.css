@@ -1,0 +1,295 @@
+.question-detail-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90vw;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 20px;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-title h3 {
+  color: #2c3e50;
+  margin: 0 0 5px 0;
+}
+
+.modal-title p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #7f8c8d;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #2c3e50;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.question-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.question-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.meta-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.meta-item label {
+  color: #2c3e50;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.meta-item input,
+.meta-item select,
+.meta-item textarea {
+  padding: 10px 12px;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.meta-item input:focus,
+.meta-item select:focus,
+.meta-item textarea:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.type-badge,
+.difficulty-badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.type-badge.multiple-choice {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.type-badge.short-answer {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.type-badge.essay {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.type-badge.coding {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.difficulty-badge.beginner {
+  background: #d4edda;
+  color: #155724;
+}
+
+.difficulty-badge.intermediate {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.difficulty-badge.advanced {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.points {
+  font-weight: bold;
+  color: #3498db;
+  font-size: 1.1rem;
+}
+
+.question-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.content-display,
+.explanation-display {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  line-height: 1.6;
+  color: #2c3e50;
+}
+
+.question-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.option-number {
+  min-width: 25px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.option-text {
+  flex: 1;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  position: relative;
+}
+
+.option-text.correct {
+  background: #d4edda;
+  color: #155724;
+  font-weight: 500;
+}
+
+.correct-mark {
+  color: #28a745;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.correct-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.question-explanation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal-footer {
+  padding: 20px;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-secondary {
+  padding: 10px 20px;
+  border: 1px solid #dee2e6;
+  background: white;
+  color: #6c757d;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background: #f8f9fa;
+}
+
+.btn-primary {
+  padding: 10px 20px;
+  border: none;
+  background: #3498db;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+}
+
+.btn-danger {
+  padding: 10px 20px;
+  border: none;
+  background: #e74c3c;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+@media (max-width: 768px) {
+  .question-detail-modal {
+    width: 95vw;
+    height: 95vh;
+  }
+
+  .meta-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .modal-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-footer button {
+    width: 100%;
+  }
+}

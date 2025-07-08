@@ -1,0 +1,49 @@
+.exam-management {
+  padding: 20px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.exam-overview {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.exam-overview h2 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.exam-overview p {
+  color: #7f8c8d;
+  margin-bottom: 30px;
+}
+
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.overview-stats .stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.overview-stats .stat-card h3 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 1.1rem;
+}
+
+.overview-stats .stat-card p {
+  color: #3498db;
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}

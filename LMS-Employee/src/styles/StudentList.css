@@ -1,0 +1,192 @@
+.student-list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--light-gray);
+}
+
+.student-list-header {
+  background: var(--white);
+  padding: 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.student-list-header h2 {
+  color: var(--main-color);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+}
+
+.student-list-header p {
+  color: var(--sub-color);
+  margin: 0;
+}
+
+.student-filters {
+  background: var(--white);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--point-color);
+}
+
+.course-filter,
+.status-filter {
+  padding: 10px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  background: var(--white);
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.student-stats {
+  background: var(--white);
+  padding: 20px 30px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  gap: 40px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--point-color);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--sub-color);
+}
+
+.student-table-container {
+  flex: 1;
+  overflow: auto;
+  background: var(--white);
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+  padding: 10px;
+  text-align: center;
+}
+
+.student-table th {
+  background: var(--main-color);
+  color: var(--white);
+  padding: 15px;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.student-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.student-row {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.student-row:hover {
+  background-color: var(--light-gray);
+}
+
+.student-id {
+  font-weight: 500;
+  color: var(--main-color);
+}
+
+.student-name {
+  font-weight: 600;
+  color: var(--main-color);
+}
+
+.grade {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.grade-A,
+.grade-Aplus {
+  background: rgba(46, 204, 113, 0.1);
+  color: #27ae60;
+}
+
+.grade-B,
+.grade-Bplus,
+.grade-Bminus {
+  background: rgba(52, 152, 219, 0.1);
+  color: #3498db;
+}
+
+.grade-C {
+  background: rgba(241, 196, 15, 0.1);
+  color: #f39c12;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status.재학 {
+  background: rgba(26, 188, 156, 0.1);
+  color: var(--point-color);
+}
+
+.status.휴학 {
+  background: rgba(241, 196, 15, 0.1);
+  color: #f39c12;
+}
+
+.status.수료 {
+  background: rgba(155, 89, 182, 0.1);
+  color: #9b59b6;
+}
+
+.no-results {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: var(--sub-color);
+  background: var(--white);
+}
