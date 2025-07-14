@@ -21,4 +21,8 @@ spring:
         show-sql: true
         properties:
             hibernate:
+<<<<<<< HEAD
                 format_sql: true
+=======
+                format_sql: true
+>>>>>>> f778e635a4135b34374d98681e375e866c88ca55
