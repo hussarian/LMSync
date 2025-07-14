@@ -10,7 +10,10 @@ spring:
 
     jpa:
         hibernate:
+<<<<<<< HEAD
  #          ddl-auto: update
+=======
+>>>>>>> course
             ddl-auto: none
             naming:
                 implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
