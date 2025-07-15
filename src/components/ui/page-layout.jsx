@@ -1,7 +1,6 @@
 "use client"
 
 import Header from "@/components/layout/header"
-import WindowsActivation from "@/components/ui/windows-activation"
 import { useEffect, useState } from "react"
 
 export default function PageLayout({ children, currentPage, backgroundColor = "#f8f9fa" }) {
@@ -23,7 +22,6 @@ export default function PageLayout({ children, currentPage, backgroundColor = "#
         userName={currentUser?.name || "사용자"}
       />
       {children}
-      <WindowsActivation />
     </div>
   )
 }

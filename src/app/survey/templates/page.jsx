@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Eye, Edit, Trash2, Plus, Search, Filter, Check, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import PageLayout from "@/components/ui/page-layout"
+import Sidebar from"@/components/layout/sidebar"
 
 export default function SurveyTemplatesPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -16,6 +17,12 @@ export default function SurveyTemplatesPage() {
     category: "강의 평가",
   })
 
+    // 사이드바 메뉴 구성
+    const sidebarMenuItems = [
+      { href: "/survey/items", label: "평가 항목", key: "survey-items" },
+      { href: "/survey/lectures", label: "강의 리스트", key: "survey-lectures" },
+      { href: "/survey/templates", label: "템플릿 목록", key: "survey-templates" },
+    ]
   // 샘플 템플릿 데이터
   const templates = [
     {
@@ -147,8 +154,9 @@ export default function SurveyTemplatesPage() {
   ]
 
   return (
-    <PageLayout title="설문 평가 관리" sidebarItems={sidebarItems} currentPath="/survey/templates">
+    <PageLayout title="설문 평가 관리">
       <div className="space-y-6">
+      <Sidebar title="설문 평가 관리"  menuItems={sidebarMenuItems} currentPath="/survey/templates" />
         {/* 통계 카드 */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg shadow-sm border">
