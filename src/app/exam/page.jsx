@@ -44,27 +44,7 @@ export default function ExamPage() {
       completed: 32,
       endDate: "2024-01-20",
       avgScore: 78.5,
-    },
-    {
-      id: 2,
-      title: "React 심화 기말고사",
-      course: "프론트엔드 개발",
-      status: "완료",
-      participants: 38,
-      completed: 38,
-      endDate: "2024-01-18",
-      avgScore: 82.3,
-    },
-    {
-      id: 3,
-      title: "데이터베이스 설계 퀴즈",
-      course: "백엔드 개발",
-      status: "예정",
-      participants: 52,
-      completed: 0,
-      endDate: "2024-01-25",
-      avgScore: 0,
-    },
+    }
   ]
 
   const getStatusColor = (status) => {

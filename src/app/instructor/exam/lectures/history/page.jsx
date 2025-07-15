@@ -17,7 +17,7 @@ export default function InstructorLectureHistoryPage() {
   const sidebarItems = [
     { key: "my-exams", label: "내 시험 관리", href: "/instructor/exam/my-exams" },
     { key: "question-management", label: "문제 관리", href: "/instructor/exam/question-bank" },
-    { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
+    { key: "history", label: "내 과정 성적", href: "/instructor/exam/lectures/history" },
   ]
 
   // 담당 강의 이력 데이터

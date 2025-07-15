@@ -50,7 +50,8 @@ export default function CreateExamPage() {
 
   const sidebarItems = [
     { key: "my-exams", label: "내 시험 관리", href: "/instructor/exam/my-exams" },
-    { key: "question-management", label: "문제 관리", href: "/instructor/exam/questions" },
+    { key: "question-management", label: "문제 관리", href: "/instructor/exam/question-bank" },
+    { key: "history", label: "내 과정 성적", href: "/instructor/exam/lectures/history" },
   ]
 
   // 강사가 담당하는 강의 목록
@@ -97,7 +98,7 @@ export default function CreateExamPage() {
       subject: "프론트엔드 개발",
       detailSubject: "JavaScript 기초",
       question: "JavaScript에서 변수를 선언하는 키워드를 모두 나열하시오.",
-      type: "주관식",
+      type: "서술형",
       difficulty: "보통",
       score: 10,
       explanation: "var, let, const가 JavaScript에서 변수를 선언하는 키워드입니다.",
@@ -109,7 +110,7 @@ export default function CreateExamPage() {
       subject: "프론트엔드 개발",
       detailSubject: "React 기초",
       question: "React에서 컴포넌트의 상태를 관리하기 위해 사용하는 Hook은?",
-      type: "주관식",
+      type: "서술형",
       difficulty: "보통",
       score: 8,
       explanation: "useState Hook을 사용하여 함수형 컴포넌트에서 상태를 관리할 수 있습니다.",
@@ -131,7 +132,7 @@ export default function CreateExamPage() {
   ]
 
   const examTypes = ["퀴즈", "중간고사", "기말고사", "실습평가", "과제"]
-  const questionTypes = ["객관식", "주관식", "코드형"]
+  const questionTypes = ["객관식", "서술형", "코드형"]
 
   const handleExamDataChange = (field, value) => {
     setExamData((prev) => ({

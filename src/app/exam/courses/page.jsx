@@ -66,8 +66,6 @@ export default function ExamCoursesPage() {
   const subjectGrades = {
     1: [
       { id: 1, name: "HTML/CSS 기초", avgScore: 82.5, passRate: 85, examCount: 2 },
-      { id: 2, name: "JavaScript 기초", avgScore: 75.3, passRate: 78, examCount: 3 },
-      { id: 3, name: "반응형 웹 디자인", avgScore: 79.8, passRate: 82, examCount: 2 },
     ],
     
   }

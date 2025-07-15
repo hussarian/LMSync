@@ -45,85 +45,14 @@ export default function StudentGradesPage() {
             finalGrade: "A",
             gradePoint: 4.0,
           },
-          {
-            id: 2,
-            name: "알고리즘",
-            code: "CS202",
-            credits: 3,
-            instructor: "이교수",
-            midterm: 82,
-            final: 85,
-            assignments: 90,
-            attendance: 92,
-            finalGrade: "B+",
-            gradePoint: 3.5,
-          },
-          {
-            id: 3,
-            name: "데이터베이스",
-            code: "CS301",
-            credits: 3,
-            instructor: "박교수",
-            midterm: 90,
-            final: 88,
-            assignments: 92,
-            attendance: 98,
-            finalGrade: "A-",
-            gradePoint: 3.7,
-          },
-          {
-            id: 4,
-            name: "소프트웨어공학",
-            code: "CS302",
-            credits: 3,
-            instructor: "최교수",
-            midterm: 85,
-            final: 87,
-            assignments: 88,
-            attendance: 90,
-            finalGrade: "B+",
-            gradePoint: 3.5,
-          },
-          {
-            id: 5,
-            name: "운영체제",
-            code: "CS303",
-            credits: 3,
-            instructor: "정교수",
-            midterm: 92,
-            final: 95,
-            assignments: 94,
-            attendance: 100,
-            finalGrade: "A+",
-            gradePoint: 4.3,
-          },
-          {
-            id: 6,
-            name: "네트워크",
-            code: "CS304",
-            credits: 3,
-            instructor: "한교수",
-            midterm: 78,
-            final: 82,
-            assignments: 80,
-            attendance: 88,
-            finalGrade: "B",
-            gradePoint: 3.0,
-          },
+          
         ],
         gradeDistribution: {
-          "A+": 1,
-          A: 1,
-          "A-": 1,
-          "B+": 2,
-          B: 1,
-          "B-": 0,
-          "C+": 0,
-          C: 0,
-          "C-": 0,
-          "D+": 0,
-          D: 0,
-          F: 0,
+          "90점 이상": 1,
+          "80점 이상": 2,
+          "70점 이상" : 0,
+          "60점 이상" : 0,
+          "60점 미만" : 0
         },
       })
       setLoading(false)
@@ -134,18 +63,11 @@ export default function StudentGradesPage() {
 
   const getGradeColor = (grade) => {
     const colors = {
-      "A+": "text-green-600 bg-green-50",
-      A: "text-green-600 bg-green-50",
-      "A-": "text-green-600 bg-green-50",
-      "B+": "text-blue-600 bg-blue-50",
-      B: "text-blue-600 bg-blue-50",
-      "B-": "text-blue-600 bg-blue-50",
-      "C+": "text-yellow-600 bg-yellow-50",
-      C: "text-yellow-600 bg-yellow-50",
-      "C-": "text-yellow-600 bg-yellow-50",
-      "D+": "text-orange-600 bg-orange-50",
-      D: "text-orange-600 bg-orange-50",
-      F: "text-red-600 bg-red-50",
+      "90점 이상": "text-green-600 bg-green-50",
+      "80점 이상": "text-blue-600 bg-blue-50",
+      "70점 이상": "text-yellow-600 bg-yellow-50",
+      "60점 이상": "text-orange-600 bg-orange-50",
+      "60점 미만": "text-red-600 bg-red-50",
     }
     return colors[grade] || "text-gray-600 bg-gray-50"
   }
@@ -259,7 +181,7 @@ export default function StudentGradesPage() {
                         학점
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        담당교수
+                        담당강사
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         중간고사

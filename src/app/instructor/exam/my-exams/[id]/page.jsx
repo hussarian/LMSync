@@ -48,7 +48,7 @@ export default function ExamDetailPage() {
     course: "웹 개발 기초",
     courseCode: "WEB101",
     status: "진행중",
-    type: "중간고사",
+    type: "서술형",
     description: "JavaScript의 기본 문법과 DOM 조작에 대한 이해도를 평가하는 중간고사입니다.",
     participants: 25,
     submitted: 18,
@@ -73,7 +73,7 @@ export default function ExamDetailPage() {
       },
       {
         id: 2,
-        type: "주관식",
+        type: "서술형",
         question: "DOM이란 무엇인지 설명하세요.",
         points: 10,
       },
@@ -757,7 +757,7 @@ export default function ExamDetailPage() {
                       </div>
                     )}
 
-                    {question.type === "주관식" && (
+                    {question.type === "서술형" && (
                       <div className="mb-4">
                         <p className="font-medium mb-2" style={{ color: "#2C3E50" }}>
                           학생 답안
@@ -992,7 +992,7 @@ export default function ExamDetailPage() {
                             className="px-3 py-1 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                           >
                             <option value="객관식">객관식</option>
-                            <option value="주관식">주관식</option>
+                            <option value="서술형">서술형</option>
                             <option value="코드형">코드형</option>
                           </select>
                           <input

@@ -57,107 +57,14 @@ export default function StudentExamsPage() {
         },
         {
           id: 3,
-          type: "주관식",
+          type: "서술형",
           question: "JavaScript에서 배열의 마지막 요소를 제거하는 메서드의 이름을 작성하세요.",
           correctAnswer: "pop",
           score: 10,
         },
       ],
     },
-    {
-      id: 2,
-      title: "React 심화 기말고사",
-      subject: "프론트엔드 개발",
-      instructor: "이강사",
-      type: "기말고사",
-      status: "completed",
-      graded: true,
-      startDate: "2024-01-10",
-      endDate: "2024-01-11",
-      duration: 120,
-      totalQuestions: 25,
-      totalScore: 100,
-      myScore: 85,
-      grade: "B+",
-      attempts: 1,
-      maxAttempts: 1,
-      description: "React Hooks, 상태 관리, 컴포넌트 설계에 대한 종합 평가입니다.",
-      submittedAt: "2024-01-10 14:30",
-      questions: [
-        {
-          id: 1,
-          type: "객관식",
-          question: "React에서 상태를 관리하는 Hook은 무엇인가요?",
-          options: ["useEffect", "useState", "useContext", "useReducer"],
-          correctAnswer: 1,
-          userAnswer: 1,
-          score: 4,
-          isCorrect: true,
-          feedback: "정답입니다. useState는 함수형 컴포넌트에서 상태를 관리하는 기본적인 Hook입니다.",
-        },
-        {
-          id: 2,
-          type: "객관식",
-          question: "useEffect Hook의 두 번째 매개변수는 무엇인가요?",
-          options: ["콜백 함수", "의존성 배열", "상태 값", "이벤트 객체"],
-          correctAnswer: 1,
-          userAnswer: 0,
-          score: 4,
-          isCorrect: false,
-          feedback: "의존성 배열(dependency array)이 정답입니다. 이 배열의 값이 변경될 때만 useEffect가 실행됩니다.",
-        },
-        {
-          id: 3,
-          type: "주관식",
-          question: "React에서 컴포넌트 간 데이터를 전달하는 방법을 하나 작성하세요.",
-          correctAnswer: "props",
-          userAnswer: "props",
-          score: 5,
-          isCorrect: true,
-          feedback: "정답입니다. props는 부모 컴포넌트에서 자식 컴포넌트로 데이터를 전달하는 기본적인 방법입니다.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Python 기초 퀴즈",
-      subject: "프로그래밍 기초",
-      instructor: "박강사",
-      type: "퀴즈",
-      status: "upcoming",
-      graded: false,
-      startDate: "2024-01-20",
-      endDate: "2024-01-21",
-      duration: 60,
-      totalQuestions: 15,
-      totalScore: 75,
-      myScore: null,
-      grade: null,
-      attempts: 0,
-      maxAttempts: 2,
-      description: "Python 기본 문법과 자료구조에 대한 이해도를 확인합니다.",
-      questions: [],
-    },
-    {
-      id: 4,
-      title: "데이터베이스 중간고사",
-      subject: "데이터베이스",
-      instructor: "최강사",
-      type: "중간고사",
-      status: "expired",
-      graded: false,
-      startDate: "2024-01-05",
-      endDate: "2024-01-06",
-      duration: 100,
-      totalQuestions: 30,
-      totalScore: 100,
-      myScore: 0,
-      grade: "F",
-      attempts: 0,
-      maxAttempts: 1,
-      description: "관계형 데이터베이스와 SQL에 대한 기본 지식을 평가합니다.",
-      questions: [],
-    },
+   
   ])
 
   // 통계 계산
@@ -266,7 +173,7 @@ export default function StudentExamsPage() {
         if (Number.parseInt(userAnswer) === question.correctAnswer) {
           score += question.score
         }
-      } else if (question.type === "주관식") {
+      } else if (question.type === "서술형") {
         if (userAnswer && userAnswer.toLowerCase().trim() === question.correctAnswer.toLowerCase()) {
           score += question.score
         }
@@ -433,7 +340,7 @@ export default function StudentExamsPage() {
                               <span className="font-medium">과목:</span> {exam.subject}
                             </div>
                             <div>
-                              <span className="font-medium">담당교수:</span> {exam.instructor}
+                              <span className="font-medium">강사:</span> {exam.instructor}
                             </div>
                             <div>
                               <span className="font-medium">시험시간:</span> {exam.duration}분
@@ -553,7 +460,7 @@ export default function StudentExamsPage() {
             <div className="p-4 border-b bg-gray-50">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">
-                  문��� {currentQuestion + 1} / {selectedExam.questions.length}
+                  문제 {currentQuestion + 1} / {selectedExam.questions.length}
                 </span>
                 <span className="text-sm text-gray-600">
                   답변 완료: {Object.keys(answers).length} / {selectedExam.questions.length}
@@ -608,7 +515,7 @@ export default function StudentExamsPage() {
                     </div>
                   )}
 
-                  {selectedExam.questions[currentQuestion].type === "주관식" && (
+                  {selectedExam.questions[currentQuestion].type === "서술형" && (
                     <div>
                       <textarea
                         value={answers[selectedExam.questions[currentQuestion].id] || ""}
@@ -818,7 +725,7 @@ export default function StudentExamsPage() {
                         </div>
                       )}
 
-                      {question.type === "주관식" && (
+                      {question.type === "서술형" && (
                         <div className="space-y-2">
                           <div className="text-sm">
                             <span className="font-medium text-gray-600">내 답안:</span>

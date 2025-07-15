@@ -53,7 +53,7 @@ export default function QuestionBankPage() {
       {
         id: 2,
         question: "React의 useState Hook에 대해 설명하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "웹프로그래밍",
         difficulty: "상",
         points: 10,
@@ -75,7 +75,7 @@ export default function QuestionBankPage() {
       {
         id: 4,
         question: "데이터베이스의 정규화에 대해 설명하고, 1NF, 2NF, 3NF의 차이점을 서술하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "데이터베이스",
         difficulty: "상",
         points: 15,
@@ -144,7 +144,7 @@ export default function QuestionBankPage() {
     switch (type) {
       case "객관식":
         return "text-blue-600 bg-blue-50"
-      case "주관식":
+      case "서술형":
         return "text-purple-600 bg-purple-50"
       case "코드형":
         return "text-orange-600 bg-orange-50"
@@ -367,7 +367,7 @@ export default function QuestionBankPage() {
                 >
                   <option value="">전체 유형</option>
                   <option value="객관식">객관식</option>
-                  <option value="주관식">주관식</option>
+                  <option value="서술형">서술형</option>
                   <option value="코드형">코드형</option>
                 </select>
 
@@ -508,7 +508,7 @@ export default function QuestionBankPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="객관식">객관식</option>
-                      <option value="주관식">주관식</option>
+                      <option value="서술형">서술형</option>
                       <option value="코드형">코드형</option>
                     </select>
                   </div>
@@ -650,7 +650,7 @@ export default function QuestionBankPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="객관식">객관식</option>
-                      <option value="주관식">주관식</option>
+                      <option value="서술형">서술형</option>
                       <option value="코드형">코드형</option>
                     </select>
                   </div>
@@ -660,7 +660,7 @@ export default function QuestionBankPage() {
                       type="text"
                       value={editingQuestion.subject}
                       onChange={(e) => handleEditQuestionChange("subject", e.target.value)}
-                      placeholder="과목���을 입력하세요"
+                      placeholder="과목명을 입력하세요"
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>

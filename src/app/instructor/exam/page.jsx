@@ -11,7 +11,7 @@ export default function InstructorExamPage() {
   const sidebarItems = [
     { key: "my-exams", label: "내 시험 관리", href: "/instructor/exam/my-exams" },
     { key: "question-management", label: "문제 관리", href: "/instructor/exam/question-bank" },
-    { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
+    { key: "history", label: "내 과정 성적", href: "/instructor/exam/lectures/history" },
   ]
 
   const stats = [
@@ -53,42 +53,6 @@ export default function InstructorExamPage() {
       startDate: "2024-01-15",
       endDate: "2024-01-20",
       avgScore: 78.5,
-    },
-    {
-      id: 2,
-      title: "React 컴포넌트 퀴즈",
-      course: "프론트엔드 개발",
-      status: "채점중",
-      participants: 22,
-      submitted: 22,
-      graded: 15,
-      startDate: "2024-01-10",
-      endDate: "2024-01-18",
-      avgScore: 85.2,
-    },
-    {
-      id: 3,
-      title: "HTML/CSS 기말고사",
-      course: "웹 개발 기초",
-      status: "완료",
-      participants: 28,
-      submitted: 28,
-      graded: 28,
-      startDate: "2024-01-05",
-      endDate: "2024-01-12",
-      avgScore: 79.8,
-    },
-    {
-      id: 4,
-      title: "Node.js 실습 평가",
-      course: "백엔드 개발",
-      status: "예정",
-      participants: 20,
-      submitted: 0,
-      graded: 0,
-      startDate: "2024-01-25",
-      endDate: "2024-01-30",
-      avgScore: 0,
     },
   ]
 
