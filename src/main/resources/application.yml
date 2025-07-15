@@ -10,7 +10,10 @@ spring:
 
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none
+            naming:
+                implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+                physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
         show-sql: true
         properties:
             hibernate:
@@ -41,3 +44,6 @@ app:
     frontend-admin-url: http://localhost:7001
     domain: localhost
     dev-mode: true
+
+server:
+  port: 3001
