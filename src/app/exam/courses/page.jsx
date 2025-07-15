@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { BookOpen, Search, Filter, ChevronDown, ChevronUp, Plus, Clock, CheckCircle } from "lucide-react"
 import Sidebar from "@/components/layout/sidebar"
 import Header from "@/components/layout/header"
+import { Fragment } from 'react';
 
 export default function ExamCoursesPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -43,6 +44,7 @@ export default function ExamCoursesPage() {
     },
   ]
 
+  // 더미데이터
   const courses = [
     {
       id: 1,
@@ -58,62 +60,7 @@ export default function ExamCoursesPage() {
       startDate: "2024-01-15",
       endDate: "2024-03-15",
     },
-    {
-      id: 2,
-      code: "REACT001",
-      name: "React 심화 과정",
-      category: "프론트엔드",
-      instructor: "��리액트",
-      duration: "6주",
-      students: 38,
-      examStatus: "완료",
-      examCount: 2,
-      avgScore: 82.3,
-      startDate: "2024-01-08",
-      endDate: "2024-02-19",
-    },
-    {
-      id: 3,
-      code: "DB001",
-      name: "데이터베이스 설계",
-      category: "백엔드",
-      instructor: "박데이터",
-      duration: "10주",
-      students: 52,
-      examStatus: "예정",
-      examCount: 4,
-      avgScore: 0,
-      startDate: "2024-02-01",
-      endDate: "2024-04-12",
-    },
-    {
-      id: 4,
-      code: "JS001",
-      name: "JavaScript 기초",
-      category: "프론트엔드",
-      instructor: "최자바",
-      duration: "4주",
-      students: 67,
-      examStatus: "완료",
-      examCount: 2,
-      avgScore: 75.8,
-      startDate: "2023-12-01",
-      endDate: "2023-12-29",
-    },
-    {
-      id: 5,
-      code: "NODE001",
-      name: "Node.js 서버 개발",
-      category: "백엔드",
-      instructor: "정노드",
-      duration: "12주",
-      students: 29,
-      examStatus: "진행중",
-      examCount: 5,
-      avgScore: 80.2,
-      startDate: "2024-01-22",
-      endDate: "2024-04-15",
-    },
+    
   ]
 
   const subjectGrades = {
@@ -122,22 +69,7 @@ export default function ExamCoursesPage() {
       { id: 2, name: "JavaScript 기초", avgScore: 75.3, passRate: 78, examCount: 3 },
       { id: 3, name: "반응형 웹 디자인", avgScore: 79.8, passRate: 82, examCount: 2 },
     ],
-    2: [
-      { id: 4, name: "React 컴포넌트", avgScore: 84.2, passRate: 88, examCount: 2 },
-      { id: 5, name: "상태 관리", avgScore: 80.1, passRate: 83, examCount: 2 },
-    ],
-    3: [
-      { id: 6, name: "데이터베이스 설계", avgScore: 0, passRate: 0, examCount: 4 },
-      { id: 7, name: "SQL 기초", avgScore: 0, passRate: 0, examCount: 3 },
-    ],
-    4: [
-      { id: 8, name: "변수와 함수", avgScore: 78.9, passRate: 81, examCount: 1 },
-      { id: 9, name: "DOM 조작", avgScore: 72.7, passRate: 75, examCount: 1 },
-    ],
-    5: [
-      { id: 10, name: "Express.js", avgScore: 83.1, passRate: 86, examCount: 3 },
-      { id: 11, name: "데이터베이스 연동", avgScore: 77.3, passRate: 79, examCount: 2 },
-    ],
+    
   }
 
   const categories = ["all", "프론트엔드", "백엔드", "풀스택", "데이터사이언스"]
@@ -290,7 +222,7 @@ export default function ExamCoursesPage() {
                     </thead>
                     <tbody>
                       {filteredCourses.map((course) => (
-                        <>
+                        <Fragment key={course.id}>
                           <tr key={course.id} className="border-b hover:bg-gray-50">
                             <td className="py-3 px-4">
                               <div>
@@ -395,7 +327,7 @@ export default function ExamCoursesPage() {
                               </td>
                             </tr>
                           )}
-                        </>
+                        </Fragment>
                       ))}
                     </tbody>
                   </table>
@@ -482,10 +414,11 @@ export default function ExamCoursesPage() {
                       {Array.from({ length: selectedSubject.examCount }, (_, index) => (
                         <div key={index} className="border rounded-lg p-4">
                           <div className="flex justify-between items-center mb-3">
-                            <h4 className="font-semibold">시험 {index + 1}</h4>
-                            <Badge className="bg-blue-100 text-blue-800">
+                            {/* 시험명이 들어갈 예정 */}
+                            <h4 className="font-semibold">시험 {index + 1}</h4> 
+                            {/* <Badge className="bg-blue-100 text-blue-800">
                               {index === 0 ? "중간고사" : index === selectedSubject.examCount - 1 ? "기말고사" : "퀴즈"}
-                            </Badge>
+                            </Badge> */}
                           </div>
                           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                             <div>
@@ -531,25 +464,25 @@ export default function ExamCoursesPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-5 gap-4 text-center">
-                    <div className="bg-red-50 p-4 rounded-lg">
-                      <div className="text-2xl font-bold text-red-600">3명</div>
-                      <div className="text-sm text-gray-600">F (0-59점)</div>
-                    </div>
-                    <div className="bg-orange-50 p-4 rounded-lg">
-                      <div className="text-2xl font-bold text-orange-600">5명</div>
-                      <div className="text-sm text-gray-600">D (60-69점)</div>
-                    </div>
-                    <div className="bg-yellow-50 p-4 rounded-lg">
-                      <div className="text-2xl font-bold text-yellow-600">12명</div>
-                      <div className="text-sm text-gray-600">C (70-79점)</div>
+                    <div className="bg-green-50 p-4 rounded-lg">
+                      <div className="text-2xl font-bold text-green-600">7명</div>
+                      <div className="text-sm text-gray-600">A (90-100점)</div>
                     </div>
                     <div className="bg-blue-50 p-4 rounded-lg">
                       <div className="text-2xl font-bold text-blue-600">18명</div>
                       <div className="text-sm text-gray-600">B (80-89점)</div>
                     </div>
-                    <div className="bg-green-50 p-4 rounded-lg">
-                      <div className="text-2xl font-bold text-green-600">7명</div>
-                      <div className="text-sm text-gray-600">A (90-100점)</div>
+                    <div className="bg-yellow-50 p-4 rounded-lg">
+                      <div className="text-2xl font-bold text-yellow-600">12명</div>
+                      <div className="text-sm text-gray-600">C (70-79점)</div>
+                    </div>
+                    <div className="bg-orange-50 p-4 rounded-lg">
+                      <div className="text-2xl font-bold text-orange-600">5명</div>
+                      <div className="text-sm text-gray-600">D (60-69점)</div>
+                    </div>
+                    <div className="bg-red-50 p-4 rounded-lg">
+                      <div className="text-2xl font-bold text-red-600">3명</div>
+                      <div className="text-sm text-gray-600">F (0-59점)</div>
                     </div>
                   </div>
                 </CardContent>

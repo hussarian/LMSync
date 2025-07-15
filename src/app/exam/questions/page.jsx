@@ -5,6 +5,7 @@ import { Search, Plus, FileText, BarChart3, ChevronDown, ChevronUp } from "lucid
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 import { Button } from "@/components/ui/button"
+import { Fragment } from 'react';
 
 export default function ExamQuestionsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -46,58 +47,7 @@ export default function ExamQuestionsPage() {
       lastUpdated: "2024-01-15",
       status: "활성",
     },
-    {
-      id: 2,
-      name: "React 심화",
-      code: "RC002",
-      category: "프론트엔드",
-      instructor: "이리액트",
-      totalQuestions: 38,
-      easyQuestions: 12,
-      mediumQuestions: 18,
-      hardQuestions: 8,
-      lastUpdated: "2024-01-12",
-      status: "활성",
-    },
-    {
-      id: 3,
-      name: "Node.js 서버 개발",
-      code: "ND003",
-      category: "백엔드",
-      instructor: "박노드",
-      totalQuestions: 52,
-      easyQuestions: 18,
-      mediumQuestions: 22,
-      hardQuestions: 12,
-      lastUpdated: "2024-01-10",
-      status: "활성",
-    },
-    {
-      id: 4,
-      name: "데이터베이스 설계",
-      code: "DB004",
-      category: "데이터베이스",
-      instructor: "최디비",
-      totalQuestions: 30,
-      easyQuestions: 10,
-      mediumQuestions: 15,
-      hardQuestions: 5,
-      lastUpdated: "2024-01-08",
-      status: "비활성",
-    },
-    {
-      id: 5,
-      name: "Python 데이터 분석",
-      code: "PY005",
-      category: "데이터 분석",
-      instructor: "정파이썬",
-      totalQuestions: 41,
-      easyQuestions: 14,
-      mediumQuestions: 19,
-      hardQuestions: 8,
-      lastUpdated: "2024-01-05",
-      status: "활성",
-    },
+    
   ]
 
   const subjectQuestions = {
@@ -131,63 +81,7 @@ export default function ExamQuestionsPage() {
         createdDate: "2024-01-15",
       },
     ],
-    2: [
-      // React 심화
-      {
-        id: 4,
-        detailSubject: "컴포넌트 생명주기",
-        question: "useEffect 훅의 의존성 배열이 빈 배열일 때의 동작을 설명하시오.",
-        type: "주관식",
-        difficulty: "보통",
-        points: 10,
-        createdDate: "2024-01-08",
-      },
-      {
-        id: 5,
-        detailSubject: "상태 관리",
-        question: "Redux와 Context API의 차이점은?",
-        type: "객관식",
-        difficulty: "어려움",
-        points: 15,
-        createdDate: "2024-01-10",
-      },
-    ],
-    3: [
-      // Node.js 서버 개발
-      {
-        id: 6,
-        detailSubject: "Express.js 기초",
-        question: "Express.js에서 미들웨어의 역할을 설명하시오.",
-        type: "주관식",
-        difficulty: "보통",
-        points: 12,
-        createdDate: "2024-01-05",
-      },
-    ],
-    4: [
-      // 데이터베이스 설계
-      {
-        id: 7,
-        detailSubject: "관계형 데이터베이스",
-        question: "정규화의 목적과 1차, 2차, 3차 정규화를 설명하시오.",
-        type: "주관식",
-        difficulty: "어려움",
-        points: 20,
-        createdDate: "2024-01-03",
-      },
-    ],
-    5: [
-      // Python 데이터 분석
-      {
-        id: 8,
-        detailSubject: "Pandas 기초",
-        question: "DataFrame과 Series의 차이점을 설명하시오.",
-        type: "주관식",
-        difficulty: "쉬움",
-        points: 8,
-        createdDate: "2024-01-01",
-      },
-    ],
+    
   }
 
   // 필터링된 과목 목록
@@ -366,9 +260,9 @@ export default function ExamQuestionsPage() {
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       문제 현황
                     </th>
-                    <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {/* <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       난이도별 분포
-                    </th>
+                    </th> */}
                     <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       상태
                     </th>
@@ -382,7 +276,7 @@ export default function ExamQuestionsPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredSubjects.map((subject) => (
-                    <>
+                    <Fragment key={course.id}>
                       <tr key={subject.id} className="hover:bg-gray-50">
                         <td className="py-3 px-4">
                           <div>
@@ -401,7 +295,7 @@ export default function ExamQuestionsPage() {
                         <td className="py-3 px-4">
                           <div className="text-sm font-medium text-gray-900">총 {subject.totalQuestions}개</div>
                         </td>
-                        <td className="py-3 px-4">
+                        {/* <td className="py-3 px-4">
                           <div className="flex space-x-2 text-xs">
                             <span className="px-2 py-1 rounded-full bg-green-100 text-green-800">
                               쉬움 {subject.easyQuestions}
@@ -413,7 +307,7 @@ export default function ExamQuestionsPage() {
                               어려움 {subject.hardQuestions}
                             </span>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="py-3 px-4">
                           <span
                             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
@@ -485,7 +379,7 @@ export default function ExamQuestionsPage() {
                           </td>
                         </tr>
                       )}
-                    </>
+                    </Fragment>
                   ))}
                 </tbody>
               </table>
@@ -528,8 +422,8 @@ export default function ExamQuestionsPage() {
                       <span className="text-sm text-gray-600">문제 유형:</span>
                       <span className="text-sm font-medium">{selectedQuestion.type}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">난이도:</span>
+                    {/* <div className="flex justify-between">
+                       <span className="text-sm text-gray-600">난이도:</span>
                       <span
                         className={`text-sm font-medium px-2 py-1 rounded-full ${
                           selectedQuestion.difficulty === "쉬움"
@@ -540,8 +434,8 @@ export default function ExamQuestionsPage() {
                         }`}
                       >
                         {selectedQuestion.difficulty}
-                      </span>
-                    </div>
+                      </span> 
+                    </div> */}
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-600">배점:</span>
                       <span className="text-sm font-medium">{selectedQuestion.points}점</span>
@@ -633,7 +527,7 @@ export default function ExamQuestionsPage() {
                   closeQuestionModal()
                 }}
               >
-                문제 수정
+                문제 수정 (삭제로 변경할 수도..?)
               </Button>
             </div>
           </div>

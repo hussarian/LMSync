@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { Bell, MessageSquare, User } from "lucide-react"
 import { useState, useRef, useEffect } from "react"
+import Image from "next/image"
 
 export default function Header({ currentPage = "", userRole = "student", userName = "사용자" }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
