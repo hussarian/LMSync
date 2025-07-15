@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
+import EmptyState from "@/components/ui/empty-state"
 import { useRouter } from "next/navigation"
 
 export default function CoursesListPage() {
@@ -41,145 +42,8 @@ export default function CoursesListPage() {
     { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
   ]
 
-  // 더미 과정 데이터
-  const coursesData = [
-    {
-      id: "C001",
-      name: "웹 개발 풀스택 과정",
-      category: "프로그래밍",
-      instructor: "담당강사",
-      duration: "6개월",
-      startDate: "2024-03-01",
-      endDate: "2024-08-31",
-      students: 25,
-      maxStudents: 30,
-      status: "진행중",
-      description: "HTML, CSS, JavaScript, React, Node.js를 활용한 풀스택 웹 개발 과정",
-      price: "1,200,000원",
-      schedule: "월, 수, 금 19:00-22:00",
-      location: "강의실 A-101",
-      prerequisites: "컴퓨터 기초 지식",
-    },
-    {
-      id: "C002",
-      name: "데이터 분석 기초 과정",
-      category: "데이터사이언스",
-      instructor: "이교수",
-      duration: "3개월",
-      startDate: "2024-02-15",
-      endDate: "2024-05-15",
-      students: 18,
-      maxStudents: 20,
-      status: "진행중",
-      description: "Python, Pandas, NumPy를 활용한 데이터 분석 기초 과정",
-      price: "800,000원",
-      schedule: "화, 목 14:00-17:00",
-      location: "온라인",
-      prerequisites: "수학 기초 지식",
-    },
-    {
-      id: "C003",
-      name: "UI/UX 디자인 과정",
-      category: "디자인",
-      instructor: "박디자이너",
-      duration: "4개월",
-      startDate: "2024-01-10",
-      endDate: "2024-05-10",
-      students: 15,
-      maxStudents: 15,
-      status: "마감",
-      description: "Figma, Adobe XD를 활용한 UI/UX 디자인 실무 과정",
-      price: "950,000원",
-      schedule: "월, 수 10:00-13:00",
-      location: "디자인 스튜디오",
-      prerequisites: "디자인 툴 사용 경험",
-    },
-    {
-      id: "C004",
-      name: "모바일 앱 개발 과정",
-      category: "프로그래밍",
-      instructor: "최개발자",
-      duration: "5개월",
-      startDate: "2024-04-01",
-      endDate: "2024-08-31",
-      students: 0,
-      maxStudents: 25,
-      status: "모집중",
-      description: "React Native를 활용한 크로스플랫폼 모바일 앱 개발 과정",
-      price: "1,100,000원",
-      schedule: "화, 목 19:00-22:00",
-      location: "온라인",
-      prerequisites: "JavaScript 기초 지식",
-    },
-    {
-      id: "C005",
-      name: "디지털 마케팅 과정",
-      category: "마케팅",
-      instructor: "정마케터",
-      duration: "2개월",
-      startDate: "2024-01-01",
-      endDate: "2024-02-29",
-      students: 22,
-      maxStudents: 25,
-      status: "완료",
-      description: "SNS 마케팅, 구글 애드워즈, 콘텐츠 마케팅 전략 과정",
-      price: "600,000원",
-      schedule: "월, 금 14:00-17:00",
-      location: "마케팅 센터",
-      prerequisites: "마케팅 기초 지식",
-    },
-    {
-      id: "C006",
-      name: "클라우드 인프라 과정",
-      category: "인프라",
-      instructor: "한엔지니어",
-      duration: "4개월",
-      startDate: "2024-03-15",
-      endDate: "2024-07-15",
-      students: 12,
-      maxStudents: 20,
-      status: "진행중",
-      description: "AWS, Docker, Kubernetes를 활용한 클라우드 인프라 구축 과정",
-      price: "1,000,000원",
-      schedule: "수, 금 10:00-13:00",
-      location: "클라우드 센터",
-      prerequisites: "리눅스 기초 지식",
-    },
-    {
-      id: "C007",
-      name: "인공지능 기초 과정",
-      category: "AI/ML",
-      instructor: "윤연구원",
-      duration: "6개월",
-      startDate: "2024-05-01",
-      endDate: "2024-10-31",
-      students: 0,
-      maxStudents: 30,
-      status: "모집중",
-      description: "Python, TensorFlow를 활용한 머신러닝 및 딥러닝 기초 과정",
-      price: "1,500,000원",
-      schedule: "화, 목 10:00-13:00",
-      location: "AI 연구소",
-      prerequisites: "Python 기초 지식",
-    },
-    {
-      id: "C008",
-      name: "사이버보안 전문가 과정",
-      category: "보안",
-      instructor: "송보안전문가",
-      duration: "8개월",
-      startDate: "2024-02-01",
-      endDate: "2024-09-30",
-      students: 16,
-      maxStudents: 18,
-      status: "진행중",
-      description: "네트워크 보안, 웹 보안, 모의해킹 실무 과정",
-      price: "1,800,000원",
-      schedule: "월, 수, 금 14:00-17:00",
-      location: "보안 센터",
-      prerequisites: "네트워크 기초 지식",
-    },
-  ]
+  // TODO: API 연동 필요 - 과정 목록 데이터
+  const coursesData = []
 
   // 필터링된 과정 데이터
   const filteredCourses = coursesData.filter((course) => {
@@ -562,15 +426,28 @@ export default function CoursesListPage() {
                     </tbody>
                   </table>
 
-                  {filteredCourses.length === 0 && (
-                    <div className="text-center py-8">
-                      <BookOpen className="w-16 h-16 mx-auto mb-4" style={{ color: "#95A5A6" }} />
-                      <h3 className="text-xl font-semibold mb-2" style={{ color: "#2C3E50" }}>
-                        검색 결과가 없습니다
-                      </h3>
-                      <p style={{ color: "#95A5A6" }}>다른 검색어나 필터를 사용해보세요.</p>
-                    </div>
-                  )}
+                  {coursesData.length === 0 ? (
+                    <EmptyState
+                      icon={BookOpen}
+                      title="등록된 과정이 없습니다"
+                      description="새로운 과정을 등록해보세요."
+                      action={
+                        <Button 
+                          onClick={() => router.push('/courses/register')}
+                          className="bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          과정 등록
+                        </Button>
+                      }
+                    />
+                  ) : filteredCourses.length === 0 ? (
+                    <EmptyState
+                      icon={BookOpen}
+                      title="검색 결과가 없습니다"
+                      description="다른 검색어나 필터를 사용해보세요."
+                    />
+                  ) : null}
                 </div>
               </CardContent>
             </Card>

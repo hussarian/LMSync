@@ -1,10 +1,16 @@
 "use client"
 
+// TODO: 강사 과제 상세 관리 페이지
+// - API 연동 필요: 과제 상세 정보, 제출 현황, 채점 관리
+// - 파일 미리보기 및 다운로드 기능
+// - 일괄 채점 기능
+
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { ArrowLeft, Download, FileText, Calendar, Users, CheckCircle, XCircle, Clock, Eye } from "lucide-react"
 import PageLayout from "@/components/ui/page-layout"
 import { Button } from "@/components/ui/button"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function AssignmentDetailPage() {
   const params = useParams()
@@ -25,103 +31,37 @@ export default function AssignmentDetailPage() {
   useEffect(() => {
     const fetchAssignmentDetail = async () => {
       setLoading(true)
-      // 실제 API 호출 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // 샘플 과제 상세 데이터
-      const sampleAssignment = {
-        id: Number.parseInt(params.id),
-        title: "웹 프로그래밍 기초 과제 1",
-        description:
-          "HTML과 CSS를 활용한 개인 포트폴리오 웹사이트 제작\n\n요구사항:\n1. 반응형 디자인 적용\n2. 최소 3개 페이지 구성\n3. CSS Grid 또는 Flexbox 사용\n4. 개인 정보 및 포트폴리오 내용 포함",
-        courseName: "웹 프로그래밍 기초",
-        courseCode: "WEB101",
-        dueDate: "2024-01-20T23:59:00",
-        createdDate: "2024-01-10T09:00:00",
-        totalStudents: 30,
-        submissionCount: 28,
-        gradingStatus: "completed",
-        maxScore: 100,
-        averageScore: 85.5,
-        attachments: [
-          { id: 1, name: "과제_요구사항.pdf", size: "2.5MB", type: "pdf" },
-          { id: 2, name: "참고_템플릿.zip", size: "15.2MB", type: "zip" },
-        ],
+      try {
+        // TODO: 실제 API 호출로 교체 필요
+        // const [assignmentResponse, submissionsResponse] = await Promise.all([
+        //   getInstructorAssignmentDetail(params.id),
+        //   getAssignmentSubmissions(params.id)
+        // ])
+        // setAssignment(assignmentResponse.data)
+        // setSubmissions(submissionsResponse.data)
+        
+        // 임시: 빈 데이터로 설정
+        setAssignment({
+          id: Number.parseInt(params.id),
+          title: "",
+          description: "",
+          courseName: "",
+          courseCode: "",
+          dueDate: null,
+          createdDate: null,
+          totalStudents: 0,
+          submissionCount: 0,
+          gradingStatus: "",
+          maxScore: 0,
+          averageScore: 0,
+          attachments: [],
+        })
+        setSubmissions([])
+      } catch (error) {
+        console.error('과제 상세 정보 조회 실패:', error)
+      } finally {
+        setLoading(false)
       }
-
-      // 샘플 제출 현황 데이터
-      const sampleSubmissions = [
-        {
-          id: 1,
-          studentId: "2024001",
-          studentName: "김철수",
-          email: "kim@example.com",
-          submittedAt: "2024-01-18T14:30:00",
-          status: "submitted",
-          score: 92,
-          graded: true,
-          files: [
-            { id: 1, name: "portfolio_김철수.zip", size: "8.5MB", type: "zip" },
-            { id: 2, name: "README.txt", size: "1.2KB", type: "txt" },
-          ],
-          feedback: "전반적으로 우수한 작품입니다. 반응형 디자인이 잘 구현되었습니다.",
-        },
-        {
-          id: 2,
-          studentId: "2024002",
-          studentName: "이영희",
-          email: "lee@example.com",
-          submittedAt: "2024-01-19T16:45:00",
-          status: "submitted",
-          score: 88,
-          graded: true,
-          files: [{ id: 3, name: "my_portfolio.zip", size: "12.3MB", type: "zip" }],
-          feedback: "창의적인 디자인이 돋보입니다. CSS 구조를 더 체계적으로 정리하면 좋겠습니다.",
-        },
-        {
-          id: 3,
-          studentId: "2024003",
-          studentName: "박민수",
-          email: "park@example.com",
-          submittedAt: "2024-01-20T22:15:00",
-          status: "submitted",
-          score: null,
-          graded: false,
-          files: [
-            { id: 4, name: "portfolio_final.zip", size: "6.8MB", type: "zip" },
-            { id: 5, name: "설명서.docx", size: "245KB", type: "docx" },
-          ],
-          feedback: null,
-        },
-        {
-          id: 4,
-          studentId: "2024004",
-          studentName: "정수진",
-          email: "jung@example.com",
-          submittedAt: null,
-          status: "not_submitted",
-          score: null,
-          graded: false,
-          files: [],
-          feedback: null,
-        },
-        {
-          id: 5,
-          studentId: "2024005",
-          studentName: "최동현",
-          email: "choi@example.com",
-          submittedAt: "2024-01-20T23:45:00",
-          status: "late",
-          score: 75,
-          graded: true,
-          files: [{ id: 6, name: "late_submission.zip", size: "4.2MB", type: "zip" }],
-          feedback: "지각 제출이지만 기본 요구사항은 ��족했습니다.",
-        },
-      ]
-
-      setAssignment(sampleAssignment)
-      setSubmissions(sampleSubmissions)
-      setLoading(false)
     }
 
     if (params.id) {
@@ -242,33 +182,33 @@ export default function AssignmentDetailPage() {
         <div className="bg-white rounded-lg shadow-sm border p-6">
           <div className="flex justify-between items-start mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{assignment.title}</h1>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">{assignment?.title || "과제 제목"}</h1>
               <div className="flex items-center space-x-4 text-sm text-gray-600">
                 <span className="flex items-center">
                   <FileText className="w-4 h-4 mr-1" />
-                  {assignment.courseName} ({assignment.courseCode})
+                  {assignment?.courseName || "-"} ({assignment?.courseCode || "-"})
                 </span>
                 <span className="flex items-center">
                   <Calendar className="w-4 h-4 mr-1" />
-                  마감: {formatDate(assignment.dueDate)}
+                  마감: {assignment?.dueDate ? formatDate(assignment.dueDate) : "-"}
                 </span>
                 <span className="flex items-center">
                   <Users className="w-4 h-4 mr-1" />
-                  {assignment.submissionCount}/{assignment.totalStudents}명 제출
+                  {assignment?.submissionCount || 0}/{assignment?.totalStudents || 0}명 제출
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="mb-4">
+                      <div className="mb-4">
             <h3 className="text-lg font-semibold mb-2">과제 설명</h3>
             <div className="bg-gray-50 p-4 rounded-md">
-              <pre className="whitespace-pre-wrap text-sm text-gray-700">{assignment.description}</pre>
+              <pre className="whitespace-pre-wrap text-sm text-gray-700">{assignment?.description || "과제 설명이 없습니다."}</pre>
             </div>
           </div>
 
           {/* 첨부 파일 */}
-          {assignment.attachments && assignment.attachments.length > 0 && (
+          {assignment?.attachments && assignment.attachments.length > 0 && (
             <div>
               <h3 className="text-lg font-semibold mb-2">첨부 파일</h3>
               <div className="space-y-2">
@@ -303,7 +243,7 @@ export default function AssignmentDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">총 제출</p>
-                <p className="text-2xl font-bold text-green-600">{assignment.submissionCount}</p>
+                <p className="text-2xl font-bold text-green-600">{assignment?.submissionCount || 0}</p>
               </div>
               <CheckCircle className="h-8 w-8 text-green-400" />
             </div>

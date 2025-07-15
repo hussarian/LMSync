@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
+import EmptyState from "@/components/ui/empty-state"
 import { useRouter } from "next/navigation"
 
 export default function SubjectsListPage() {
@@ -36,177 +37,8 @@ export default function SubjectsListPage() {
     { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
   ]
 
-  // TODO: 실제 API에서 과목 데이터를 불러와서 설정
-  const subjectsData = [
-    {
-      id: "S001",
-      name: "HTML/CSS 기초",
-      category: "프로그래밍",
-      difficulty: "초급",
-      duration: "2주",
-      description: "웹 표준과 시맨틱 마크업을 학습하는 기초 과목",
-      prerequisites: "컴퓨터 기초 지식",
-      objectives: "HTML5와 CSS3를 활용한 웹 페이지 제작",
-      instructor: "담당강사",
-      status: "활성",
-      createdDate: "2024-01-15",
-      usedInCourses: 3,
-    },
-    {
-      id: "S002",
-      name: "JavaScript 기초",
-      category: "프로그래밍",
-      difficulty: "초급",
-      duration: "2주",
-      description: "변수, 함수, 객체, DOM 조작을 학습하는 JavaScript 기초 과목",
-      prerequisites: "HTML/CSS 기초",
-      objectives: "JavaScript 기본 문법과 DOM 조작 능력 습득",
-      instructor: "담당강사",
-      status: "활성",
-      createdDate: "2024-01-20",
-      usedInCourses: 5,
-    },
-    {
-      id: "S003",
-      name: "JavaScript 심화",
-      category: "프로그래밍",
-      difficulty: "중급",
-      duration: "4주",
-      description: "비동기 처리, ES6+, 모듈 시스템을 학습하는 심화 과목",
-      prerequisites: "JavaScript 기초",
-      objectives: "고급 JavaScript 개념과 모던 개발 기법 습득",
-      instructor: "박강사",
-      status: "활성",
-      createdDate: "2024-01-25",
-      usedInCourses: 4,
-    },
-    {
-      id: "S004",
-      name: "React 기초",
-      category: "프로그래밍",
-      difficulty: "중급",
-      duration: "4주",
-      description: "컴포넌트, 상태관리, 라이프사이클을 학습하는 React 기초 과목",
-      prerequisites: "JavaScript 심화",
-      objectives: "React를 활용한 SPA 개발 능력 습득",
-      instructor: "최강사",
-      status: "활성",
-      createdDate: "2024-02-01",
-      usedInCourses: 3,
-    },
-    {
-      id: "S005",
-      name: "React 심화",
-      category: "프로그래밍",
-      difficulty: "고급",
-      duration: "4주",
-      description: "라우팅, 상태관리 라이브러리를 학습하는 React 심화 과목",
-      prerequisites: "React 기초",
-      objectives: "복잡한 React 애플리케이션 개발 능력 습득",
-      instructor: "정강사",
-      status: "활성",
-      createdDate: "2024-02-05",
-      usedInCourses: 2,
-    },
-    {
-      id: "S006",
-      name: "Node.js & Express",
-      category: "프로그래밍",
-      difficulty: "중급",
-      duration: "4주",
-      description: "서버 개발, API 구축을 학습하는 백엔드 과목",
-      prerequisites: "JavaScript 심화",
-      objectives: "Node.js를 활용한 서버 개발 능력 습득",
-      instructor: "한강사",
-      status: "활성",
-      createdDate: "2024-02-10",
-      usedInCourses: 3,
-    },
-    {
-      id: "S007",
-      name: "데이터베이스 연���",
-      category: "프로그래밍",
-      difficulty: "중급",
-      duration: "4주",
-      description: "MongoDB 연동, 데이터베이스 설계를 학습하는 과목",
-      prerequisites: "Node.js & Express",
-      objectives: "데이터베이스 연동 및 관리 능력 습득",
-      instructor: "윤강사",
-      status: "활성",
-      createdDate: "2024-02-15",
-      usedInCourses: 2,
-    },
-    {
-      id: "S008",
-      name: "Python 기초",
-      category: "데이터사이언스",
-      difficulty: "초급",
-      duration: "2주",
-      description: "데이터 분석을 위한 Python 기초 문법 학습",
-      prerequisites: "프로���래밍 기초 지식",
-      objectives: "Python 기본 문법과 라이브러리 활용 능력 습득",
-      instructor: "송강사",
-      status: "활성",
-      createdDate: "2024-01-30",
-      usedInCourses: 4,
-    },
-    {
-      id: "S009",
-      name: "NumPy & Pandas",
-      category: "데이터사이언스",
-      difficulty: "중급",
-      duration: "2주",
-      description: "배열 연산과 데이터프레임 조작을 학습하는 과목",
-      prerequisites: "Python 기초",
-      objectives: "데이터 처리 및 분석 라이브러리 활용 능력 습득",
-      instructor: "강강사",
-      status: "활성",
-      createdDate: "2024-02-20",
-      usedInCourses: 3,
-    },
-    {
-      id: "S010",
-      name: "데이터 시각화",
-      category: "데이터사이언스",
-      difficulty: "중급",
-      duration: "2주",
-      description: "Matplotlib, Seaborn을 활용한 데이터 시각화",
-      prerequisites: "NumPy & Pandas",
-      objectives: "효과적인 데이터 시각화 기법 습득",
-      instructor: "임강사",
-      status: "활성",
-      createdDate: "2024-02-25",
-      usedInCourses: 2,
-    },
-    {
-      id: "S011",
-      name: "UI/UX 디자인 기초",
-      category: "디자인",
-      difficulty: "초급",
-      duration: "3주",
-      description: "사용자 경험과 인터페이스 디자인 기초 이론",
-      prerequisites: "디자인 기초 지식",
-      objectives: "UI/UX 디자인 원칙과 방법론 이해",
-      instructor: "조강사",
-      status: "비활성",
-      createdDate: "2024-01-10",
-      usedInCourses: 1,
-    },
-    {
-      id: "S012",
-      name: "Figma 활용",
-      category: "디자인",
-      difficulty: "초급",
-      duration: "2주",
-      description: "Figma를 활용한 프로토타이핑과 디자인 시스템 구축",
-      prerequisites: "UI/UX 디자인 기초",
-      objectives: "Figma 도구 활용 능력과 협업 방법 습득",
-      instructor: "차강사",
-      status: "활성",
-      createdDate: "2024-01-12",
-      usedInCourses: 2,
-    },
-  ]
+  // TODO: API 연동 필요 - 과목 목록 데이터
+  const subjectsData = []
 
   // 필터링된 과목 데이터
   const filteredSubjects = subjectsData.filter((subject) => {
@@ -589,15 +421,28 @@ export default function SubjectsListPage() {
                     </tbody>
                   </table>
 
-                  {filteredSubjects.length === 0 && (
-                    <div className="text-center py-8">
-                      <BookOpen className="w-16 h-16 mx-auto mb-4" style={{ color: "#95A5A6" }} />
-                      <h3 className="text-xl font-semibold mb-2" style={{ color: "#2C3E50" }}>
-                        검색 결과가 없습니다
-                      </h3>
-                      <p style={{ color: "#95A5A6" }}>다른 검색어나 필터를 사용해보세요.</p>
-                    </div>
-                  )}
+                  {subjectsData.length === 0 ? (
+                    <EmptyState
+                      icon={BookOpen}
+                      title="등록된 과목이 없습니다"
+                      description="새로운 과목을 등록해보세요."
+                      action={
+                        <Button 
+                          onClick={() => router.push('/courses/subjects/register')}
+                          className="bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          과목 등록
+                        </Button>
+                      }
+                    />
+                  ) : filteredSubjects.length === 0 ? (
+                    <EmptyState
+                      icon={BookOpen}
+                      title="검색 결과가 없습니다"
+                      description="다른 검색어나 필터를 사용해보세요."
+                    />
+                  ) : null}
                 </div>
               </CardContent>
             </Card>

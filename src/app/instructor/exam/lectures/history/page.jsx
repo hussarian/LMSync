@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Search, BookOpen, Users, TrendingUp, Calendar, Eye, BarChart3, Award } from "lucide-react"
 import Link from "next/link"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function InstructorLectureHistoryPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -20,139 +21,8 @@ export default function InstructorLectureHistoryPage() {
     { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
   ]
 
-  // 담당 강의 이력 데이터
-  const [lectures] = useState([
-    {
-      id: 1,
-      title: "JavaScript 기초",
-      code: "JS101",
-      period: "2024.01.15 - 2024.04.15",
-      year: "2024",
-      semester: "1학기",
-      status: "완료",
-      totalStudents: 25,
-      completedStudents: 23,
-      dropoutStudents: 2,
-      averageScore: 88.5,
-      passRate: 92,
-      attendanceRate: 85.2,
-      satisfactionScore: 4.6,
-      totalClasses: 48,
-      completedClasses: 48,
-      category: "프로그래밍",
-      level: "초급",
-      scoreDistribution: {
-        excellent: 8, // 90점 이상
-        good: 10, // 80-89점
-        average: 5, // 70-79점
-        poor: 0, // 70점 미만
-      },
-    },
-    {
-      id: 2,
-      title: "React 심화",
-      code: "REACT201",
-      period: "2024.03.01 - 2024.06.30",
-      year: "2024",
-      semester: "1학기",
-      status: "진행중",
-      totalStudents: 18,
-      completedStudents: 0,
-      dropoutStudents: 1,
-      averageScore: 91.2,
-      passRate: 94,
-      attendanceRate: 92.1,
-      satisfactionScore: 4.8,
-      totalClasses: 40,
-      completedClasses: 28,
-      category: "프로그래밍",
-      level: "고급",
-      scoreDistribution: {
-        excellent: 12,
-        good: 5,
-        average: 1,
-        poor: 0,
-      },
-    },
-    {
-      id: 3,
-      title: "Python 기초",
-      code: "PY101",
-      period: "2023.09.01 - 2023.12.15",
-      year: "2023",
-      semester: "2학기",
-      status: "완료",
-      totalStudents: 22,
-      completedStudents: 20,
-      dropoutStudents: 2,
-      averageScore: 82.3,
-      passRate: 90,
-      attendanceRate: 78.5,
-      satisfactionScore: 4.3,
-      totalClasses: 45,
-      completedClasses: 45,
-      category: "프로그래밍",
-      level: "초급",
-      scoreDistribution: {
-        excellent: 5,
-        good: 12,
-        average: 3,
-        poor: 2,
-      },
-    },
-    {
-      id: 4,
-      title: "데이터베이스 설계",
-      code: "DB301",
-      period: "2023.03.01 - 2023.06.30",
-      year: "2023",
-      semester: "1학기",
-      status: "완료",
-      totalStudents: 30,
-      completedStudents: 28,
-      dropoutStudents: 2,
-      averageScore: 85.7,
-      passRate: 93,
-      attendanceRate: 88.3,
-      satisfactionScore: 4.5,
-      totalClasses: 42,
-      completedClasses: 42,
-      category: "데이터베이스",
-      level: "중급",
-      scoreDistribution: {
-        excellent: 9,
-        good: 15,
-        average: 4,
-        poor: 2,
-      },
-    },
-    {
-      id: 5,
-      title: "웹 개발 프로젝트",
-      code: "WEB401",
-      period: "2022.09.01 - 2022.12.15",
-      year: "2022",
-      semester: "2학기",
-      status: "완료",
-      totalStudents: 15,
-      completedStudents: 14,
-      dropoutStudents: 1,
-      averageScore: 93.8,
-      passRate: 100,
-      attendanceRate: 95.2,
-      satisfactionScore: 4.9,
-      totalClasses: 36,
-      completedClasses: 36,
-      category: "웹개발",
-      level: "고급",
-      scoreDistribution: {
-        excellent: 11,
-        good: 3,
-        average: 1,
-        poor: 0,
-      },
-    },
-  ])
+  // TODO: 실제 API 호출로 교체 필요
+  const [lectures] = useState([])
 
   const filteredLectures = lectures.filter((lecture) => {
     const matchesSearch =

@@ -1,5 +1,10 @@
 "use client"
 
+// TODO: 기관(학원) 등록 페이지
+// - API 연동 필요: 기관 등록, 주소 검색
+// - 유효성 검사 강화 필요
+// - 사업자등록번호 형식 검증 추가
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,7 +35,7 @@ export default function InstitutionRegisterPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // 기관 등록 로직
+    // TODO: 실제 API 호출로 교체 필요
     console.log("기관 등록 데이터:", formData)
     alert("기관이 성공적으로 등록되었습니다!")
   }
@@ -92,7 +97,10 @@ export default function InstitutionRegisterPage() {
                       name="businessNumber"
                       placeholder="000-00-00000"
                       value={formData.businessNumber}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        // TODO: 사업자등록번호 형식 자동 변환 (000-00-00000)
+                        handleInputChange(e)
+                      }}
                       required
                     />
                   </div>
@@ -122,7 +130,10 @@ export default function InstitutionRegisterPage() {
                       name="phone"
                       placeholder="010-0000-0000"
                       value={formData.phone}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        // TODO: 전화번호 형식 자동 변환 (010-0000-0000)
+                        handleInputChange(e)
+                      }}
                       required
                     />
                   </div>
@@ -159,7 +170,15 @@ export default function InstitutionRegisterPage() {
                         required
                         className="flex-1"
                       />
-                      <Button type="button" variant="outline" style={{ borderColor: "#1ABC9C", color: "#1ABC9C" }}>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        style={{ borderColor: "#1ABC9C", color: "#1ABC9C" }}
+                        onClick={() => {
+                          // TODO: 주소 검색 API 연동 필요 (다음/카카오 주소 API)
+                          alert("주소 검색 기능은 개발 중입니다.")
+                        }}
+                      >
                         주소 검색
                       </Button>
                     </div>

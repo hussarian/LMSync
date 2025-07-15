@@ -18,89 +18,11 @@ export default function SurveyLecturesPage() {
     { key: "survey-templates", label: "템플릿 목록", href: "/survey/templates" },
   ]
 
-  // 샘플 강의 데이터
-  const [lectures, setLectures] = useState([
-    {
-      id: 1,
-      code: "CS101",
-      name: "JavaScript 기초",
-      instructor: "김강사",
-      category: "프로그래밍",
-      startDate: "2024-01-15",
-      endDate: "2024-03-15",
-      students: 25,
-      maxStudents: 30,
-      template: "기본 강의 평가",
-      templateId: "TPL001",
-      surveyActive: true,
-      surveyResponses: 18,
-      status: "진행중",
-    },
-    {
-      id: 2,
-      code: "CS102",
-      name: "React 심화",
-      instructor: "이강사",
-      category: "프로그래밍",
-      startDate: "2024-02-01",
-      endDate: "2024-04-01",
-      students: 20,
-      maxStudents: 25,
-      template: "실습 중심 평가",
-      templateId: "TPL002",
-      surveyActive: false,
-      surveyResponses: 0,
-      status: "진행중",
-    },
-    {
-      id: 3,
-      code: "DS201",
-      name: "데이터 분석 기초",
-      instructor: "박강사",
-      category: "데이터사이언스",
-      startDate: "2024-01-20",
-      endDate: "2024-03-20",
-      students: 15,
-      maxStudents: 20,
-      template: "이론 및 실습 평가",
-      templateId: "TPL003",
-      surveyActive: true,
-      surveyResponses: 12,
-      status: "진행중",
-    },
-    {
-      id: 4,
-      code: "UI301",
-      name: "UI/UX 디자인",
-      instructor: "���강사",
-      category: "디자인",
-      startDate: "2023-11-01",
-      endDate: "2024-01-01",
-      students: 18,
-      maxStudents: 20,
-      template: "창작 활동 평가",
-      templateId: "TPL004",
-      surveyActive: false,
-      surveyResponses: 18,
-      status: "완료",
-    },
-    {
-      id: 5,
-      code: "ML401",
-      name: "머신러닝 실무",
-      instructor: "정강사",
-      category: "인공지능",
-      startDate: "2024-03-01",
-      endDate: "2024-05-01",
-      students: 12,
-      maxStudents: 15,
-      template: "프로젝트 기반 평가",
-      templateId: "TPL005",
-      surveyActive: true,
-      surveyResponses: 8,
-      status: "진행중",
-    },
-  ])
+  // TODO: API 연동 필요 - 강의 목록 및 설문 현황 조회
+  // TODO: 강의별 설문 활성화/비활성화 기능 추가
+  // TODO: 설문 템플릿 적용 기능 추가
+  // TODO: 설문 응답 현황 실시간 업데이트
+  const [lectures, setLectures] = useState([])
 
   // 설문 활성/비활성 토글
   const toggleSurvey = (lectureId) => {

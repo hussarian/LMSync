@@ -18,64 +18,13 @@ export default function SurveyPage() {
     { href: "/survey/templates", label: "템플릿 목록", key: "survey-templates" },
   ]
 
-  // 통계 데이터
-  const stats = [
-    {
-      title: "전체 설문",
-      value: "24개",
-      icon: FileText,
-      color: "#e74c3c",
-      description: "등록된 설문 수",
-    },
-    {
-      title: "진행 중인 설문",
-      value: "8개",
-      icon: Clock,
-      color: "#f39c12",
-      description: "현재 진행 중",
-    },
-    {
-      title: "완료된 설문",
-      value: "16개",
-      icon: CheckCircle,
-      color: "#27ae60",
-      description: "완료된 설문 수",
-    },
-  ]
-
-  // 최근 설문 현황
-  const recentSurveys = [
-    {
-      id: 1,
-      title: "JavaScript 기초 과정 만족도 조사",
-      course: "JavaScript 기초",
-      status: "진행중",
-      responses: 45,
-      totalStudents: 60,
-      endDate: "2024-01-20",
-      type: "만족도",
-    },
-    {
-      id: 2,
-      title: "React 심화 과정 강의 평가",
-      course: "React 심화",
-      status: "완료",
-      responses: 32,
-      totalStudents: 32,
-      endDate: "2024-01-15",
-      type: "강의평가",
-    },
-    {
-      id: 3,
-      title: "Python 데이터 분석 중간 평가",
-      course: "Python 데이터 분석",
-      status: "예정",
-      responses: 0,
-      totalStudents: 25,
-      endDate: "2024-01-25",
-      type: "중간평가",
-    },
-  ]
+  // TODO: API 연동 필요 - 설문 통계 데이터 조회
+  // TODO: 설문 생성, 수정, 삭제 기능 추가
+  // TODO: 설문 상태 관리 기능 추가
+  // TODO: 설문 결과 분석 기능 추가
+  // TODO: 설문 템플릿 관리 연동
+  const [stats, setStats] = useState([])
+  const [recentSurveys, setRecentSurveys] = useState([])
 
   const getStatusColor = (status) => {
     switch (status) {

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 import { Search, Plus, Edit, Trash2, Eye, Filter, BookOpen, Clock, BarChart3, X } from "lucide-react"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function QuestionBankPage() {
   const [questions, setQuestions] = useState([])
@@ -34,69 +35,9 @@ export default function QuestionBankPage() {
     { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
   ]
 
-  // 샘플 문제 데이터
+  // TODO: 실제 API 호출로 교체 필요
   useEffect(() => {
-    const sampleQuestions = [
-      {
-        id: 1,
-        question: "다음 중 JavaScript의 데이터 타입이 아닌 것은?",
-        type: "객관식",
-        subject: "웹프로그래밍",
-        difficulty: "중",
-        points: 5,
-        options: ["string", "number", "boolean", "integer"],
-        correctAnswer: 3,
-        createdDate: "2024-01-15",
-        usageCount: 12,
-        correctRate: 78,
-      },
-      {
-        id: 2,
-        question: "React의 useState Hook에 대해 설명하시오.",
-        type: "주관식",
-        subject: "웹프로그래밍",
-        difficulty: "상",
-        points: 10,
-        createdDate: "2024-01-20",
-        usageCount: 8,
-        correctRate: 65,
-      },
-      {
-        id: 3,
-        question: "다음 Python 코드의 출력 결과를 작성하시오.\n\nfor i in range(3):\n    print(i * 2)",
-        type: "코드형",
-        subject: "파이썬프로그래밍",
-        difficulty: "하",
-        points: 8,
-        createdDate: "2024-01-18",
-        usageCount: 15,
-        correctRate: 82,
-      },
-      {
-        id: 4,
-        question: "데이터베이스의 정규화에 대해 설명하고, 1NF, 2NF, 3NF의 차이점을 서술하시오.",
-        type: "주관식",
-        subject: "데이터베이스",
-        difficulty: "상",
-        points: 15,
-        createdDate: "2024-01-22",
-        usageCount: 6,
-        correctRate: 58,
-      },
-      {
-        id: 5,
-        question: "다음 중 CSS의 display 속성 값이 아닌 것은?",
-        type: "객관식",
-        subject: "웹프로그래밍",
-        difficulty: "하",
-        points: 3,
-        options: ["block", "inline", "flex", "visible"],
-        correctAnswer: 3,
-        createdDate: "2024-01-25",
-        usageCount: 20,
-        correctRate: 85,
-      },
-    ]
+    const sampleQuestions = []
 
     setTimeout(() => {
       setQuestions(sampleQuestions)

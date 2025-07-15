@@ -1,12 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { EmptyState } from "@/components/ui/empty-state"
 import { Star, ArrowLeft, Send, User, Calendar, BookOpen } from "lucide-react"
 
 export default function EvaluateCoursePage() {
@@ -24,20 +25,37 @@ export default function EvaluateCoursePage() {
   })
   const [feedback, setFeedback] = useState("")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [courseInfo, setCourseInfo] = useState(null)
 
   // 사이드바 메뉴 구성
   const sidebarMenuItems = [
   ]
 
-  // 강의 정보 (실제로는 API에서 가져올 데이터)
-  const courseInfo = {
-    id: courseId,
-    courseName: "JavaScript 기초",
-    instructor: "김영희 교수",
-    period: "2024-01-01 ~ 2024-03-31",
-    totalClasses: 20,
-    attendedClasses: 15,
-  }
+  // TODO: API 연동 필요 - 강의 정보 조회
+  // TODO: 설문 문항 동적 로딩 기능 추가
+  // TODO: 설문 저장 (임시저장) 기능 구현
+  // TODO: 설문 제출 전 확인 모달 추가
+  // TODO: 설문 진행률 표시 기능 추가
+  useEffect(() => {
+    const fetchCourseInfo = async () => {
+      try {
+        setLoading(true)
+        // const response = await getCourseInfo(courseId)
+        // setCourseInfo(response.data)
+        setCourseInfo(null) // 임시로 null 설정
+      } catch (error) {
+        console.error('강의 정보 조회 실패:', error)
+        setCourseInfo(null)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    if (courseId) {
+      fetchCourseInfo()
+    }
+  }, [courseId])
 
   const evaluationItems = [
     {
@@ -85,12 +103,14 @@ export default function EvaluateCoursePage() {
     setIsSubmitting(true)
 
     try {
-      // 실제로는 API 호출
+      // TODO: 실제 API 호출로 교체
+      // await submitSurveyEvaluation(courseId, { ratings, feedback })
       await new Promise((resolve) => setTimeout(resolve, 2000))
 
       alert("설문 평가가 완료되었습니다. 소중한 의견 감사합니다!")
       router.push("/student/survey")
     } catch (error) {
+      console.error('설문 제출 실패:', error)
       alert("설문 제출 중 오류가 발생했습니다.")
     } finally {
       setIsSubmitting(false)
@@ -115,9 +135,48 @@ export default function EvaluateCoursePage() {
     )
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">강의 정보를 불러오는 중...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!courseInfo) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header currentPage="survey" userRole="student" userName="학생" />
+        <div className="flex">
+          <Sidebar title="설문 평가" menuItems={sidebarMenuItems} currentPath={currentPath} />
+          <main className="flex-1 p-6">
+            <div className="max-w-4xl mx-auto">
+              <Button variant="outline" onClick={() => router.back()} className="mb-6">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                뒤로가기
+              </Button>
+              <EmptyState
+                icon={BookOpen}
+                title="강의 정보를 찾을 수 없습니다"
+                description="요청하신 강의의 정보가 존재하지 않거나 설문 평가 권한이 없습니다."
+                action={{
+                  label: "설문 목록으로 돌아가기",
+                  onClick: () => router.push("/student/survey"),
+                }}
+              />
+            </div>
+          </main>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPage="survey" userRole="student" userName="김학생" />
+      <Header currentPage="survey" userRole="student" userName="학생" />
 
       <div className="flex">
         <Sidebar title="설문 평가" menuItems={sidebarMenuItems} currentPath={currentPath} />
@@ -140,20 +199,20 @@ export default function EvaluateCoursePage() {
               </CardHeader>
               <CardContent>
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h2 className="text-xl font-bold text-gray-900 mb-3">{courseInfo.courseName}</h2>
+                  <h2 className="text-xl font-bold text-gray-900 mb-3">{courseInfo?.courseName || "-"}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                     <div className="flex items-center gap-2">
                       <User className="w-4 h-4" />
-                      <span>{courseInfo.instructor}</span>
+                      <span>{courseInfo?.instructor || "-"}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      <span>{courseInfo.period}</span>
+                      <span>{courseInfo?.period || "-"}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <BookOpen className="w-4 h-4" />
                       <span>
-                        출석: {courseInfo.attendedClasses}/{courseInfo.totalClasses}회
+                        출석: {courseInfo?.attendedClasses || 0}/{courseInfo?.totalClasses || 0}회
                       </span>
                     </div>
                   </div>

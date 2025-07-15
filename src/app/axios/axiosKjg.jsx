@@ -311,6 +311,91 @@ export const fetchAccountsByUserType = async (userType, params = {}) => {
 }
 
 // ====================================
+// 🏢 기관(학원) 관리 API
+// ====================================
+
+// 기관 등록
+export const registerInstitution = async (institutionData) => {
+  try {
+    const response = await api.post('/institutions/register', institutionData)
+    return response.data
+  } catch (error) {
+    console.error('기관 등록 실패:', error)
+    throw error
+  }
+}
+
+// 기관 목록 조회
+export const fetchInstitutions = async (params = {}) => {
+  try {
+    const response = await api.get('/institutions', { params })
+    return response.data
+  } catch (error) {
+    console.error('기관 목록 조회 실패:', error)
+    throw error
+  }
+}
+
+// 기관 정보 수정
+export const updateInstitution = async (institutionId, institutionData) => {
+  try {
+    const response = await api.put(`/institutions/${institutionId}`, institutionData)
+    return response.data
+  } catch (error) {
+    console.error('기관 정보 수정 실패:', error)
+    throw error
+  }
+}
+
+// 기관 삭제
+export const deleteInstitution = async (institutionId) => {
+  try {
+    const response = await api.delete(`/institutions/${institutionId}`)
+    return response.data
+  } catch (error) {
+    console.error('기관 삭제 실패:', error)
+    throw error
+  }
+}
+
+// 주소 검색 (다음/카카오 주소 API)
+export const searchAddress = async (query) => {
+  try {
+    const response = await api.get('/common/address/search', {
+      params: { query }
+    })
+    return response.data
+  } catch (error) {
+    console.error('주소 검색 실패:', error)
+    throw error
+  }
+}
+
+// 우편번호로 주소 조회
+export const getAddressByPostcode = async (postcode) => {
+  try {
+    const response = await api.get(`/common/address/postcode/${postcode}`)
+    return response.data
+  } catch (error) {
+    console.error('우편번호 주소 조회 실패:', error)
+    throw error
+  }
+}
+
+// 기관 상태 변경 (활성/비활성)
+export const toggleInstitutionStatus = async (institutionId, isActive) => {
+  try {
+    const response = await api.put(`/institutions/${institutionId}/status`, {
+      isActive
+    })
+    return response.data
+  } catch (error) {
+    console.error('기관 상태 변경 실패:', error)
+    throw error
+  }
+}
+
+// ====================================
 // 📋 계정 등록 템플릿 및 도구 API
 // ====================================
 

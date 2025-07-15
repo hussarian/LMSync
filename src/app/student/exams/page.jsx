@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { Search, Calendar, FileText, Award, Eye, Play, CheckCircle, XCircle, AlertCircle } from "lucide-react"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function StudentExamsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -18,147 +19,8 @@ export default function StudentExamsPage() {
   const [isResultModalOpen, setIsResultModalOpen] = useState(false)
   const [selectedResult, setSelectedResult] = useState(null)
 
-  // 샘플 시험 데이터
-  const [exams, setExams] = useState([
-    {
-      id: 1,
-      title: "JavaScript 기초 중간고사",
-      subject: "웹 프로그래밍",
-      instructor: "김강사",
-      type: "중간고사",
-      status: "available",
-      graded: false, // 채점 완료 여부 추가
-      startDate: "2024-01-15",
-      endDate: "2024-01-16",
-      duration: 90, // 분
-      totalQuestions: 20,
-      totalScore: 100,
-      myScore: null,
-      grade: null,
-      attempts: 0,
-      maxAttempts: 1,
-      description: "JavaScript 기초 문법과 DOM 조작에 대한 이해도를 평가합니다.",
-      questions: [
-        {
-          id: 1,
-          type: "객관식",
-          question: "JavaScript에서 변수를 선언하는 키워드가 아닌 것은?",
-          options: ["var", "let", "const", "def"],
-          correctAnswer: 3,
-          score: 5,
-        },
-        {
-          id: 2,
-          type: "객관식",
-          question: "다음 중 JavaScript의 데이터 타입이 아닌 것은?",
-          options: ["string", "number", "boolean", "integer"],
-          correctAnswer: 3,
-          score: 5,
-        },
-        {
-          id: 3,
-          type: "주관식",
-          question: "JavaScript에서 배열의 마지막 요소를 제거하는 메서드의 이름을 작성하세요.",
-          correctAnswer: "pop",
-          score: 10,
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "React 심화 기말고사",
-      subject: "프론트엔드 개발",
-      instructor: "이강사",
-      type: "기말고사",
-      status: "completed",
-      graded: true,
-      startDate: "2024-01-10",
-      endDate: "2024-01-11",
-      duration: 120,
-      totalQuestions: 25,
-      totalScore: 100,
-      myScore: 85,
-      grade: "B+",
-      attempts: 1,
-      maxAttempts: 1,
-      description: "React Hooks, 상태 관리, 컴포넌트 설계에 대한 종합 평가입니다.",
-      submittedAt: "2024-01-10 14:30",
-      questions: [
-        {
-          id: 1,
-          type: "객관식",
-          question: "React에서 상태를 관리하는 Hook은 무엇인가요?",
-          options: ["useEffect", "useState", "useContext", "useReducer"],
-          correctAnswer: 1,
-          userAnswer: 1,
-          score: 4,
-          isCorrect: true,
-          feedback: "정답입니다. useState는 함수형 컴포넌트에서 상태를 관리하는 기본적인 Hook입니다.",
-        },
-        {
-          id: 2,
-          type: "객관식",
-          question: "useEffect Hook의 두 번째 매개변수는 무엇인가요?",
-          options: ["콜백 함수", "의존성 배열", "상태 값", "이벤트 객체"],
-          correctAnswer: 1,
-          userAnswer: 0,
-          score: 4,
-          isCorrect: false,
-          feedback: "의존성 배열(dependency array)이 정답입니다. 이 배열의 값이 변경될 때만 useEffect가 실행됩니다.",
-        },
-        {
-          id: 3,
-          type: "주관식",
-          question: "React에서 컴포넌트 간 데이터를 전달하는 방법을 하나 작성하세요.",
-          correctAnswer: "props",
-          userAnswer: "props",
-          score: 5,
-          isCorrect: true,
-          feedback: "정답입니다. props는 부모 컴포넌트에서 자식 컴포넌트로 데이터를 전달하는 기본적인 방법입니다.",
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Python 기초 퀴즈",
-      subject: "프로그래밍 기초",
-      instructor: "박강사",
-      type: "퀴즈",
-      status: "upcoming",
-      graded: false,
-      startDate: "2024-01-20",
-      endDate: "2024-01-21",
-      duration: 60,
-      totalQuestions: 15,
-      totalScore: 75,
-      myScore: null,
-      grade: null,
-      attempts: 0,
-      maxAttempts: 2,
-      description: "Python 기본 문법과 자료구조에 대한 이해도를 확인합니다.",
-      questions: [],
-    },
-    {
-      id: 4,
-      title: "데이터베이스 중간고사",
-      subject: "데이터베이스",
-      instructor: "최강사",
-      type: "중간고사",
-      status: "expired",
-      graded: false,
-      startDate: "2024-01-05",
-      endDate: "2024-01-06",
-      duration: 100,
-      totalQuestions: 30,
-      totalScore: 100,
-      myScore: 0,
-      grade: "F",
-      attempts: 0,
-      maxAttempts: 1,
-      description: "관계형 데이터베이스와 SQL에 대한 기본 지식을 평가합니다.",
-      questions: [],
-    },
-  ])
+  // TODO: 실제 API 호출로 교체 필요
+  const [exams, setExams] = useState([])
 
   // 통계 계산
   const totalExams = exams.length
@@ -402,10 +264,11 @@ export default function StudentExamsPage() {
             {/* 시험 목록 */}
             <div className="space-y-4">
               {filteredExams.length === 0 ? (
-                <div className="bg-white p-8 rounded-lg border text-center">
-                  <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">조건에 맞는 시험이 없습니다.</p>
-                </div>
+                <EmptyState
+                  icon={FileText}
+                  title="등록된 시험이 없습니다"
+                  description="아직 응시할 수 있는 시험이 없습니다."
+                />
               ) : (
                 filteredExams.map((exam) => (
                   <div key={exam.id} className="bg-white rounded-lg shadow-sm border overflow-hidden">

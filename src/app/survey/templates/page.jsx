@@ -16,79 +16,14 @@ export default function SurveyTemplatesPage() {
     category: "강의 평가",
   })
 
-  // 샘플 템플릿 데이터
-  const templates = [
-    {
-      id: 1,
-      name: "기본 강의 평가 템플릿",
-      description: "일반적인 강의 평가를 위한 기본 템플릿",
-      category: "강의 평가",
-      questionCount: 8,
-      usageCount: 15,
-      createdDate: "2024-01-15",
-      status: "활성",
-    },
-    {
-      id: 2,
-      name: "실습 과정 평가 템플릿",
-      description: "실습 중심 과정을 위한 평가 템플릿",
-      category: "실습 평가",
-      questionCount: 12,
-      usageCount: 8,
-      createdDate: "2024-01-20",
-      status: "활성",
-    },
-    {
-      id: 3,
-      name: "온라인 강의 평가 템플릿",
-      description: "온라인 강의 특화 평가 템플릿",
-      category: "온라인 평가",
-      questionCount: 10,
-      usageCount: 22,
-      createdDate: "2024-02-01",
-      status: "비활성",
-    },
-  ]
-
-  // 샘플 질문 데이터
-  const availableQuestions = [
-    {
-      id: 1,
-      content: "강의 내용이 이해하기 쉬웠나요?",
-      category: "강의 내용",
-      type: "5점 척도",
-    },
-    {
-      id: 2,
-      content: "강사의 설명이 명확했나요?",
-      category: "강사 평가",
-      type: "5점 척도",
-    },
-    {
-      id: 3,
-      content: "실습 시간이 충분했나요?",
-      category: "실습",
-      type: "5점 척도",
-    },
-    {
-      id: 4,
-      content: "전반적으로 만족하시나요?",
-      category: "전반적 만족도",
-      type: "5점 척도",
-    },
-    {
-      id: 5,
-      content: "개선이 필요한 부분이 있다면 자유롭게 작성해주세요.",
-      category: "개선사항",
-      type: "주관식",
-    },
-    {
-      id: 6,
-      content: "강의 자료의 품질은 어떠했나요?",
-      category: "강의 자료",
-      type: "5점 척도",
-    },
-  ]
+  // TODO: API 연동 필요 - 설문 템플릿 목록 조회
+  // TODO: 템플릿 생성, 수정, 삭제 기능 추가
+  // TODO: 템플릿 복사 및 적용 기능 추가
+  // TODO: 템플릿 사용 통계 조회 기능 추가
+  const [templates, setTemplates] = useState([])
+  
+  // TODO: API 연동 필요 - 사용 가능한 질문 목록 조회
+  const [availableQuestions, setAvailableQuestions] = useState([])
 
   const categories = ["all", "강의 평가", "실습 평가", "온라인 평가", "기타"]
 

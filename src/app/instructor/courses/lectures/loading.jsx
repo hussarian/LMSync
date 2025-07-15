@@ -1,3 +1,7 @@
+// TODO: 강사 강의 목록 로딩 페이지
+// - 스켈레톤 UI로 개선 완료
+// - 실제 데이터 로딩과 연동 필요
+
 export default function Loading() {
   return (
     <div className="min-h-screen bg-gray-50">

@@ -1,10 +1,16 @@
 "use client"
 
+// TODO: 강사 담당 강의 목록 페이지
+// - API 연동 필요: 담당 강의 목록 조회, 통계 데이터
+// - 강의별 상세 관리 기능
+// - 실시간 출석 체크 시스템
+
 import { useState } from "react"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 import { Button } from "@/components/ui/button"
 import { Search, Calendar, Users, Clock, BookOpen, MapPin } from "lucide-react"
+import EmptyState from "@/components/ui/empty-state"
 import Link from "next/link"
 
 export default function InstructorLecturesPage() {
@@ -18,117 +24,14 @@ export default function InstructorLecturesPage() {
     { href: "/instructor/courses/assignments", label: "과제 리스트", key: "assignments" }, 
   ]
 
-  // 강사가 담당한 모든 강의 데이터 (과거~현재)
-  const [lectures] = useState([
-    {
-      id: 1,
-      courseName: "JavaScript 기초",
-      courseCode: "JS101",
-      lectureTitle: "변수와 데이터 타입",
-      lectureNumber: 1,
-      date: "2024.02.15",
-      time: "09:00 - 11:00",
-      classroom: "A101",
-      students: 25,
-      attendees: 23,
-      status: "완료",
-      period: "2024년 1학기",
-      materials: ["강의자료.pdf", "실습파일.zip"],
-      homework: "변수 선언 연습문제",
-      notes: "학생들의 이해도가 높았음",
-    },
-    {
-      id: 2,
-      courseName: "JavaScript 기초",
-      courseCode: "JS101",
-      lectureTitle: "조건문과 반복문",
-      lectureNumber: 2,
-      date: "2024.02.17",
-      time: "09:00 - 11:00",
-      classroom: "A101",
-      students: 25,
-      attendees: 24,
-      status: "완료",
-      period: "2024년 1학기",
-      materials: ["조건문_강의자료.pdf", "반복문_예제.js"],
-      homework: "조건문 실습과제",
-      notes: "반복문 부분에서 질문이 많았음",
-    },
-    {
-      id: 3,
-      courseName: "JavaScript 기초",
-      courseCode: "JS101",
-      lectureTitle: "함수와 스코프",
-      lectureNumber: 3,
-      date: "2024.02.19",
-      time: "09:00 - 11:00",
-      classroom: "A101",
-      students: 25,
-      attendees: null,
-      status: "예정",
-      period: "2024년 1학기",
-      materials: ["함수_강의자료.pdf"],
-      homework: null,
-      notes: null,
-    },
-    {
-      id: 4,
-      courseName: "React 심화",
-      courseCode: "REACT201",
-      lectureTitle: "컴포넌트 설계 패턴",
-      lectureNumber: 1,
-      date: "2024.02.16",
-      time: "14:00 - 17:00",
-      classroom: "B203",
-      students: 18,
-      attendees: 17,
-      status: "완료",
-      period: "2024년 1학기",
-      materials: ["React_패턴.pdf", "예제코드.zip"],
-      homework: "컴포넌트 리팩토링",
-      notes: "고급 패턴에 대한 추가 설명 필요",
-    },
-    {
-      id: 5,
-      courseName: "Python 기초",
-      courseCode: "PY101",
-      lectureTitle: "파이썬 기초 문법",
-      lectureNumber: 8,
-      date: "2024.01.25",
-      time: "10:00 - 12:00",
-      classroom: "C105",
-      students: 22,
-      attendees: 20,
-      status: "완료",
-      period: "2023년 2학기",
-      materials: ["Python_기초.pdf"],
-      homework: "기초 문법 연습",
-      notes: "과정 완료",
-    },
-    {
-      id: 6,
-      courseName: "웹 개발 입문",
-      courseCode: "WEB101",
-      lectureTitle: "HTML/CSS 기초",
-      lectureNumber: 1,
-      date: "2023.09.05",
-      time: "13:00 - 16:00",
-      classroom: "D201",
-      students: 30,
-      attendees: 28,
-      status: "완료",
-      period: "2023년 2학기",
-      materials: ["HTML_CSS_기초.pdf", "실습예제.html"],
-      homework: "개인 웹페이지 제작",
-      notes: "첫 강의, 학생들의 참여도 높음",
-    },
-  ])
+  // TODO: 강사가 담당한 모든 강의 데이터 (API에서 가져오기)
+  const [lectures] = useState([])
 
   const filteredLectures = lectures.filter((lecture) => {
     const matchesSearch =
-      lecture.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lecture.courseCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lecture.lectureTitle.toLowerCase().includes(searchTerm.toLowerCase())
+      lecture.courseName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lecture.courseCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lecture.lectureTitle?.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesPeriod = selectedPeriod === "all" || lecture.period === selectedPeriod
     const matchesStatus = selectedStatus === "all" || lecture.status === selectedStatus
@@ -152,7 +55,7 @@ export default function InstructorLecturesPage() {
   }
 
   const getAttendanceRate = (attendees, students) => {
-    if (attendees === null) return null
+    if (attendees === null || !students) return null
     return Math.round((attendees / students) * 100)
   }
 
@@ -160,15 +63,18 @@ export default function InstructorLecturesPage() {
   const totalLectures = lectures.length
   const completedLectures = lectures.filter((l) => l.status === "완료").length
   const upcomingLectures = lectures.filter((l) => l.status === "예정").length
-  const averageAttendance =
-    lectures
-      .filter((l) => l.attendees !== null)
-      .reduce((sum, l) => sum + getAttendanceRate(l.attendees, l.students), 0) /
-    lectures.filter((l) => l.attendees !== null).length
+  const averageAttendance = lectures.filter((l) => l.attendees !== null).length > 0
+    ? Math.round(
+        lectures
+          .filter((l) => l.attendees !== null)
+          .reduce((sum, l) => sum + getAttendanceRate(l.attendees, l.students), 0) /
+        lectures.filter((l) => l.attendees !== null).length
+      )
+    : 0
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPage="courses" userRole="instructor" userName="김강사" />
+      <Header currentPage="courses" userRole="instructor" userName="강사" />
 
       <div className="flex">
         <Sidebar title="과정 관리" menuItems={sidebarItems} currentPath="/instructor/courses/lectures" />
@@ -226,7 +132,7 @@ export default function InstructorLecturesPage() {
                   <div>
                     <p className="text-sm font-medium text-gray-600">평균 출석률</p>
                     <p className="text-2xl font-bold" style={{ color: "#9b59b6" }}>
-                      {Math.round(averageAttendance)}%
+                      {averageAttendance}%
                     </p>
                   </div>
                   <Users className="w-8 h-8" style={{ color: "#9b59b6" }} />
@@ -272,149 +178,164 @@ export default function InstructorLecturesPage() {
 
             {/* 강의 목록 */}
             <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        강의 정보
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        일시/장소
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        출석 현황
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        강의 자료
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        과제
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        상태
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        관리
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredLectures.map((lecture) => (
-                      <tr key={lecture.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">{lecture.lectureTitle}</div>
-                            <div className="text-sm text-gray-500">
-                              {lecture.courseName} ({lecture.courseCode})
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {lecture.lectureNumber}차시 | {lecture.period}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex items-center mb-1">
-                            <Calendar className="w-4 h-4 text-gray-400 mr-2" />
-                            <span className="text-sm text-gray-900">{lecture.date}</span>
-                          </div>
-                          <div className="flex items-center mb-1">
-                            <Clock className="w-4 h-4 text-gray-400 mr-2" />
-                            <span className="text-sm text-gray-900">{lecture.time}</span>
-                          </div>
-                          <div className="flex items-center">
-                            <MapPin className="w-4 h-4 text-gray-400 mr-2" />
-                            <span className="text-sm text-gray-900">{lecture.classroom}</span>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {lecture.attendees !== null ? (
+              {filteredLectures.length === 0 ? (
+                <div className="p-12">
+                  <EmptyState
+                    icon={BookOpen}
+                    title="담당 강의가 없습니다"
+                    description="현재 담당하고 계신 강의가 없습니다. 관리자에게 문의해주세요."
+                  />
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          강의 정보
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          일시/장소
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          출석 현황
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          강의 자료
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          과제
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          상태
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          관리
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {filteredLectures.map((lecture) => (
+                        <tr key={lecture.id} className="hover:bg-gray-50">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="flex items-center">
-                                <Users className="w-4 h-4 text-gray-400 mr-2" />
-                                <span className="text-sm text-gray-900">
-                                  {lecture.attendees}/{lecture.students}명
-                                </span>
+                              <div className="text-sm font-medium text-gray-900">{lecture.lectureTitle || "-"}</div>
+                              <div className="text-sm text-gray-500">
+                                {lecture.courseName || "-"} ({lecture.courseCode || "-"})
                               </div>
                               <div className="text-sm text-gray-500">
-                                출석률: {getAttendanceRate(lecture.attendees, lecture.students)}%
+                                {lecture.lectureNumber ? `${lecture.lectureNumber}차시` : "-"} | {lecture.period || "-"}
                               </div>
                             </div>
-                          ) : (
-                            <span className="text-sm text-gray-500">미진행</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="max-w-xs">
-                            {lecture.materials.map((material, index) => (
-                              <div
-                                key={index}
-                                className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer mb-1"
-                              >
-                                📎 {material}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex items-center mb-1">
+                              <Calendar className="w-4 h-4 text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-900">{lecture.date || "-"}</span>
+                            </div>
+                            <div className="flex items-center mb-1">
+                              <Clock className="w-4 h-4 text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-900">{lecture.time || "-"}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <MapPin className="w-4 h-4 text-gray-400 mr-2" />
+                              <span className="text-sm text-gray-900">{lecture.classroom || "-"}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {lecture.attendees !== null && lecture.attendees !== undefined ? (
+                              <div>
+                                <div className="flex items-center">
+                                  <Users className="w-4 h-4 text-gray-400 mr-2" />
+                                  <span className="text-sm text-gray-900">
+                                    {lecture.attendees}/{lecture.students}명
+                                  </span>
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  출석률: {getAttendanceRate(lecture.attendees, lecture.students)}%
+                                </div>
                               </div>
-                            ))}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          {lecture.homework ? (
-                            <div className="text-sm text-gray-900">{lecture.homework}</div>
-                          ) : (
-                            <span className="text-sm text-gray-500">없음</span>
-                          )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lecture.status)}`}
-                          >
-                            {lecture.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="flex space-x-2">
-                            <Link href={`/instructor/courses/lectures/${lecture.id}`}>
-                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                상세보기
-                              </Button>
-                            </Link>
-                            {lecture.status === "예정" && (
-                              <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                                수정
-                              </Button>
+                            ) : (
+                              <span className="text-sm text-gray-500">미진행</span>
                             )}
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="max-w-xs">
+                              {(lecture.materials || []).map((material, index) => (
+                                <div
+                                  key={index}
+                                  className="text-sm text-blue-600 hover:text-blue-800 cursor-pointer mb-1"
+                                >
+                                  📎 {material}
+                                </div>
+                              ))}
+                              {(!lecture.materials || lecture.materials.length === 0) && (
+                                <span className="text-sm text-gray-500">없음</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            {lecture.homework ? (
+                              <div className="text-sm text-gray-900">{lecture.homework}</div>
+                            ) : (
+                              <span className="text-sm text-gray-500">없음</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span
+                              className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lecture.status || "")}`}
+                            >
+                              {lecture.status || "-"}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="flex space-x-2">
+                              <Link href={`/instructor/courses/lectures/${lecture.id}`}>
+                                <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                  상세보기
+                                </Button>
+                              </Link>
+                              {lecture.status === "예정" && (
+                                <Button size="sm" variant="outline" className="text-xs bg-transparent">
+                                  수정
+                                </Button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* 강의 노트 섹션 */}
-            <div className="mt-6 bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="text-lg font-semibold mb-4" style={{ color: "#2C3E50" }}>
-                최근 강의 노트
-              </h3>
-              <div className="space-y-4">
-                {lectures
-                  .filter((l) => l.notes && l.status === "완료")
-                  .slice(0, 3)
-                  .map((lecture) => (
-                    <div key={lecture.id} className="border-l-4 border-blue-500 pl-4 py-2">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-medium text-gray-900">{lecture.lectureTitle}</h4>
-                          <p className="text-sm text-gray-600">
-                            {lecture.courseName} | {lecture.date}
-                          </p>
-                          <p className="text-sm text-gray-700 mt-1">{lecture.notes}</p>
+            {lectures.filter((l) => l.notes && l.status === "완료").length > 0 && (
+              <div className="mt-6 bg-white rounded-lg shadow-sm border p-6">
+                <h3 className="text-lg font-semibold mb-4" style={{ color: "#2C3E50" }}>
+                  최근 강의 노트
+                </h3>
+                <div className="space-y-4">
+                  {lectures
+                    .filter((l) => l.notes && l.status === "완료")
+                    .slice(0, 3)
+                    .map((lecture) => (
+                      <div key={lecture.id} className="border-l-4 border-blue-500 pl-4 py-2">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-medium text-gray-900">{lecture.lectureTitle}</h4>
+                            <p className="text-sm text-gray-600">
+                              {lecture.courseName} | {lecture.date}
+                            </p>
+                            <p className="text-sm text-gray-700 mt-1">{lecture.notes}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* 안내사항 */}
             <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">

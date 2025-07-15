@@ -9,6 +9,7 @@ import { FileText, Clock, Users, TrendingUp, Plus, Eye, Edit, Search, Download, 
 import Sidebar from "@/components/layout/sidebar"
 import Header from "@/components/layout/header"
 import Link from "next/link"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function MyExamsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -22,143 +23,36 @@ export default function MyExamsPage() {
     { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
   ]
 
+  // TODO: 실제 API 호출로 교체 필요
   const stats = [
     {
       title: "총 출제 시험",
-      value: "24개",
+      value: "0개",
       icon: FileText,
       color: "#9b59b6",
     },
     {
       title: "진행 중인 시험",
-      value: "5개",
+      value: "0개",
       icon: Clock,
       color: "#9b59b6",
     },
     {
       title: "채점 대기",
-      value: "42건",
+      value: "0건",
       icon: Edit,
       color: "#9b59b6",
     },
     {
       title: "평균 응시율",
-      value: "87.3%",
+      value: "0%",
       icon: TrendingUp,
       color: "#9b59b6",
     },
   ]
 
-  const myExams = [
-    {
-      id: 1,
-      title: "JavaScript 기초 중간고사",
-      course: "웹 개발 기초",
-      courseCode: "WEB101",
-      status: "진행중",
-      type: "���간고사",
-      participants: 25,
-      submitted: 18,
-      graded: 12,
-      totalQuestions: 20,
-      duration: 90,
-      startDate: "2024-01-15",
-      endDate: "2024-01-20",
-      createdDate: "2024-01-10",
-      avgScore: 78.5,
-      maxScore: 100,
-    },
-    {
-      id: 2,
-      title: "React 컴포넌트 퀴즈",
-      course: "프론트엔드 개발",
-      courseCode: "FE201",
-      status: "채점중",
-      type: "퀴즈",
-      participants: 22,
-      submitted: 22,
-      graded: 15,
-      totalQuestions: 10,
-      duration: 45,
-      startDate: "2024-01-10",
-      endDate: "2024-01-18",
-      createdDate: "2024-01-05",
-      avgScore: 85.2,
-      maxScore: 100,
-    },
-    {
-      id: 3,
-      title: "HTML/CSS 기말고사",
-      course: "웹 개발 기초",
-      courseCode: "WEB101",
-      status: "완료",
-      type: "기말고사",
-      participants: 28,
-      submitted: 28,
-      graded: 28,
-      totalQuestions: 25,
-      duration: 120,
-      startDate: "2024-01-05",
-      endDate: "2024-01-12",
-      createdDate: "2023-12-28",
-      avgScore: 79.8,
-      maxScore: 100,
-    },
-    {
-      id: 4,
-      title: "Node.js 실습 평가",
-      course: "백엔드 개발",
-      courseCode: "BE301",
-      status: "예정",
-      type: "실습평가",
-      participants: 20,
-      submitted: 0,
-      graded: 0,
-      totalQuestions: 15,
-      duration: 180,
-      startDate: "2024-01-25",
-      endDate: "2024-01-30",
-      createdDate: "2024-01-15",
-      avgScore: 0,
-      maxScore: 100,
-    },
-    {
-      id: 5,
-      title: "데이터베이스 설계 시험",
-      course: "데이터베이스",
-      courseCode: "DB201",
-      status: "완료",
-      type: "중간고사",
-      participants: 30,
-      submitted: 29,
-      graded: 29,
-      totalQuestions: 18,
-      duration: 100,
-      startDate: "2023-12-20",
-      endDate: "2023-12-27",
-      createdDate: "2023-12-15",
-      avgScore: 82.1,
-      maxScore: 100,
-    },
-    {
-      id: 6,
-      title: "Python 기초 퀴즈",
-      course: "프로그래밍 기초",
-      courseCode: "PY101",
-      status: "진행중",
-      type: "퀴즈",
-      participants: 35,
-      submitted: 28,
-      graded: 20,
-      totalQuestions: 12,
-      duration: 60,
-      startDate: "2024-01-18",
-      endDate: "2024-01-22",
-      createdDate: "2024-01-12",
-      avgScore: 76.8,
-      maxScore: 100,
-    },
-  ]
+  // TODO: 실제 API 호출로 교체 필요
+  const myExams = []
 
   const courses = ["all", "웹 개발 기초", "프론트엔드 개발", "백엔드 개발", "데이터베이스", "프��그래밍 기초"]
   const statuses = ["all", "예정", "진행중", "채점중", "���료"]

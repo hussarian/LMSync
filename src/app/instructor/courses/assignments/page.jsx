@@ -1,11 +1,17 @@
 "use client"
 
+// TODO: 강사 과제 관리 페이지
+// - API 연동 필요: 과제 목록 조회, 과제 등록, 채점 관리
+// - 파일 업로드/다운로드 기능
+// - 실시간 제출 현황 업데이트
+
 import { useState, useEffect } from "react"
 import { Search, Calendar, FileText, Clock, CheckCircle, AlertCircle, Plus } from "lucide-react"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import EmptyState from "@/components/ui/empty-state"
 import Link from "next/link"
 
 export default function InstructorAssignmentsPage() {
@@ -29,83 +35,22 @@ export default function InstructorAssignmentsPage() {
     { key: "assignments", label: "과제 리스트", href: "/instructor/courses/assignments" }, 
   ]
 
-  // 샘플 과제 데이터
+  // TODO: 실제 API에서 과제 데이터 가져오기
   useEffect(() => {
     const fetchAssignments = async () => {
       setLoading(true)
-      // 실제 API 호출 시뮬레이션
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      const sampleAssignments = [
-        {
-          id: 1,
-          title: "웹 프로그래밍 기초 과제 1",
-          description: "HTML과 CSS를 활용한 개인 포트폴리오 웹사이트 제작",
-          courseName: "웹 프로그래밍 기초",
-          courseCode: "WEB101",
-          dueDate: "2024-01-20",
-          submittedDate: "2024-01-15",
-          status: "submitted",
-          submissionCount: 28,
-          totalStudents: 30,
-          gradingStatus: "completed",
-        },
-        {
-          id: 2,
-          title: "데이터베이스 설계 프로젝트",
-          description: "도서관 관리 시스템을 위한 ERD 설계 및 SQL 쿼리 작성",
-          courseName: "데이터베이스 시스템",
-          courseCode: "DB201",
-          dueDate: "2024-01-25",
-          submittedDate: "2024-01-22",
-          status: "submitted",
-          submissionCount: 25,
-          totalStudents: 25,
-          gradingStatus: "in_progress",
-        },
-        {
-          id: 3,
-          title: "알고리즘 분석 보고서",
-          description: "정렬 알고리즘의 시간 복잡도 분석 및 성능 비교 보고서",
-          courseName: "자료구조와 알고리즘",
-          courseCode: "ALG301",
-          dueDate: "2024-02-01",
-          submittedDate: null,
-          status: "pending",
-          submissionCount: 0,
-          totalStudents: 22,
-          gradingStatus: "not_started",
-        },
-        {
-          id: 4,
-          title: "모바일 앱 개발 과제",
-          description: "React Native를 사용한 간단한 할 일 관리 앱 개발",
-          courseName: "모바일 프로그래밍",
-          courseCode: "MOB401",
-          dueDate: "2024-01-30",
-          submittedDate: "2024-01-28",
-          status: "submitted",
-          submissionCount: 18,
-          totalStudents: 20,
-          gradingStatus: "completed",
-        },
-        {
-          id: 5,
-          title: "네트워크 보안 분석",
-          description: "실제 네트워크 환경에서의 보안 취약점 분석 및 대응 방안 제시",
-          courseName: "네트워크 보안",
-          courseCode: "SEC501",
-          dueDate: "2024-02-05",
-          submittedDate: null,
-          status: "draft",
-          submissionCount: 0,
-          totalStudents: 15,
-          gradingStatus: "not_started",
-        },
-      ]
-
-      setAssignments(sampleAssignments)
-      setLoading(false)
+      try {
+        // TODO: 실제 API 호출로 교체 필요
+        // const response = await getInstructorAssignments()
+        // setAssignments(response.data)
+        
+        // 임시: 빈 배열로 설정
+        setAssignments([])
+      } catch (error) {
+        console.error('과제 목록 조회 실패:', error)
+      } finally {
+        setLoading(false)
+      }
     }
 
     fetchAssignments()
@@ -114,9 +59,9 @@ export default function InstructorAssignmentsPage() {
   // 필터링된 과제 목록
   const filteredAssignments = assignments.filter((assignment) => {
     const matchesSearch =
-      assignment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assignment.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      assignment.courseName.toLowerCase().includes(searchTerm.toLowerCase())
+      assignment.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      assignment.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      assignment.courseName?.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesStatus = filterStatus === "all" || assignment.status === filterStatus
     const matchesCourse = filterCourse === "all" || assignment.courseCode === filterCourse
@@ -169,7 +114,16 @@ export default function InstructorAssignmentsPage() {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <PageLayout title="과제 리스트" sidebarItems={sidebarItems} currentPath="/instructor/courses/assignments">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <p className="text-gray-600">과제 목록을 불러오는 중...</p>
+          </div>
+        </div>
+      </PageLayout>
+    )
   }
 
   return (
@@ -249,11 +203,7 @@ export default function InstructorAssignmentsPage() {
                 onChange={(e) => setFilterCourse(e.target.value)}
               >
                 <option value="all">모든 과정</option>
-                <option value="WEB101">웹 프로그래밍 기초</option>
-                <option value="DB201">데이터베이스 시스템</option>
-                <option value="ALG301">자료구조와 알고리즘</option>
-                <option value="MOB401">모바일 프로그래밍</option>
-                <option value="SEC501">네트워크 보안</option>
+                {/* TODO: 동적으로 과정 목록 로드 */}
               </select>
             </div>
           </div>
@@ -273,10 +223,12 @@ export default function InstructorAssignmentsPage() {
           </div>
 
           {filteredAssignments.length === 0 ? (
-            <div className="p-12 text-center">
-              <FileText className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">과제가 없습니다</h3>
-              <p className="text-gray-500">검색 조건을 변경하거나 새로운 과제를 등록해보세요.</p>
+            <div className="p-12">
+              <EmptyState
+                icon={FileText}
+                title="등록된 과제가 없습니다"
+                description="새로운 과제를 등록하여 학생들에게 배정해보세요."
+              />
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -314,13 +266,13 @@ export default function InstructorAssignmentsPage() {
                     <tr key={assignment.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4">
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{assignment.title}</div>
-                          <div className="text-sm text-gray-500 mt-1">{assignment.description}</div>
+                          <div className="text-sm font-medium text-gray-900">{assignment.title || "-"}</div>
+                          <div className="text-sm text-gray-500 mt-1">{assignment.description || "-"}</div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900">{assignment.courseName}</div>
-                        <div className="text-sm text-gray-500">{assignment.courseCode}</div>
+                        <div className="text-sm text-gray-900">{assignment.courseName || "-"}</div>
+                        <div className="text-sm text-gray-500">{assignment.courseCode || "-"}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center text-sm text-gray-900">
@@ -336,13 +288,13 @@ export default function InstructorAssignmentsPage() {
                       <td className="px-6 py-4">{getStatusBadge(assignment.status)}</td>
                       <td className="px-6 py-4">
                         <div className="text-sm text-gray-900">
-                          {assignment.submissionCount}/{assignment.totalStudents}
+                          {assignment.submissionCount || 0}/{assignment.totalStudents || 0}
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                           <div
                             className="bg-blue-600 h-2 rounded-full"
                             style={{
-                              width: `${(assignment.submissionCount / assignment.totalStudents) * 100}%`,
+                              width: `${assignment.totalStudents > 0 ? (assignment.submissionCount / assignment.totalStudents) * 100 : 0}%`,
                             }}
                           ></div>
                         </div>
@@ -394,6 +346,7 @@ export default function InstructorAssignmentsPage() {
           </div>
         </div>
       </div>
+      
       {/* 과제 제출 모달 */}
       {showSubmissionModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -437,11 +390,7 @@ export default function InstructorAssignmentsPage() {
                   onChange={(e) => setSubmissionForm({ ...submissionForm, course: e.target.value })}
                 >
                   <option value="">과정을 선택하세요</option>
-                  <option value="WEB101">웹 프로그래밍 기초</option>
-                  <option value="DB201">데이터베이스 시스템</option>
-                  <option value="ALG301">자료구조와 알고리즘</option>
-                  <option value="MOB401">모바일 프로그래밍</option>
-                  <option value="SEC501">네트워크 보안</option>
+                  {/* TODO: 동적으로 담당 과정 목록 로드 */}
                 </select>
               </div>
 
@@ -541,7 +490,7 @@ export default function InstructorAssignmentsPage() {
                 className="bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={(e) => {
                   e.preventDefault()
-                  // 여기에 과제 등록 로직 추가
+                  // TODO: 실제 과제 등록 API 호출
                   console.log("과제 등록:", submissionForm)
                   setShowSubmissionModal(false)
                   // 폼 초기화

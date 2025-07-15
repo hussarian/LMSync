@@ -4,6 +4,7 @@ import { useState } from "react"
 import { Search, Eye, BarChart3, Users, Calendar, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { EmptyState } from "@/components/ui/empty-state"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 
@@ -17,114 +18,12 @@ export default function InstructorSurveyLecturesPage() {
     { key: "survey-lectures", label: "담당 강의 설문", href: "/instructor/survey/lectures" },
   ]
 
-  // 담당 강의 설문 데이터
-  const [lectures, setLectures] = useState([
-    {
-      id: 1,
-      code: "CS101",
-      name: "JavaScript 기초",
-      period: "2024-01학기",
-      startDate: "2024-01-15",
-      endDate: "2024-03-15",
-      students: 25,
-      surveyActive: true,
-      surveyStartDate: "2024-03-10",
-      surveyEndDate: "2024-03-20",
-      responses: 18,
-      responseRate: 72,
-      averageScore: 4.2,
-      status: "진행중",
-      category: "프로그래밍",
-      room: "A101",
-      schedule: "월,수,금 09:00-12:00",
-      completionRate: 85,
-      satisfaction: 4.3,
-    },
-    {
-      id: 2,
-      code: "CS102",
-      name: "React 심화",
-      period: "2024-01학기",
-      startDate: "2024-02-01",
-      endDate: "2024-04-01",
-      students: 20,
-      surveyActive: false,
-      surveyStartDate: "2024-04-05",
-      surveyEndDate: "2024-04-15",
-      responses: 0,
-      responseRate: 0,
-      averageScore: 0,
-      status: "설문 예정",
-      category: "프로그래밍",
-      room: "B201",
-      schedule: "화,목 14:00-17:00",
-      completionRate: 90,
-      satisfaction: 0,
-    },
-    {
-      id: 3,
-      code: "WEB201",
-      name: "웹 개발 실무",
-      period: "2023-02학기",
-      startDate: "2023-09-01",
-      endDate: "2023-12-15",
-      students: 22,
-      surveyActive: false,
-      surveyStartDate: "2023-12-10",
-      surveyEndDate: "2023-12-20",
-      responses: 20,
-      responseRate: 91,
-      averageScore: 4.5,
-      status: "완료",
-      category: "프로그래밍",
-      room: "C301",
-      schedule: "월,수,금 13:00-16:00",
-      completionRate: 95,
-      satisfaction: 4.6,
-    },
-    {
-      id: 4,
-      code: "DB301",
-      name: "데이터베이스 설계",
-      period: "2023-02학기",
-      startDate: "2023-09-15",
-      endDate: "2023-12-30",
-      students: 18,
-      surveyActive: false,
-      surveyStartDate: "2023-12-25",
-      surveyEndDate: "2024-01-05",
-      responses: 16,
-      responseRate: 89,
-      averageScore: 4.1,
-      status: "완료",
-      category: "데이터베이스",
-      room: "D102",
-      schedule: "화,목 10:00-13:00",
-      completionRate: 88,
-      satisfaction: 4.2,
-    },
-    {
-      id: 5,
-      code: "AI401",
-      name: "인공지능 기초",
-      period: "2024-01학기",
-      startDate: "2024-03-01",
-      endDate: "2024-05-15",
-      students: 15,
-      surveyActive: true,
-      surveyStartDate: "2024-05-10",
-      surveyEndDate: "2024-05-20",
-      responses: 8,
-      responseRate: 53,
-      averageScore: 3.9,
-      status: "진행중",
-      category: "인공지능",
-      room: "E201",
-      schedule: "월,수 15:00-18:00",
-      completionRate: 78,
-      satisfaction: 3.8,
-    },
-  ])
+  // TODO: API 연동 필요 - 담당 강의 설문 데이터 조회
+  // TODO: 실시간 데이터 업데이트 기능 추가
+  // TODO: 설문 생성/수정 기능 추가
+  // TODO: 설문 결과 분석 차트 개선
+  // TODO: 설문 알림 기능 추가
+  const [lectures, setLectures] = useState([])
 
   // 강의 상세보기
   const handleViewDetails = (lectureId) => {
@@ -139,27 +38,27 @@ export default function InstructorSurveyLecturesPage() {
   // 필터링된 강의 목록
   const filteredLectures = lectures.filter((lecture) => {
     const matchesSearch =
-      lecture.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lecture.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      lecture.category.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = selectedStatus === "all" || lecture.status === selectedStatus
-    const matchesPeriod = selectedPeriod === "all" || lecture.period === selectedPeriod
+      lecture?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lecture?.code?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      lecture?.category?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = selectedStatus === "all" || lecture?.status === selectedStatus
+    const matchesPeriod = selectedPeriod === "all" || lecture?.period === selectedPeriod
 
     return matchesSearch && matchesStatus && matchesPeriod
   })
 
-  // 통계 계산
-  const totalLectures = lectures.length
-  const activeSurveys = lectures.filter((l) => l.surveyActive).length
-  const completedSurveys = lectures.filter((l) => l.status === "완료").length
+  // 통계 계산 - 안전한 처리
+  const totalLectures = lectures.length || 0
+  const activeSurveys = lectures.filter((l) => l?.surveyActive).length || 0
+  const completedSurveys = lectures.filter((l) => l?.status === "완료").length || 0
   const averageResponseRate = Math.round(
-    lectures.filter((l) => l.responses > 0).reduce((sum, l) => sum + l.responseRate, 0) /
-      lectures.filter((l) => l.responses > 0).length || 0,
-  )
+    lectures.filter((l) => (l?.responses || 0) > 0).reduce((sum, l) => sum + (l?.responseRate || 0), 0) /
+      lectures.filter((l) => (l?.responses || 0) > 0).length || 0,
+  ) || 0
   const averageSatisfaction = (
-    lectures.filter((l) => l.satisfaction > 0).reduce((sum, l) => sum + l.satisfaction, 0) /
-      lectures.filter((l) => l.satisfaction > 0).length || 0
-  ).toFixed(1)
+    lectures.filter((l) => (l?.satisfaction || 0) > 0).reduce((sum, l) => sum + (l?.satisfaction || 0), 0) /
+      lectures.filter((l) => (l?.satisfaction || 0) > 0).length || 0
+  ).toFixed(1) || "0.0"
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -183,7 +82,7 @@ export default function InstructorSurveyLecturesPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPage="survey" userRole="instructor" userName="김강사" />
+      <Header currentPage="survey" userRole="instructor" userName="강사" />
       <div className="flex">
         <Sidebar title="설문 평가 관리" menuItems={sidebarItems} currentPath="/instructor/survey/lectures" />
 
@@ -278,119 +177,128 @@ export default function InstructorSurveyLecturesPage() {
             </div>
           </div>
 
-          {/* 강의 목록 */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredLectures.map((lecture) => (
-              <div key={lecture.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-                <div className="p-6">
-                  {/* 강의 기본 정보 */}
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">{lecture.name}</h3>
-                      <p className="text-sm text-gray-600">
-                        {lecture.code} • {lecture.category}
-                      </p>
-                      <p className="text-sm text-gray-500">{lecture.period}</p>
-                    </div>
-                    <Badge className={getStatusColor(lecture.status)}>{lecture.status}</Badge>
-                  </div>
-
-                  {/* 강의 세부 정보 */}
-                  <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
-                    <div>
-                      <p className="text-gray-600">
-                        강의실: <span className="font-medium">{lecture.room}</span>
-                      </p>
-                      <p className="text-gray-600">
-                        수강생: <span className="font-medium">{lecture.students}명</span>
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-600">
-                        완료율: <span className="font-medium">{lecture.completionRate}%</span>
-                      </p>
-                      <p className="text-gray-600">
-                        일정: <span className="font-medium">{lecture.schedule}</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* 설문 정보 */}
-                  <div className="bg-gray-50 p-4 rounded-lg mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-medium text-gray-900">설문 평가 현황</h4>
-                      {lecture.surveyActive && <Badge className="bg-green-100 text-green-800">진행중</Badge>}
-                    </div>
-
-                    {lecture.responses > 0 ? (
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">응답률</span>
-                          <span className="font-medium">
-                            {lecture.responses}/{lecture.students}명 ({lecture.responseRate}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-500 h-2 rounded-full"
-                            style={{ width: `${lecture.responseRate}%` }}
-                          ></div>
-                        </div>
-                        {lecture.averageScore > 0 && (
-                          <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">평균 만족도</span>
-                            <span className={`font-bold ${getScoreColor(lecture.satisfaction)}`}>
-                              {lecture.satisfaction}/5.0
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-sm text-gray-500">
-                        {lecture.status === "설문 예정" ? (
-                          <p>
-                            설문 기간: {lecture.surveyStartDate} ~ {lecture.surveyEndDate}
-                          </p>
-                        ) : (
-                          <p>아직 응답이 없습니다.</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 액션 버튼 */}
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleViewDetails(lecture.id)}
-                      className="flex-1"
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      상세보기
-                    </Button>
-                    {lecture.responses > 0 && (
-                      <Button
-                        size="sm"
-                        onClick={() => handleViewResults(lecture.id)}
-                        className="flex-1 bg-blue-600 hover:bg-blue-700"
-                      >
-                        <BarChart3 className="w-4 h-4 mr-2" />
-                        결과 분석
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 결과가 없을 때 */}
-          {filteredLectures.length === 0 && (
+          {/* 강의 목록 또는 빈 상태 */}
+          {lectures.length === 0 ? (
+            <EmptyState
+              icon={BarChart3}
+              title="담당 강의가 없습니다"
+              description="설문을 진행할 수 있는 담당 강의가 없습니다. 강의를 추가하거나 관리자에게 문의하세요."
+              action={{
+                label: "강의 관리로 이동",
+                onClick: () => (window.location.href = "/instructor/courses"),
+              }}
+            />
+          ) : filteredLectures.length === 0 ? (
             <div className="bg-white p-8 rounded-lg shadow-sm text-center">
               <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">검색 결과가 없습니다</h3>
               <p className="text-gray-600">검색 조건을 변경해보세요.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {filteredLectures.map((lecture) => (
+                <div key={lecture.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                  <div className="p-6">
+                    {/* 강의 기본 정보 */}
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{lecture?.name || "-"}</h3>
+                        <p className="text-sm text-gray-600">
+                          {lecture?.code || "-"} • {lecture?.category || "-"}
+                        </p>
+                        <p className="text-sm text-gray-500">{lecture?.period || "-"}</p>
+                      </div>
+                      <Badge className={getStatusColor(lecture?.status)}>{lecture?.status || "-"}</Badge>
+                    </div>
+
+                    {/* 강의 세부 정보 */}
+                    <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+                      <div>
+                        <p className="text-gray-600">
+                          강의실: <span className="font-medium">{lecture?.room || "-"}</span>
+                        </p>
+                        <p className="text-gray-600">
+                          수강생: <span className="font-medium">{lecture?.students || 0}명</span>
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-gray-600">
+                          완료율: <span className="font-medium">{lecture?.completionRate || 0}%</span>
+                        </p>
+                        <p className="text-gray-600">
+                          일정: <span className="font-medium">{lecture?.schedule || "-"}</span>
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 설문 정보 */}
+                    <div className="bg-gray-50 p-4 rounded-lg mb-4">
+                      <div className="flex justify-between items-center mb-2">
+                        <h4 className="font-medium text-gray-900">설문 평가 현황</h4>
+                        {lecture?.surveyActive && <Badge className="bg-green-100 text-green-800">진행중</Badge>}
+                      </div>
+
+                      {(lecture?.responses || 0) > 0 ? (
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">응답률</span>
+                            <span className="font-medium">
+                              {lecture?.responses || 0}/{lecture?.students || 0}명 ({lecture?.responseRate || 0}%)
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-500 h-2 rounded-full"
+                              style={{ width: `${lecture?.responseRate || 0}%` }}
+                            ></div>
+                          </div>
+                          {(lecture?.averageScore || 0) > 0 && (
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">평균 만족도</span>
+                              <span className={`font-bold ${getScoreColor(lecture?.satisfaction || 0)}`}>
+                                {lecture?.satisfaction || 0}/5.0
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-gray-500">
+                          {lecture?.status === "설문 예정" ? (
+                            <p>
+                              설문 기간: {lecture?.surveyStartDate || "-"} ~ {lecture?.surveyEndDate || "-"}
+                            </p>
+                          ) : (
+                            <p>아직 응답이 없습니다.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 액션 버튼 */}
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleViewDetails(lecture.id)}
+                        className="flex-1"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        상세보기
+                      </Button>
+                      {(lecture?.responses || 0) > 0 && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleViewResults(lecture.id)}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        >
+                          <BarChart3 className="w-4 h-4 mr-2" />
+                          결과 분석
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </main>

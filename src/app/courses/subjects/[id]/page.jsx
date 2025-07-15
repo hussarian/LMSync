@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
+import EmptyState from "@/components/ui/empty-state"
 import { useRouter } from "next/navigation"
 
 export default function SubjectDetailPage({ params }) {
@@ -19,87 +20,31 @@ export default function SubjectDetailPage({ params }) {
     { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
   ]
 
-  // TODO: 실제 API에서 과목 데이터를 불러와서 설정
-  const subjectsData = {
-    S001: {
-      id: "S001",
-      name: "HTML/CSS 기초",
-      category: "프로그래밍",
-      difficulty: "초급",
-      duration: "2주",
-      description:
-        "웹 표준과 시맨틱 마크업을 학습하는 기초 과목입니다. HTML5의 새로운 요소들과 CSS3의 다양한 스타일링 기법을 배우며, 반응형 웹 디자인의 기초를 익힙니다.",
-      prerequisites: "컴퓨터 기초 지식",
-      objectives: [
-        "HTML5 시맨틱 요소를 이해하고 활용할 수 있다",
-        "CSS3 선택자와 속성을 활용하여 스타일링할 수 있다",
-        "Flexbox와 Grid를 이용한 레이아웃을 구성할 수 있다",
-        "반응형 웹 디자인의 기본 원리를 이해한다",
-      ],
-      instructor: "담당강사",
-      status: "활성",
-      createdDate: "2024-01-15",
-      usedInCourses: 3,
-      curriculum: [
-        {
-          week: "1주차",
-          topic: "HTML 기초",
-          description: "HTML 구조, 기본 태그, 시맨틱 요소 학습",
-        },
-        {
-          week: "2주차",
-          topic: "CSS 기초 및 레이아웃",
-          description: "CSS 선택자, 박스 모델, Flexbox, Grid 학습",
-        },
-      ],
-      relatedCourses: [
-        { id: "C001", name: "프론트엔드 개발 기초", students: 25, status: "진행중" },
-        { id: "C003", name: "웹 개발 종합", students: 30, status: "진행중" },
-        { id: "C005", name: "UI/UX 개발", students: 20, status: "예정" },
-      ],
-    },
-    S002: {
-      id: "S002",
-      name: "JavaScript 기초",
-      category: "프로그래밍",
-      difficulty: "초급",
-      duration: "2주",
-      description:
-        "JavaScript의 기본 문법과 DOM 조작을 학습하는 과목입니다. 변수, 함수, 객체의 개념을 이해하고 실제 웹 페이지에서 동적인 기능을 구현하는 방법을 배웁니다.",
-      prerequisites: "HTML/CSS 기초",
-      objectives: [
-        "JavaScript 기본 문법을 이해하고 활용할 수 있다",
-        "DOM을 조작하여 동적인 웹 페이지를 만들 수 있다",
-        "이벤트 처리를 통한 사용자 상호작용을 구현할 수 있다",
-        "기본적인 알고리즘과 자료구조를 이해한다",
-      ],
-      instructor: "담당강사",
-      status: "활성",
-      createdDate: "2024-01-20",
-      usedInCourses: 5,
-      curriculum: [
-        {
-          week: "1주차",
-          topic: "JavaScript 기본 문법",
-          description: "변수, 데이터 타입, 연산자, 조건문, 반복문",
-        },
-        {
-          week: "2주차",
-          topic: "DOM 조작과 이벤트",
-          description: "DOM 선택, 조작, 이벤트 리스너, 폼 처리",
-        },
-      ],
-      relatedCourses: [
-        { id: "C001", name: "프론트엔드 개발 기초", students: 25, status: "진행중" },
-        { id: "C002", name: "JavaScript 마스터", students: 18, status: "진행중" },
-        { id: "C003", name: "웹 개발 종합", students: 30, status: "진행중" },
-        { id: "C004", name: "React 개발", students: 22, status: "예정" },
-        { id: "C005", name: "UI/UX 개발", students: 20, status: "예정" },
-      ],
-    },
-  }
+  // TODO: API 연동 필요 - 과목 상세 데이터
+  const subjectsData = {}
 
-  const subject = subjectsData[subjectId] || subjectsData["S001"]
+  const subject = subjectsData[subjectId]
+
+  // 데이터가 없을 때 빈 상태 표시
+  if (!subject) {
+    return (
+      <PageLayout
+        sidebar={<Sidebar title="과목 관리" menuItems={sidebarMenuItems} currentPath="/courses/subjects" />}
+      >
+        <EmptyState
+          icon={BookOpen}
+          title="과목을 찾을 수 없습니다"
+          description="요청하신 과목 정보가 존재하지 않거나 삭제되었습니다."
+          action={
+            <Button onClick={() => router.push('/courses/subjects')} className="bg-blue-600 hover:bg-blue-700 text-white">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              과목 목록으로 돌아가기
+            </Button>
+          }
+        />
+      </PageLayout>
+    )
+  }
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {

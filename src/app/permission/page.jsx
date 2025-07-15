@@ -5,102 +5,18 @@ import { Users, Shield, Settings, Eye, Edit, Trash2, Plus, Check, X } from "luci
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
 import { Button } from "@/components/ui/button"
+import EmptyState from "@/components/ui/empty-state"
 
 export default function PermissionPage() {
   const [userRole] = useState("director") // 실제로는 로그인한 사용자의 역할을 가져와야 함
   const [selectedStaff, setSelectedStaff] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
 
-  // 직원 목록 데이터 (학원장용)
-  const staffList = [
-    {
-      id: 1,
-      name: "김영희",
-      role: "staff",
-      email: "kim@example.com",
-      phone: "010-1234-5678",
-      department: "교무팀",
-      joinDate: "2023-03-15",
-      permissions: ["계정 등록", "학적부 관리", "과정 관리", "강의실 관리"],
-      status: "활성",
-      avatar: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 2,
-      name: "박민수",
-      role: "staff",
-      email: "park@example.com",
-      phone: "010-2345-6789",
-      department: "행정팀",
-      joinDate: "2023-01-20",
-      permissions: ["계정 등록", "설문 평가 관리", "시험 및 성적"],
-      status: "활성",
-      avatar: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 3,
-      name: "이수진",
-      role: "instructor",
-      email: "lee@example.com",
-      phone: "010-3456-7890",
-      department: "강의팀",
-      joinDate: "2023-05-10",
-      permissions: ["학적부 관리", "과정 관리", "시험 및 성적"],
-      status: "활성",
-      avatar: "/placeholder.svg?height=60&width=60",
-    },
-    {
-      id: 4,
-      name: "정현우",
-      role: "staff",
-      email: "jung@example.com",
-      phone: "010-4567-8901",
-      department: "교무팀",
-      joinDate: "2023-07-01",
-      permissions: ["계정 등록", "학적부 관리"],
-      status: "비활성",
-      avatar: "/placeholder.svg?height=60&width=60",
-    },
-  ]
+  // TODO: API 연동 필요 - 직원 목록 데이터
+  const staffList = []
 
-  // 현재 사용자의 권한 (일반직원용)
-  const currentUserPermissions = [
-    {
-      category: "계정 관리",
-      permissions: [
-        { name: "개별 계정 등록", granted: true, description: "새로운 사용자 계정을 개별적으로 생성할 수 있습니다." },
-        { name: "일괄 계정 등록", granted: true, description: "여러 사용자 계정을 한번에 생성할 수 있습니다." },
-        { name: "계정 삭제", granted: false, description: "기존 사용자 계정을 삭제할 수 있습니다." },
-      ],
-    },
-    {
-      category: "학적 관리",
-      permissions: [
-        { name: "학생 정보 조회", granted: true, description: "학생들의 기본 정보를 조회할 수 있습니다." },
-        { name: "학생 정보 수정", granted: true, description: "학생들의 정보를 수정할 수 있습니다." },
-        { name: "학생 등록", granted: true, description: "새로운 학생을 등록할 수 있습니다." },
-        { name: "학생 삭제", granted: false, description: "학생 정보를 삭제할 수 있습니다." },
-      ],
-    },
-    {
-      category: "과정 관리",
-      permissions: [
-        { name: "과정 조회", granted: true, description: "등록된 과정들을 조회할 수 있습니다." },
-        { name: "과정 등록", granted: true, description: "새로운 과정을 등록할 수 있습니다." },
-        { name: "과정 수정", granted: false, description: "기존 과정 정보를 수정할 수 있습니다." },
-        { name: "과정 삭제", granted: false, description: "과정을 삭제할 수 있습니다." },
-      ],
-    },
-    {
-      category: "강의실 관리",
-      permissions: [
-        { name: "강의실 조회", granted: true, description: "강의실 현황을 조회할 수 있습니다." },
-        { name: "강의실 예약", granted: true, description: "강의실을 예약할 수 있습니다." },
-        { name: "강의실 등록", granted: false, description: "새로운 강의실을 등록할 수 있습니다." },
-        { name: "강의실 삭제", granted: false, description: "강의실을 삭제할 수 있습니다." },
-      ],
-    },
-  ]
+  // TODO: API 연동 필요 - 현재 사용자의 권한 데이터
+  const currentUserPermissions = []
 
   const sidebarMenuItems = [
     { href: "/permission/staff", label: "직원 관리", key: "staff-management" },
@@ -143,7 +59,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">전체 직원</p>
               <p className="text-2xl font-bold" style={{ color: "#3498db" }}>
-                {staffList.length}명
+                0명
               </p>
             </div>
           </div>
@@ -157,7 +73,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">활성 직원</p>
               <p className="text-2xl font-bold" style={{ color: "#2ecc71" }}>
-                {staffList.filter((s) => s.status === "활성").length}명
+                0명
               </p>
             </div>
           </div>
@@ -171,7 +87,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">강사</p>
               <p className="text-2xl font-bold" style={{ color: "#9b59b6" }}>
-                {staffList.filter((s) => s.role === "instructor").length}명
+                0명
               </p>
             </div>
           </div>
@@ -185,7 +101,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">일반 직원</p>
               <p className="text-2xl font-bold" style={{ color: "#e74c3c" }}>
-                {staffList.filter((s) => s.role === "staff").length}명
+                0명
               </p>
             </div>
           </div>
@@ -193,91 +109,103 @@ export default function PermissionPage() {
       </div>
 
       {/* 직원 카드 목록 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {staffList.map((staff) => (
-          <div key={staff.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <img
-                  src={staff.avatar || "/placeholder.svg"}
-                  alt={staff.name}
-                  className="w-16 h-16 rounded-full object-cover"
-                />
-                <div className="ml-4 flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900">{staff.name}</h3>
-                  <p className="text-sm text-gray-600">{staff.department}</p>
-                  <div className="flex items-center mt-1">
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        staff.status === "활성" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {staff.status}
-                    </span>
-                    <span
-                      className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
-                        staff.role === "instructor" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {staff.role === "instructor" ? "강사" : "직원"}
-                    </span>
+      {staffList.length === 0 ? (
+        <EmptyState
+          title="등록된 직원이 없습니다"
+          description="새로운 직원을 추가하여 권한을 관리해보세요."
+          action={
+            <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <Plus className="w-4 h-4 mr-2" />새 직원 추가
+            </Button>
+          }
+        />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {staffList.map((staff) => (
+            <div key={staff.id} className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+              <div className="p-6">
+                <div className="flex items-center mb-4">
+                  <img
+                    src={staff.avatar || "/placeholder.svg"}
+                    alt={staff.name}
+                    className="w-16 h-16 rounded-full object-cover"
+                  />
+                  <div className="ml-4 flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900">{staff.name}</h3>
+                    <p className="text-sm text-gray-600">{staff.department}</p>
+                    <div className="flex items-center mt-1">
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          staff.status === "활성" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {staff.status}
+                      </span>
+                      <span
+                        className={`ml-2 px-2 py-1 rounded-full text-xs font-medium ${
+                          staff.role === "instructor" ? "bg-purple-100 text-purple-800" : "bg-blue-100 text-blue-800"
+                        }`}
+                      >
+                        {staff.role === "instructor" ? "강사" : "직원"}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center text-sm text-gray-600">
-                  <span className="font-medium">이메일:</span>
-                  <span className="ml-2">{staff.email}</span>
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="font-medium">이메일:</span>
+                    <span className="ml-2">{staff.email}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="font-medium">연락처:</span>
+                    <span className="ml-2">{staff.phone}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-gray-600">
+                    <span className="font-medium">입사일:</span>
+                    <span className="ml-2">{staff.joinDate}</span>
+                  </div>
                 </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <span className="font-medium">연락처:</span>
-                  <span className="ml-2">{staff.phone}</span>
-                </div>
-                <div className="flex items-center text-sm text-gray-600">
-                  <span className="font-medium">입사일:</span>
-                  <span className="ml-2">{staff.joinDate}</span>
-                </div>
-              </div>
 
-              <div className="mb-4">
-                <p className="text-sm font-medium text-gray-700 mb-2">보유 권한</p>
-                <div className="flex flex-wrap gap-1">
-                  {staff.permissions.slice(0, 3).map((permission, index) => (
-                    <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {permission}
-                    </span>
-                  ))}
-                  {staff.permissions.length > 3 && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      +{staff.permissions.length - 3}개
-                    </span>
-                  )}
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-gray-700 mb-2">보유 권한</p>
+                  <div className="flex flex-wrap gap-1">
+                    {staff.permissions.slice(0, 3).map((permission, index) => (
+                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                        {permission}
+                      </span>
+                    ))}
+                    {staff.permissions.length > 3 && (
+                      <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                        +{staff.permissions.length - 3}개
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex space-x-2">
-                <Button size="sm" variant="ghost" onClick={() => console.log("상세보기:", staff.id)} className="flex-1">
-                  <Eye className="w-4 h-4 mr-1" />
-                  상세보기
-                </Button>
-                <Button size="sm" variant="ghost" onClick={() => handleEditPermissions(staff)} className="flex-1">
-                  <Edit className="w-4 h-4 mr-1" />
-                  권한수정
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleDeleteStaff(staff.id)}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex space-x-2">
+                  <Button size="sm" variant="ghost" onClick={() => console.log("상세보기:", staff.id)} className="flex-1">
+                    <Eye className="w-4 h-4 mr-1" />
+                    상세보기
+                  </Button>
+                  <Button size="sm" variant="ghost" onClick={() => handleEditPermissions(staff)} className="flex-1">
+                    <Edit className="w-4 h-4 mr-1" />
+                    권한수정
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleDeleteStaff(staff.id)}
+                    className="text-red-600 hover:text-red-700"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -301,8 +229,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">허용된 권한</p>
               <p className="text-2xl font-bold" style={{ color: "#2ecc71" }}>
-                {currentUserPermissions.reduce((acc, cat) => acc + cat.permissions.filter((p) => p.granted).length, 0)}
-                개
+                0개
               </p>
             </div>
           </div>
@@ -316,8 +243,7 @@ export default function PermissionPage() {
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">제한된 권한</p>
               <p className="text-2xl font-bold" style={{ color: "#e74c3c" }}>
-                {currentUserPermissions.reduce((acc, cat) => acc + cat.permissions.filter((p) => !p.granted).length, 0)}
-                개
+                0개
               </p>
             </div>
           </div>
@@ -325,45 +251,52 @@ export default function PermissionPage() {
       </div>
 
       {/* 권한 상세 목록 */}
-      <div className="space-y-6">
-        {currentUserPermissions.map((category, categoryIndex) => (
-          <div key={categoryIndex} className="bg-white rounded-lg shadow-sm border">
-            <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{category.category}</h3>
-              <div className="space-y-3">
-                {category.permissions.map((permission, permissionIndex) => (
-                  <div key={permissionIndex} className="flex items-start justify-between p-4 rounded-lg border">
-                    <div className="flex-1">
-                      <div className="flex items-center mb-2">
-                        <div
-                          className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 ${
-                            permission.granted ? "bg-green-100" : "bg-red-100"
-                          }`}
-                        >
-                          {permission.granted ? (
-                            <Check className="w-3 h-3 text-green-600" />
-                          ) : (
-                            <X className="w-3 h-3 text-red-600" />
-                          )}
+      {currentUserPermissions.length === 0 ? (
+        <EmptyState
+          title="권한 정보가 없습니다"
+          description="계정에 할당된 권한이 없거나 데이터를 불러올 수 없습니다."
+        />
+      ) : (
+        <div className="space-y-6">
+          {currentUserPermissions.map((category, categoryIndex) => (
+            <div key={categoryIndex} className="bg-white rounded-lg shadow-sm border">
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{category.category}</h3>
+                <div className="space-y-3">
+                  {category.permissions.map((permission, permissionIndex) => (
+                    <div key={permissionIndex} className="flex items-start justify-between p-4 rounded-lg border">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <div
+                            className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 ${
+                              permission.granted ? "bg-green-100" : "bg-red-100"
+                            }`}
+                          >
+                            {permission.granted ? (
+                              <Check className="w-3 h-3 text-green-600" />
+                            ) : (
+                              <X className="w-3 h-3 text-red-600" />
+                            )}
+                          </div>
+                          <h4 className="font-medium text-gray-900">{permission.name}</h4>
                         </div>
-                        <h4 className="font-medium text-gray-900">{permission.name}</h4>
+                        <p className="text-sm text-gray-600 ml-8">{permission.description}</p>
                       </div>
-                      <p className="text-sm text-gray-600 ml-8">{permission.description}</p>
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-medium ${
+                          permission.granted ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                        }`}
+                      >
+                        {permission.granted ? "허용" : "제한"}
+                      </span>
                     </div>
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        permission.granted ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {permission.granted ? "허용" : "제한"}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 
@@ -381,9 +314,9 @@ export default function PermissionPage() {
           <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h3 className="text-xl font-semibold text-gray-900">{selectedStaff.name} 권한 관리</h3>
+                <h3 className="text-xl font-semibold text-gray-900">{selectedStaff?.name || "직원"} 권한 관리</h3>
                 <p className="text-sm text-gray-600 mt-1">
-                  {selectedStaff.department} · {selectedStaff.email}
+                  {selectedStaff?.department || "부서"} · {selectedStaff?.email || "이메일"}
                 </p>
               </div>
               <Button variant="ghost" onClick={() => setIsEditModalOpen(false)} className="p-2">
@@ -397,19 +330,19 @@ export default function PermissionPage() {
                 <div className="bg-gray-50 rounded-lg p-4 mb-4">
                   <div className="flex items-center mb-4">
                     <img
-                      src={selectedStaff.avatar || "/placeholder.svg"}
-                      alt={selectedStaff.name}
+                      src={selectedStaff?.avatar || "/placeholder.svg"}
+                      alt={selectedStaff?.name || "직원"}
                       className="w-16 h-16 rounded-full object-cover"
                     />
                     <div className="ml-4">
-                      <h4 className="font-semibold text-gray-900">{selectedStaff.name}</h4>
-                      <p className="text-sm text-gray-600">{selectedStaff.department}</p>
+                      <h4 className="font-semibold text-gray-900">{selectedStaff?.name || "직원"}</h4>
+                      <p className="text-sm text-gray-600">{selectedStaff?.department || "부서"}</p>
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-medium mt-1 ${
-                          selectedStaff.status === "활성" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                          selectedStaff?.status === "활성" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {selectedStaff.status}
+                        {selectedStaff?.status || "상태"}
                       </span>
                     </div>
                   </div>
@@ -417,15 +350,15 @@ export default function PermissionPage() {
                   <div className="space-y-2 text-sm">
                     <div>
                       <span className="font-medium text-gray-700">이메일:</span>
-                      <span className="ml-2 text-gray-600">{selectedStaff.email}</span>
+                      <span className="ml-2 text-gray-600">{selectedStaff?.email || "-"}</span>
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">연락처:</span>
-                      <span className="ml-2 text-gray-600">{selectedStaff.phone}</span>
+                      <span className="ml-2 text-gray-600">{selectedStaff?.phone || "-"}</span>
                     </div>
                     <div>
                       <span className="font-medium text-gray-700">입사일:</span>
-                      <span className="ml-2 text-gray-600">{selectedStaff.joinDate}</span>
+                      <span className="ml-2 text-gray-600">{selectedStaff?.joinDate || "-"}</span>
                     </div>
                   </div>
                 </div>
@@ -433,7 +366,7 @@ export default function PermissionPage() {
                 <div className="bg-blue-50 rounded-lg p-4">
                   <h5 className="font-medium text-blue-900 mb-2">역할 설정</h5>
                   <select
-                    defaultValue={selectedStaff.role}
+                    defaultValue={selectedStaff?.role || "staff"}
                     className="w-full px-3 py-2 border border-blue-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="staff">일반 직원</option>
@@ -524,9 +457,9 @@ export default function PermissionPage() {
                               type="checkbox"
                               id={permission.key}
                               data-category={module.category}
-                              defaultChecked={selectedStaff.permissions.some((p) =>
+                              defaultChecked={selectedStaff?.permissions?.some((p) =>
                                 p.includes(permission.name.split(" ")[0]),
-                              )}
+                              ) || false}
                               className={`mt-1 rounded border-${module.color}-300 text-${module.color}-600 focus:ring-${module.color}-500`}
                             />
                             <div className="flex-1">

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
+import EmptyState from "@/components/ui/empty-state"
 import Link from "next/link"
 
 export default function CourseDetailPage({ params }) {
@@ -20,109 +21,32 @@ export default function CourseDetailPage({ params }) {
     { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
   ]
 
-  // 더미 과정 상세 데이터 (실제로는 API에서 가져올 데이터)
-  const courseData = {
-    C001: {
-      id: "C001",
-      name: "웹 개발 풀스택 과정",
-      category: "프로그래밍",
-      instructor: "담당강사",
-      duration: "6개월",
-      startDate: "2024-03-01",
-      endDate: "2024-08-31",
-      students: 25,
-      maxStudents: 30,
-      status: "진행중",
-      description:
-        "HTML, CSS, JavaScript, React, Node.js를 활용한 풀스택 웹 개발 과정입니다. 실무 중심의 프로젝트를 통해 실제 웹 애플리케이션을 개발할 수 있는 능력을 기릅니다.",
-      price: "1,200,000원",
-      schedule: "월, 수, 금 19:00-22:00",
-      location: "강의실 A-101",
-      prerequisites: "컴퓨터 기초 지식",
-      objectives: [
-        "HTML/CSS를 활용한 웹 페이지 제작",
-        "JavaScript 프로그래밍 기초 및 응용",
-        "React를 활용한 프론트엔드 개발",
-        "Node.js를 활용한 백엔드 개발",
-        "데이터베이스 연동 및 API 개발",
-        "실무 프로젝트 완성",
-      ],
-      curriculum: [
-        { week: "1-2주", topic: "HTML/CSS 기초", description: "웹 표준과 시맨틱 마크업" },
-        { week: "3-4주", topic: "JavaScript 기초", description: "변수, 함수, 객체, DOM 조작" },
-        { week: "5-8주", topic: "JavaScript 심화", description: "비동기 처리, ES6+, 모듈 시스템" },
-        { week: "9-12주", topic: "React 기초", description: "컴포넌트, 상태관리, 라이프사이클" },
-        { week: "13-16주", topic: "React 심화", description: "라우팅, 상태관리 라이브러리" },
-        { week: "17-20주", topic: "Node.js & Express", description: "서버 개발, API 구축" },
-        { week: "21-24주", topic: "데이터베이스 & 프로젝트", description: "MongoDB 연동, 최종 프로젝트" },
-      ],
-      enrolledStudents: [
-        { id: "20240001", name: "김학생", department: "컴퓨터공학과", enrollDate: "2024-02-15" },
-        { id: "20240002", name: "이학생", department: "경영학과", enrollDate: "2024-02-16" },
-        { id: "20240003", name: "박민수", department: "전자공학과", enrollDate: "2024-02-17" },
-        { id: "20240004", name: "최지영", department: "디자인학과", enrollDate: "2024-02-18" },
-        { id: "20240005", name: "정수현", department: "영어영문학과", enrollDate: "2024-02-19" },
-      ],
-    },
-    C002: {
-      id: "C002",
-      name: "데이터 분석 기초 과정",
-      category: "데이터사이언스",
-      instructor: "이교수",
-      duration: "3개월",
-      startDate: "2024-02-15",
-      endDate: "2024-05-15",
-      students: 18,
-      maxStudents: 20,
-      status: "진행중",
-      description:
-        "Python, Pandas, NumPy를 활용한 데이터 분석 기초 과정입니다. 실제 데이터를 활용한 분석 실습을 통해 데이터 사이언티스트로서의 기초 역량을 기릅니다.",
-      price: "800,000원",
-      schedule: "화, 목 19:00-22:00",
-      location: "강의실 B-201",
-      prerequisites: "Python 기초 지식",
-      objectives: [
-        "Python 데이터 분석 라이브러리 활용",
-        "데이터 전처리 및 정제",
-        "통계 분석 기초",
-        "데이터 시각화",
-        "실무 데이터 분석 프로젝트",
-      ],
-      curriculum: [
-        { week: "1-2주", topic: "Python 기초 복습", description: "데이터 분석을 위한 Python 기초" },
-        { week: "3-4주", topic: "NumPy & Pandas", description: "배열 연산과 데이터프레임 조작" },
-        { week: "5-6주", topic: "데이터 전처리", description: "결측치 처리, 이상치 탐지" },
-        { week: "7-8주", topic: "통계 분석", description: "기술통계, 가설검정" },
-        { week: "9-10주", topic: "데이터 시각화", description: "Matplotlib, Seaborn 활용" },
-        { week: "11-12주", topic: "프로젝트", description: "실무 데이터 분석 프로젝트" },
-      ],
-      enrolledStudents: [
-        { id: "20240006", name: "한소영", department: "수학과", enrollDate: "2024-02-10" },
-        { id: "20240007", name: "윤태호", department: "물리학과", enrollDate: "2024-02-11" },
-        { id: "20240008", name: "강미래", department: "화학과", enrollDate: "2024-02-12" },
-      ],
-    },
-  }
+  // TODO: API 연동 필요 - 과정 상세 데이터
+  const courseData = {}
 
-  const course = courseData[id] || {
-    id: id,
-    name: "과정 정보 없음",
-    category: "-",
-    instructor: "-",
-    duration: "-",
-    startDate: "-",
-    endDate: "-",
-    students: 0,
-    maxStudents: 0,
-    status: "정보없음",
-    description: "해당 과정의 정보를 찾을 수 없습니다.",
-    price: "-",
-    schedule: "-",
-    location: "-",
-    prerequisites: "-",
-    objectives: [],
-    curriculum: [],
-    enrolledStudents: [],
+  const course = courseData[id]
+
+  // 데이터가 없을 때 빈 상태 표시
+  if (!course) {
+    return (
+      <PageLayout
+        sidebar={<Sidebar title="과정 관리" menuItems={sidebarMenuItems} currentPath="/courses/list" />}
+      >
+        <EmptyState
+          icon={BookOpen}
+          title="과정을 찾을 수 없습니다"
+          description="요청하신 과정 정보가 존재하지 않거나 삭제되었습니다."
+          action={
+            <Link href="/courses/list">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                과정 목록으로 돌아가기
+              </Button>
+            </Link>
+          }
+        />
+      </PageLayout>
+    )
   }
 
   const [isEditing, setIsEditing] = useState(false)

@@ -6,6 +6,7 @@ import Sidebar from "@/components/layout/sidebar"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { EmptyState } from "@/components/ui/empty-state"
 import { Star, Clock, CheckCircle, AlertCircle, BookOpen, User, Calendar } from "lucide-react"
 
 export default function StudentSurveyPage() {
@@ -15,45 +16,12 @@ export default function StudentSurveyPage() {
   const sidebarMenuItems = [
   ]
 
-  // 수강 중인 강의 목록
-  const enrolledCourses = [
-    {
-      id: 1,
-      courseName: "JavaScript 기초",
-      instructor: "김영희 교수",
-      period: "2024-01-01 ~ 2024-03-31",
-      status: "진행중",
-      surveyStatus: "미완료",
-      surveyDeadline: "2024-01-25",
-      progress: 75,
-      totalClasses: 20,
-      attendedClasses: 15,
-    },
-    {
-      id: 2,
-      courseName: "React 심화",
-      instructor: "박철수 교수",
-      period: "2024-01-15 ~ 2024-04-15",
-      status: "진행중",
-      surveyStatus: "완료",
-      surveyDeadline: "2024-01-30",
-      progress: 60,
-      totalClasses: 24,
-      attendedClasses: 14,
-    },
-    {
-      id: 3,
-      courseName: "Python 데이터 분석",
-      instructor: "이민수 교수",
-      period: "2023-12-01 ~ 2024-02-29",
-      status: "완료",
-      surveyStatus: "완료",
-      surveyDeadline: "2024-02-20",
-      progress: 100,
-      totalClasses: 16,
-      attendedClasses: 16,
-    },
-  ]
+  // TODO: API 연동 필요 - 수강 중인 강의 목록 조회
+  // TODO: 설문 진행률 및 마감일 알림 기능 추가
+  // TODO: 설문 참여 독려 알림 시스템 추가
+  // TODO: 설문 결과 열람 권한 관리
+  // TODO: 설문 히스토리 관리 기능 추가
+  const [enrolledCourses, setEnrolledCourses] = useState([])
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -78,18 +46,24 @@ export default function StudentSurveyPage() {
   }
 
   const handleStartSurvey = (courseId) => {
-    // 설문 시작 로직
+    // TODO: 설문 시작 전 유효성 검사 추가
     window.location.href = `/student/survey/evaluate/${courseId}`
   }
 
   const handleViewResults = (courseId) => {
-    // 설문 결과 보기 로직
+    // TODO: 설문 결과 열람 권한 확인
     window.location.href = `/student/survey/results/${courseId}`
   }
 
+  // 안전한 통계 계산
+  const totalCourses = enrolledCourses.length || 0
+  const activeCourses = enrolledCourses.filter((course) => course?.status === "진행중").length || 0
+  const incompleteSurveys = enrolledCourses.filter((course) => course?.surveyStatus === "미완료").length || 0
+  const completedSurveys = enrolledCourses.filter((course) => course?.surveyStatus === "완료").length || 0
+
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header currentPage="survey" userRole="student" userName="김학생" />
+      <Header currentPage="survey" userRole="student" userName="학생" />
 
       <div className="flex">
         <Sidebar title="설문 평가" menuItems={sidebarMenuItems} currentPath={currentPath} />
@@ -111,9 +85,7 @@ export default function StudentSurveyPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600 mb-1">수강 중인 강의</p>
-                      <p className="text-3xl font-bold text-blue-600">
-                        {enrolledCourses.filter((course) => course.status === "진행중").length}개
-                      </p>
+                      <p className="text-3xl font-bold text-blue-600">{activeCourses}개</p>
                     </div>
                     <BookOpen className="w-8 h-8 text-blue-500" />
                   </div>
@@ -125,9 +97,7 @@ export default function StudentSurveyPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600 mb-1">미완료 설문</p>
-                      <p className="text-3xl font-bold text-orange-600">
-                        {enrolledCourses.filter((course) => course.surveyStatus === "미완료").length}개
-                      </p>
+                      <p className="text-3xl font-bold text-orange-600">{incompleteSurveys}개</p>
                     </div>
                     <Clock className="w-8 h-8 text-orange-500" />
                   </div>
@@ -139,9 +109,7 @@ export default function StudentSurveyPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600 mb-1">완료한 설문</p>
-                      <p className="text-3xl font-bold text-green-600">
-                        {enrolledCourses.filter((course) => course.surveyStatus === "완료").length}개
-                      </p>
+                      <p className="text-3xl font-bold text-green-600">{completedSurveys}개</p>
                     </div>
                     <CheckCircle className="w-8 h-8 text-green-500" />
                   </div>
@@ -149,98 +117,110 @@ export default function StudentSurveyPage() {
               </Card>
             </div>
 
-            {/* 수강 강의 목록 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Star className="w-5 h-5" style={{ color: "#1abc9c" }} />
-                  수강 중인 강의 목록
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {enrolledCourses.map((course) => (
-                    <div key={course.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start mb-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-xl font-semibold text-gray-900">{course.courseName}</h3>
-                            <Badge className={getStatusColor(course.status)}>{course.status}</Badge>
-                            <Badge className={getSurveyStatusColor(course.surveyStatus)}>
-                              설문 {course.surveyStatus}
-                            </Badge>
-                          </div>
+            {/* 수강 강의 목록 또는 빈 상태 */}
+            {enrolledCourses.length === 0 ? (
+              <EmptyState
+                icon={BookOpen}
+                title="수강 중인 강의가 없습니다"
+                description="설문을 진행할 수 있는 수강 강의가 없습니다. 강의를 신청하거나 관리자에게 문의하세요."
+                action={{
+                  label: "내 강의로 이동",
+                  onClick: () => (window.location.href = "/student/my-courses"),
+                }}
+              />
+            ) : (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="w-5 h-5" style={{ color: "#1abc9c" }} />
+                    수강 중인 강의 목록
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {enrolledCourses.map((course) => (
+                      <div key={course.id} className="border rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <div className="flex justify-between items-start mb-4">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-semibold text-gray-900">{course?.courseName || "-"}</h3>
+                              <Badge className={getStatusColor(course?.status)}>{course?.status || "-"}</Badge>
+                              <Badge className={getSurveyStatusColor(course?.surveyStatus)}>
+                                설문 {course?.surveyStatus || "-"}
+                              </Badge>
+                            </div>
 
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
-                            <div className="flex items-center gap-2">
-                              <User className="w-4 h-4" />
-                              <span>{course.instructor}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Calendar className="w-4 h-4" />
-                              <span>{course.period}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4" />
-                              <span>
-                                출석: {course.attendedClasses}/{course.totalClasses}회
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* 진도율 */}
-                          <div className="mb-4">
-                            <div className="flex justify-between items-center mb-1">
-                              <span className="text-sm text-gray-600">진도율</span>
-                              <span className="text-sm font-medium">{course.progress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className="h-2 rounded-full"
-                                style={{
-                                  width: `${course.progress}%`,
-                                  backgroundColor: "#1abc9c",
-                                }}
-                              />
-                            </div>
-                          </div>
-
-                          {course.surveyStatus === "미완료" && (
-                            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
                               <div className="flex items-center gap-2">
-                                <AlertCircle className="w-4 h-4 text-orange-600" />
-                                <span className="text-sm text-orange-800">설문 마감일: {course.surveyDeadline}</span>
+                                <User className="w-4 h-4" />
+                                <span>{course?.instructor || "-"}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Calendar className="w-4 h-4" />
+                                <span>{course?.period || "-"}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4" />
+                                <span>
+                                  출석: {course?.attendedClasses || 0}/{course?.totalClasses || 0}회
+                                </span>
                               </div>
                             </div>
-                          )}
-                        </div>
 
-                        <div className="ml-6 flex flex-col gap-2">
-                          {course.surveyStatus === "미완료" ? (
-                            <Button
-                              onClick={() => handleStartSurvey(course.id)}
-                              className="bg-teal-600 hover:bg-teal-700"
-                            >
-                              <Star className="w-4 h-4 mr-2" />
-                              설문 시작
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outline"
-                              onClick={() => handleViewResults(course.id)}
-                              className="border-teal-600 text-teal-600 hover:bg-teal-50"
-                            >
-                              <CheckCircle className="w-4 h-4 mr-2" />
-                              결과 보기
-                            </Button>
-                          )}
+                            {/* 진도율 */}
+                            <div className="mb-4">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-sm text-gray-600">진도율</span>
+                                <span className="text-sm font-medium">{course?.progress || 0}%</span>
+                              </div>
+                              <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="h-2 rounded-full"
+                                  style={{
+                                    width: `${course?.progress || 0}%`,
+                                    backgroundColor: "#1abc9c",
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            {course?.surveyStatus === "미완료" && course?.surveyDeadline && (
+                              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                                <div className="flex items-center gap-2">
+                                  <AlertCircle className="w-4 h-4 text-orange-600" />
+                                  <span className="text-sm text-orange-800">설문 마감일: {course.surveyDeadline}</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="ml-6 flex flex-col gap-2">
+                            {course?.surveyStatus === "미완료" ? (
+                              <Button
+                                onClick={() => handleStartSurvey(course.id)}
+                                className="bg-teal-600 hover:bg-teal-700"
+                              >
+                                <Star className="w-4 h-4 mr-2" />
+                                설문 시작
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="outline"
+                                onClick={() => handleViewResults(course.id)}
+                                className="border-teal-600 text-teal-600 hover:bg-teal-50"
+                              >
+                                <CheckCircle className="w-4 h-4 mr-2" />
+                                결과 보기
+                              </Button>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* 설문 평가 안내 */}
             <Card className="mt-6">

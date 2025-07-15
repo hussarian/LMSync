@@ -38,30 +38,11 @@ export default function SurveyItemsPage() {
     { href: "/survey/templates", label: "템플릿 목록", key: "survey-templates" },
   ]
 
-  // 통계 데이터
-  const stats = [
-    {
-      title: "전체 질문",
-      value: "156개",
-      icon: FileText,
-      color: "#e74c3c",
-      description: "등록된 질문 수",
-    },
-    {
-      title: "자주 사용되는 질문",
-      value: "42개",
-      icon: Star,
-      color: "#f39c12",
-      description: "사용 빈도 높음",
-    },
-    {
-      title: "최근 추가된 질문",
-      value: "8개",
-      icon: Clock,
-      color: "#27ae60",
-      description: "이번 달 추가",
-    },
-  ]
+  // TODO: API 연동 필요 - 평가 항목 통계 데이터 조회
+  // TODO: 질문 CRUD 기능 추가
+  // TODO: 질문 카테고리 관리 기능 추가
+  // TODO: 질문 사용 통계 및 분석 기능 추가
+  const [stats, setStats] = useState([])
 
   // 질문지 데이터
   const surveyItems = [
@@ -97,7 +78,7 @@ export default function SurveyItemsPage() {
     },
     {
       id: 4,
-      question: "과정 전반에 대한 만족���는 어떠신가요?",
+      question: "과정 전반에 대한 만족도는 어떠신가요?",
       category: "전반적 만족도",
       type: "5점 척도",
       usageCount: 67,
@@ -242,7 +223,7 @@ export default function SurveyItemsPage() {
               <h1 className="text-2xl font-bold mb-2" style={{ color: "#2C3E50" }}>
                 평가 항목 관리
               </h1>
-              <p className="text-gray-600">설문에 사용할 ��문들을 관리합니다.</p>
+              <p className="text-gray-600">설문에 사용할 질문들을 관리합니다.</p>
             </div>
 
             {/* 통계 카드 */}
@@ -564,7 +545,7 @@ export default function SurveyItemsPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* 템���릿 정보 */}
+              {/* 템플릿 정보 */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">템플릿 정보</h3>
 
