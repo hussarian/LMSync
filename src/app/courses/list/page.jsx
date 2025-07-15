@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
 import { useRouter } from "next/navigation"
-
+  
 export default function CoursesListPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedStatus, setSelectedStatus] = useState("all")
