@@ -16,7 +16,7 @@ export default function SubjectDetailPage({ params }) {
     { href: "/courses/register", label: "과정 등록", key: "course-register" },
     { href: "/courses/subjects", label: "과목 리스트", key: "subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록", key: "subject-register" },
-    { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
+    { href: "/courses/detail", label: "세부 과목 목록", key: "subject-detail" },
   ]
 
   // 더미 과목 데이터
@@ -139,7 +139,7 @@ export default function SubjectDetailPage({ params }) {
   }
 
   const handleEdit = () => {
-    router.push(`/courses/subjects/${subjectId}/edit`)
+    router.push(`/courses/subjects/register`)
   }
 
   const handleBack = () => {
@@ -182,7 +182,7 @@ export default function SubjectDetailPage({ params }) {
               <Button
                 onClick={handleEdit}
                 className="text-white font-medium flex items-center space-x-2"
-                style={{ backgroundColor: "#1ABC9C" }}
+                style={{ backgroundCor: "#1ABC9C" }}
               >
                 <Edit className="w-4 h-4" />
                 <span>편집</span>
@@ -190,130 +190,6 @@ export default function SubjectDetailPage({ params }) {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* 좌측: 기본 정보 */}
-              <div className="lg:col-span-1">
-                <Card>
-                  <CardContent className="p-6">
-                    <div className="text-center mb-6">
-                      <div
-                        className="w-20 h-20 mx-auto mb-4 flex items-center justify-center rounded-full"
-                        style={{ backgroundColor: "#f0f0f0" }}
-                      >
-                        <BookOpen className="w-10 h-10" style={{ color: "#1ABC9C" }} />
-                      </div>
-                      <h2 className="text-xl font-bold mb-2" style={{ color: "#2C3E50" }}>
-                        {subject.name}
-                      </h2>
-                      <Badge className="text-white" style={{ backgroundColor: getStatusColor(subject.status) }}>
-                        {subject.status}
-                      </Badge>
-                    </div>
-
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className="w-8 h-8 flex items-center justify-center rounded"
-                          style={{ backgroundColor: "#f0f0f0" }}
-                        >
-                          <span className="text-sm">📚</span>
-                        </div>
-                        <div>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            카테고리
-                          </p>
-                          <p className="font-medium" style={{ color: "#2C3E50" }}>
-                            {subject.category}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className="w-8 h-8 flex items-center justify-center rounded"
-                          style={{ backgroundColor: "#f0f0f0" }}
-                        >
-                          <Target className="w-4 h-4" style={{ color: getDifficultyColor(subject.difficulty) }} />
-                        </div>
-                        <div>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            난이도
-                          </p>
-                          <Badge
-                            className="text-white"
-                            style={{ backgroundColor: getDifficultyColor(subject.difficulty) }}
-                          >
-                            {subject.difficulty}
-                          </Badge>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className="w-8 h-8 flex items-center justify-center rounded"
-                          style={{ backgroundColor: "#f0f0f0" }}
-                        >
-                          <Clock className="w-4 h-4" style={{ color: "#95A5A6" }} />
-                        </div>
-                        <div>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            기간
-                          </p>
-                          <p className="font-medium" style={{ color: "#2C3E50" }}>
-                            {subject.duration}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className="w-8 h-8 flex items-center justify-center rounded"
-                          style={{ backgroundColor: "#f0f0f0" }}
-                        >
-                          <User className="w-4 h-4" style={{ color: "#95A5A6" }} />
-                        </div>
-                        <div>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            담당강사
-                          </p>
-                          <p className="font-medium" style={{ color: "#2C3E50" }}>
-                            {subject.instructor}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center space-x-3">
-                        <div
-                          className="w-8 h-8 flex items-center justify-center rounded"
-                          style={{ backgroundColor: "#f0f0f0" }}
-                        >
-                          <Calendar className="w-4 h-4" style={{ color: "#95A5A6" }} />
-                        </div>
-                        <div>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            등록일
-                          </p>
-                          <p className="font-medium" style={{ color: "#2C3E50" }}>
-                            {subject.createdDate}
-                          </p>
-                        </div>
-                      </div>
-
-                      {subject.prerequisites && (
-                        <div className="pt-4 border-t">
-                          <p className="text-sm font-medium mb-2" style={{ color: "#2C3E50" }}>
-                            수강 조건
-                          </p>
-                          <p className="text-sm" style={{ color: "#95A5A6" }}>
-                            {subject.prerequisites}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* 우측: 과목 소개 */}
               <div className="lg:col-span-2 space-y-6">
                 {/* 과목 소개 */}
                 <Card>
@@ -321,11 +197,13 @@ export default function SubjectDetailPage({ params }) {
                     <CardTitle style={{ color: "#2C3E50" }}>과목 소개</CardTitle>
                   </CardHeader>
                   <CardContent>
+                  <h2 className="text-xl font-bold mb-2" style={{ color: "#2C3E50" }}>
+                        {subject.name}
+                  </h2>
                     <p className="text-base leading-relaxed mb-6" style={{ color: "#2C3E50" }}>
                       {subject.description}
                     </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                       <div className="text-center p-4 rounded-lg" style={{ backgroundColor: "#f8f9fa" }}>
                         <div className="text-2xl font-bold" style={{ color: "#1ABC9C" }}>
                           {subject.usedInCourses}
@@ -339,30 +217,8 @@ export default function SubjectDetailPage({ params }) {
                           {subject.curriculum.length}
                         </div>
                         <div className="text-sm" style={{ color: "#95A5A6" }}>
-                          커리큘럼 항목
+                          세부 과목
                         </div>
-                      </div>
-                      <div className="text-center p-4 rounded-lg" style={{ backgroundColor: "#f8f9fa" }}>
-                        <div className="text-2xl font-bold" style={{ color: "#e67e22" }}>
-                          {subject.objectives.length}
-                        </div>
-                        <div className="text-sm" style={{ color: "#95A5A6" }}>
-                          학습 목표
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4" style={{ color: "#2C3E50" }}>
-                        학습 목표
-                      </h3>
-                      <div className="space-y-3">
-                        {subject.objectives.map((objective, index) => (
-                          <div key={index} className="flex items-start space-x-3">
-                            <CheckCircle className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: "#1ABC9C" }} />
-                            <p style={{ color: "#2C3E50" }}>{objective}</p>
-                          </div>
-                        ))}
                       </div>
                     </div>
                   </CardContent>
@@ -371,7 +227,7 @@ export default function SubjectDetailPage({ params }) {
                 {/* 커리큘럼 */}
                 <Card>
                   <CardHeader>
-                    <CardTitle style={{ color: "#2C3E50" }}>커리큘럼</CardTitle>
+                    <CardTitle style={{ color: "#2C3E50" }}>세부과목</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
@@ -402,48 +258,6 @@ export default function SubjectDetailPage({ params }) {
                           <p className="text-sm ml-11" style={{ color: "#2C3E50" }}>
                             {item.description}
                           </p>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* 관련 과정 */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle style={{ color: "#2C3E50" }}>이 과목을 사용하는 과정</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      {subject.relatedCourses.map((course) => (
-                        <div
-                          key={course.id}
-                          className="flex items-center justify-between p-4 border rounded-lg hover:border-emerald-500 cursor-pointer transition-colors"
-                          style={{ borderColor: "#e0e0e0" }}
-                          onClick={() => handleCourseClick(course.id)}
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div
-                              className="w-10 h-10 flex items-center justify-center rounded"
-                              style={{ backgroundColor: "#f0f0f0" }}
-                            >
-                              <span className="text-sm">📖</span>
-                            </div>
-                            <div>
-                              <h4 className="font-medium" style={{ color: "#2C3E50" }}>
-                                {course.name}
-                              </h4>
-                              <p className="text-sm" style={{ color: "#95A5A6" }}>
-                                수강생 {course.students}명
-                              </p>
-                            </div>
-                          </div>
-                          <Badge
-                            className="text-white"
-                            style={{ backgroundColor: getCourseStatusColor(course.status) }}
-                          >
-                            {course.status}
-                          </Badge>
                         </div>
                       ))}
                     </div>
