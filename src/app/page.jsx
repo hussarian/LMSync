@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import LoginForm from "@/components/auth/login-form"
@@ -7,6 +8,8 @@ import RegisterForm from "@/components/auth/register-form"
 import WindowsActivation from "@/components/ui/windows-activation"
 
 export default function LoginPage() {
+  const [selectedTab, setSelectedTab] = useState("login");
+
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: "#2C3E50" }}>
       <Card className="w-full max-w-md mx-4" style={{ backgroundColor: '#ffffff' }}>
@@ -19,10 +22,18 @@ export default function LoginPage() {
           </p>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="login" className="w-full">
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login">로그인</TabsTrigger>
-              <TabsTrigger value="register">
+              <TabsTrigger 
+                value="login" 
+                className={`text-sm ${selectedTab === 'login' ? 'font-bold text-[#1ABC9C]' : ''}`}
+              >
+                로그인
+              </TabsTrigger>
+              <TabsTrigger 
+                value="register" 
+                className={`text-sm ${selectedTab === 'register' ? 'font-bold text-[#1ABC9C]' : ''}`}
+              >
                 계정 찾기
               </TabsTrigger>
             </TabsList>
@@ -40,5 +51,5 @@ export default function LoginPage() {
 
       <WindowsActivation />
     </div>
-  )
+  );
 }
