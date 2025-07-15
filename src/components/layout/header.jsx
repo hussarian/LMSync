@@ -121,7 +121,7 @@ export default function Header({ currentPage = "", userRole = "student", userNam
             // "과정 관리" 메뉴의 href를 "/courses/list"로 변경하여 기본값을 "과정 리스트"로 설정
             { href: "/courses/list", label: "과정 관리", key: "courses" },
             { href: "/attendance", label: "강의실 관리", key: "attendance" },
-            { href: "/survey", label: "설문 평가 관리", key: "survey" },
+            { href: "/survey/items", label: "설문 평가 관리", key: "survey" },
             { href: "/exam", label: "시험 및 성적", key: "exam" },
             { href: "/permission", label: "권한 관리", key: "permission" },
           ]

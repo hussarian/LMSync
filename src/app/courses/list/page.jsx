@@ -13,18 +13,14 @@ import { useRouter } from "next/navigation"
 export default function CoursesListPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedStatus, setSelectedStatus] = useState("all")
-  const [selectedCategory, setSelectedCategory] = useState("all")
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
   const [courseFormData, setCourseFormData] = useState({
     name: "",
-    category: "프로그래밍",
     instructor: "",
     duration: "",
     startDate: "",
     endDate: "",
     maxStudents: "",
-    price: "",
     description: "",
     schedule: "",
     location: "",
@@ -38,161 +34,22 @@ export default function CoursesListPage() {
     { href: "/courses/register", label: "과정 등록", key: "course-register" },
     { href: "/courses/subjects", label: "과목 리스트", key: "subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록", key: "subject-register" },
-    { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
+    { href: "/courses/detail", label: "세부 과목 목록", key: "subject-detail" },
   ]
 
-  // 더미 과정 데이터
-  const coursesData = [
-    {
-      id: "C001",
-      name: "웹 개발 풀스택 과정",
-      category: "프로그래밍",
-      instructor: "김강사",
-      duration: "6개월",
-      startDate: "2024-03-01",
-      endDate: "2024-08-31",
-      students: 25,
-      maxStudents: 30,
-      status: "진행중",
-      description: "HTML, CSS, JavaScript, React, Node.js를 활용한 풀스택 웹 개발 과정",
-      price: "1,200,000원",
-      schedule: "월, 수, 금 19:00-22:00",
-      location: "강의실 A-101",
-      prerequisites: "컴퓨터 기초 지식",
-    },
-    {
-      id: "C002",
-      name: "데이터 분석 기초 과정",
-      category: "데이터사이언스",
-      instructor: "이교수",
-      duration: "3개월",
-      startDate: "2024-02-15",
-      endDate: "2024-05-15",
-      students: 18,
-      maxStudents: 20,
-      status: "진행중",
-      description: "Python, Pandas, NumPy를 활용한 데이터 분석 기초 과정",
-      price: "800,000원",
-      schedule: "화, 목 14:00-17:00",
-      location: "온라인",
-      prerequisites: "수학 기초 지식",
-    },
-    {
-      id: "C003",
-      name: "UI/UX 디자인 과정",
-      category: "디자인",
-      instructor: "박디자이너",
-      duration: "4개월",
-      startDate: "2024-01-10",
-      endDate: "2024-05-10",
-      students: 15,
-      maxStudents: 15,
-      status: "마감",
-      description: "Figma, Adobe XD를 활용한 UI/UX 디자인 실무 과정",
-      price: "950,000원",
-      schedule: "월, 수 10:00-13:00",
-      location: "디자인 스튜디오",
-      prerequisites: "디자인 툴 사용 경험",
-    },
-    {
-      id: "C004",
-      name: "모바일 앱 개발 과정",
-      category: "프로그래밍",
-      instructor: "최개발자",
-      duration: "5개월",
-      startDate: "2024-04-01",
-      endDate: "2024-08-31",
-      students: 0,
-      maxStudents: 25,
-      status: "모집중",
-      description: "React Native를 활용한 크로스플랫폼 모바일 앱 개발 과정",
-      price: "1,100,000원",
-      schedule: "화, 목 19:00-22:00",
-      location: "온라인",
-      prerequisites: "JavaScript 기초 지식",
-    },
-    {
-      id: "C005",
-      name: "디지털 마케팅 과정",
-      category: "마케팅",
-      instructor: "정마케터",
-      duration: "2개월",
-      startDate: "2024-01-01",
-      endDate: "2024-02-29",
-      students: 22,
-      maxStudents: 25,
-      status: "완료",
-      description: "SNS 마케팅, 구글 애드워즈, 콘텐츠 마케팅 전략 과정",
-      price: "600,000원",
-      schedule: "월, 금 14:00-17:00",
-      location: "마케팅 센터",
-      prerequisites: "마케팅 기초 지식",
-    },
-    {
-      id: "C006",
-      name: "클라우드 인프라 과정",
-      category: "인프라",
-      instructor: "한엔지니어",
-      duration: "4개월",
-      startDate: "2024-03-15",
-      endDate: "2024-07-15",
-      students: 12,
-      maxStudents: 20,
-      status: "진행중",
-      description: "AWS, Docker, Kubernetes를 활용한 클라우드 인프라 구축 과정",
-      price: "1,000,000원",
-      schedule: "수, 금 10:00-13:00",
-      location: "클라우드 센터",
-      prerequisites: "리눅스 기초 지식",
-    },
-    {
-      id: "C007",
-      name: "인공지능 기초 과정",
-      category: "AI/ML",
-      instructor: "윤연구원",
-      duration: "6개월",
-      startDate: "2024-05-01",
-      endDate: "2024-10-31",
-      students: 0,
-      maxStudents: 30,
-      status: "모집중",
-      description: "Python, TensorFlow를 활용한 머신러닝 및 딥러닝 기초 과정",
-      price: "1,500,000원",
-      schedule: "화, 목 10:00-13:00",
-      location: "AI 연구소",
-      prerequisites: "Python 기초 지식",
-    },
-    {
-      id: "C008",
-      name: "사이버보안 전문가 과정",
-      category: "보안",
-      instructor: "송보안전문가",
-      duration: "8개월",
-      startDate: "2024-02-01",
-      endDate: "2024-09-30",
-      students: 16,
-      maxStudents: 18,
-      status: "진행중",
-      description: "네트워크 보안, 웹 보안, 모의해킹 실무 과정",
-      price: "1,800,000원",
-      schedule: "월, 수, 금 14:00-17:00",
-      location: "보안 센터",
-      prerequisites: "네트워크 기초 지식",
-    },
-  ]
+  // 과정 데이터
+  const coursesData = []
 
   // 필터링된 과정 데이터
   const filteredCourses = coursesData.filter((course) => {
     const matchesSearch =
       course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       course.id.includes(searchTerm) ||
-      course.instructor.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.category.toLowerCase().includes(searchTerm.toLowerCase())
+      course.instructor.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesStatus = selectedStatus === "all" || course.status === selectedStatus
-    const matchesCategory = selectedCategory === "all" || course.category === selectedCategory
 
-    return matchesSearch && matchesStatus && matchesCategory
+    return matchesSearch && matchesStatus 
   })
 
   const getStatusColor = (status) => {
@@ -211,18 +68,22 @@ export default function CoursesListPage() {
   }
 
   const handleEdit = (courseId) => {
+    if (courseId === null) {
+      // 과정 추가 버튼 클릭 시 과정 등록 페이지로 이동
+      router.push('/courses/register')
+      return
+    }
+    
     const course = coursesData.find((c) => c.id === courseId)
     if (course) {
       setEditingCourse(course)
       setCourseFormData({
         name: course.name,
-        category: course.category,
         instructor: course.instructor,
         duration: course.duration,
         startDate: course.startDate,
         endDate: course.endDate,
         maxStudents: course.maxStudents.toString(),
-        price: course.price,
         description: course.description,
         schedule: course.schedule || "",
         location: course.location || "",
@@ -232,13 +93,11 @@ export default function CoursesListPage() {
       setEditingCourse(null)
       setCourseFormData({
         name: "",
-        category: "프로그래밍",
         instructor: "",
         duration: "",
         startDate: "",
         endDate: "",
         maxStudents: "",
-        price: "",
         description: "",
         schedule: "",
         location: "",
@@ -253,13 +112,11 @@ export default function CoursesListPage() {
     setEditingCourse(null)
     setCourseFormData({
       name: "",
-      category: "프로그래밍",
       instructor: "",
       duration: "",
       startDate: "",
       endDate: "",
       maxStudents: "",
-      price: "",
       description: "",
       schedule: "",
       location: "",
@@ -354,21 +211,6 @@ export default function CoursesListPage() {
                       <option value="마감">마감</option>
                       <option value="완료">완료</option>
                     </select>
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="px-3 py-2 border rounded-md"
-                      style={{ borderColor: "#95A5A6" }}
-                    >
-                      <option value="all">전체 카테고리</option>
-                      <option value="프로그래밍">프로그래밍</option>
-                      <option value="데이터사이언스">데이터사이언스</option>
-                      <option value="디자인">디자인</option>
-                      <option value="마케팅">마케팅</option>
-                      <option value="인프라">인프라</option>
-                      <option value="AI/ML">AI/ML</option>
-                      <option value="보안">보안</option>
-                    </select>
                     <Button
                       variant="outline"
                       className="flex items-center space-x-2 bg-transparent"
@@ -461,9 +303,6 @@ export default function CoursesListPage() {
                           과정명
                         </th>
                         <th className="text-left py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
-                          카테고리
-                        </th>
-                        <th className="text-left py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
                           강사명
                         </th>
                         <th className="text-center py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
@@ -474,9 +313,6 @@ export default function CoursesListPage() {
                         </th>
                         <th className="text-center py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
                           기간
-                        </th>
-                        <th className="text-center py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
-                          수강료
                         </th>
                         <th className="text-center py-3 px-4 font-medium" style={{ color: "#2C3E50" }}>
                           시작일
@@ -503,11 +339,6 @@ export default function CoursesListPage() {
                                   : course.description}
                               </p>
                             </div>
-                          </td>
-                          <td className="py-3 px-4">
-                            <Badge variant="outline" style={{ borderColor: "#1ABC9C", color: "#1ABC9C" }}>
-                              {course.category}
-                            </Badge>
                           </td>
                           <td className="py-3 px-4" style={{ color: "#95A5A6" }}>
                             {course.instructor}
@@ -539,9 +370,6 @@ export default function CoursesListPage() {
                           <td className="py-3 px-4 text-center text-sm" style={{ color: "#95A5A6" }}>
                             {course.duration}
                           </td>
-                          <td className="py-3 px-4 text-center font-medium" style={{ color: "#1ABC9C" }}>
-                            {course.price}
-                          </td>
                           <td className="py-3 px-4 text-center text-sm" style={{ color: "#95A5A6" }}>
                             {course.startDate}
                           </td>
@@ -549,9 +377,6 @@ export default function CoursesListPage() {
                             <div className="flex justify-center space-x-2">
                               <Button size="sm" variant="ghost" onClick={() => handleView(course.id)} className="p-1">
                                 <Eye className="w-4 h-4" style={{ color: "#1ABC9C" }} />
-                              </Button>
-                              <Button size="sm" variant="ghost" onClick={() => handleEdit(course.id)} className="p-1">
-                                <Edit className="w-4 h-4" style={{ color: "#95A5A6" }} />
                               </Button>
                               <Button size="sm" variant="ghost" onClick={() => handleDelete(course.id)} className="p-1">
                                 <Trash2 className="w-4 h-4" style={{ color: "#e74c3c" }} />
@@ -578,197 +403,8 @@ export default function CoursesListPage() {
           </div>
         </main>
       </div>
-      {/* 과정 생성/편집 모달 */}
-      {isCreateModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-4xl mx-4 max-h-[90vh] overflow-y-auto">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle style={{ color: "#2C3E50" }}>{editingCourse ? "과정 수정" : "새 과정 생성"}</CardTitle>
-                <Button variant="ghost" size="sm" onClick={handleCloseModal} style={{ color: "#95A5A6" }}>
-                  ✕
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* 기본 정보 */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    과정명 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    placeholder="과정명을 입력하세요"
-                    value={courseFormData.name}
-                    onChange={(e) => handleFormChange("name", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    카테고리 <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    value={courseFormData.category}
-                    onChange={(e) => handleFormChange("category", e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md"
-                    style={{ borderColor: "#95A5A6" }}
-                  >
-                    <option value="프로그래밍">프로그래밍</option>
-                    <option value="데이터사이언스">데이터사이언스</option>
-                    <option value="디자인">디자인</option>
-                    <option value="마케팅">마케팅</option>
-                    <option value="인프라">인프라</option>
-                    <option value="AI/ML">AI/ML</option>
-                    <option value="보안">보안</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    담당 강사 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    placeholder="강사명을 입력하세요"
-                    value={courseFormData.instructor}
-                    onChange={(e) => handleFormChange("instructor", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    과정 기간 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    placeholder="예: 6개월, 12주"
-                    value={courseFormData.duration}
-                    onChange={(e) => handleFormChange("duration", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    시작일 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    type="date"
-                    value={courseFormData.startDate}
-                    onChange={(e) => handleFormChange("startDate", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    종료일 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    type="date"
-                    value={courseFormData.endDate}
-                    onChange={(e) => handleFormChange("endDate", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    최대 수강생 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    type="number"
-                    placeholder="30"
-                    value={courseFormData.maxStudents}
-                    onChange={(e) => handleFormChange("maxStudents", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    수강료 <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    placeholder="예: 1,200,000원"
-                    value={courseFormData.price}
-                    onChange={(e) => handleFormChange("price", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    수업 일정
-                  </label>
-                  <Input
-                    placeholder="예: 월, 수, 금 19:00-22:00"
-                    value={courseFormData.schedule}
-                    onChange={(e) => handleFormChange("schedule", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    강의실
-                  </label>
-                  <Input
-                    placeholder="예: 강의실 A-101"
-                    value={courseFormData.location}
-                    onChange={(e) => handleFormChange("location", e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                    수강 조건
-                  </label>
-                  <Input
-                    placeholder="예: 컴퓨터 기초 지식"
-                    value={courseFormData.prerequisites}
-                    onChange={(e) => handleFormChange("prerequisites", e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                  과정 설명 <span className="text-red-500">*</span>
-                </label>
-                <textarea
-                  placeholder="과정에 대한 상세한 설명을 입력하세요"
-                  value={courseFormData.description}
-                  onChange={(e) => handleFormChange("description", e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md resize-none"
-                  style={{ borderColor: "#95A5A6" }}
-                  rows={4}
-                />
-              </div>
-
-              {/* 버튼 그룹 */}
-              <div className="flex justify-end space-x-4 pt-4 border-t">
-                <Button
-                  variant="outline"
-                  onClick={handleCloseModal}
-                  className="bg-transparent"
-                  style={{ borderColor: "#95A5A6", color: "#95A5A6" }}
-                >
-                  취소
-                </Button>
-                <Button
-                  onClick={handleSaveCourse}
-                  className="text-white font-medium"
-                  style={{ backgroundColor: "#1ABC9C" }}
-                >
-                  {editingCourse ? "수정" : "생성"}
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+     
+      )
     </PageLayout>
   )
 }

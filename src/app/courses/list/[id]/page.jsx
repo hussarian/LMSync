@@ -17,7 +17,7 @@ export default function CourseDetailPage({ params }) {
     { href: "/courses/register", label: "과정 등록", key: "course-register" },
     { href: "/courses/subjects", label: "과목 리스트", key: "subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록", key: "subject-register" },
-    { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
+    { href: "/courses/detail", label: "세부 과목 목록", key: "subject-detail" },
   ]
 
   // 더미 과정 상세 데이터 (실제로는 API에서 가져올 데이터)

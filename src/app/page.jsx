@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import LoginForm from "@/components/auth/login-form"
 import RegisterForm from "@/components/auth/register-form"
-import WindowsActivation from "@/components/ui/windows-activation"
 
 export default function LoginPage() {
   return (
@@ -38,7 +37,7 @@ export default function LoginPage() {
         </CardContent>
       </Card>
 
-      <WindowsActivation />
+      
     </div>
   )
 }
