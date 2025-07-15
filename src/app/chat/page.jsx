@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import PageLayout from "@/components/ui/page-layout"
 
-import { useMockChatRoom } from "@/hooks/useMockSocket.jsx"
+import { useStompChatRoom } from "@/hooks/useStompSocket.jsx"
 import { chatService } from "@/lib/chatService.jsx"
 
 export default function ChatPage() {
@@ -28,16 +28,17 @@ export default function ChatPage() {
   const [chatList, setChatList] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Mock WebSocket 훅 사용
+  // STOMP WebSocket 훅 사용
   const currentUserId = "current_user"
   const currentUserName = "나"
   const { 
     messages, 
     typingUsers, 
+    onlineUsers, 
     sendMessage, 
     handleTyping, 
     isConnected 
-  } = useMockChatRoom(activeRoomId, currentUserId, currentUserName)
+  } = useStompChatRoom(activeRoomId, currentUserId, currentUserName)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -53,16 +54,20 @@ export default function ChatPage() {
       setLoading(true)
       const result = await chatService.getChatRooms()
       
-      if (result.success) {
+      if (result && result.success && result.data) {
         setChatList(result.data)
         // 첫 번째 채팅방을 기본으로 선택
         if (result.data.length > 0 && !activeChat) {
           setActiveChat(result.data[0].name)
           setActiveRoomId(result.data[0].id)
         }
+      } else {
+        console.warn('채팅방 목록을 가져올 수 없습니다:', result?.error || '알 수 없는 오류')
+        setChatList([])
       }
     } catch (error) {
       console.error('채팅방 목록 가져오기 오류:', error)
+      setChatList([])
     } finally {
       setLoading(false)
     }
@@ -78,10 +83,15 @@ export default function ChatPage() {
       try {
         const result = await chatService.searchUsers(searchQuery, searchType)
         
-        if (result.success) {
+        if (result && result.success && result.data && result.data.users) {
           setSearchResults(result.data.users)
         } else {
+          console.warn('사용자 검색 결과를 가져올 수 없습니다:', result?.error || '알 수 없는 오류')
           setSearchResults([])
+          // 사용자에게 알림 (선택사항)
+          if (result?.error && result.error.includes('백엔드 서버')) {
+            alert('백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.')
+          }
         }
       } catch (error) {
         console.error('사용자 검색 오류:', error)
@@ -184,7 +194,7 @@ export default function ChatPage() {
                     <div className="p-4 text-center">
                       <p className="text-sm" style={{ color: "#95A5A6" }}>채팅방 목록을 불러오는 중...</p>
                     </div>
-                  ) : chatList.length === 0 ? (
+                  ) : !chatList || chatList.length === 0 ? (
                     <div className="p-4 text-center">
                       <p className="text-sm" style={{ color: "#95A5A6" }}>채팅방이 없습니다.</p>
                     </div>
@@ -228,10 +238,17 @@ export default function ChatPage() {
             </Card>
 
             {/* 채팅 화면 */}
-            <Card className="lg:col-span-3 flex flex-col">
+            <Card className="lg:col-span-2 flex flex-col">
               <CardHeader className="border-b">
                 <div className="flex items-center justify-between">
-                  <CardTitle style={{ color: "#2C3E50" }}>{activeChat || "채팅"}</CardTitle>
+                  <div>
+                    <CardTitle style={{ color: "#2C3E50" }}>{activeChat || "채팅"}</CardTitle>
+                    {onlineUsers.length > 0 && (
+                      <p className="text-xs mt-1" style={{ color: "#95A5A6" }}>
+                        온라인 {onlineUsers.length}명
+                      </p>
+                    )}
+                  </div>
                   <div className="flex items-center space-x-2">
                     <div 
                       className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}
@@ -345,6 +362,44 @@ export default function ChatPage() {
                   </Button>
                 </form>
               </div>
+            </Card>
+
+            {/* 온라인 사용자 목록 */}
+            <Card className="lg:col-span-1">
+              <CardHeader>
+                <CardTitle style={{ color: "#2C3E50" }}>온라인 사용자</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="space-y-1">
+                  {onlineUsers.length === 0 ? (
+                    <div className="p-4 text-center">
+                      <p className="text-sm" style={{ color: "#95A5A6" }}>온라인 사용자가 없습니다.</p>
+                    </div>
+                  ) : (
+                    onlineUsers.map((user) => (
+                      <div
+                        key={user.userId}
+                        className="p-3 border-b"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium" style={{ color: "#2C3E50" }}>
+                              {user.userName}
+                            </p>
+                            <p className="text-xs" style={{ color: "#95A5A6" }}>
+                              {new Date(user.joinedAt).toLocaleTimeString('ko-KR', { 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                              })}에 참여
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
             </Card>
           </div>
         </div>

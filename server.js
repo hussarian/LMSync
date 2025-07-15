@@ -5,7 +5,7 @@ const { initSocket } = require('./src/lib/socket.jsx');
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // Next.js 앱 준비
 const app = next({ dev, hostname, port });

@@ -9,8 +9,8 @@ export const useSocket = () => {
   useEffect(() => {
     // Socket.io 클라이언트 초기화
     const socketInstance = io(process.env.NODE_ENV === 'production' 
-      ? process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000'
-      : 'http://localhost:3000'
+      ? process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001'
+      : 'http://localhost:3001'
     );
 
     // 연결 이벤트

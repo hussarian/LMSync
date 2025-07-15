@@ -5,10 +5,9 @@ let io;
 export const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: process.env.NODE_ENV === 'production' 
-        ? process.env.NEXT_PUBLIC_FRONTEND_URL 
-        : "http://localhost:3000",
-      methods: ["GET", "POST"]
+      origin: "http://localhost:3000", // 프론트엔드 주소로 맞추세요!
+      methods: ["GET", "POST"],
+      credentials: true
     }
   });
 

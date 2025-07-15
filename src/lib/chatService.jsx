@@ -6,15 +6,38 @@ export const chatService = {
   async getChatRooms() {
     try {
       const response = await fetch(`${API_BASE_URL}/chat/rooms`)
-      const data = await response.json()
       
       if (!response.ok) {
-        throw new Error(data.error || '채팅방 목록을 가져오는데 실패했습니다.')
+        let errorMessage = '채팅방 목록을 가져오는데 실패했습니다.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // JSON 파싱 실패 시 HTTP 상태 코드에 따른 메시지 사용
+          if (response.status === 404) {
+            errorMessage = '서버를 찾을 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+          } else if (response.status >= 500) {
+            // Java 컴파일러 에러 메시지 필터링
+            if (errorMessage.includes('-parameters') || errorMessage.includes('reflection')) {
+              errorMessage = '백엔드 서버 설정 오류가 발생했습니다. 서버를 재시작해주세요.'
+            } else {
+              errorMessage = '서버 오류가 발생했습니다.'
+            }
+          } else {
+            errorMessage = `요청 실패 (${response.status})`
+          }
+        }
+        throw new Error(errorMessage)
       }
       
+      const data = await response.json()
       return { success: true, data: data.rooms }
     } catch (error) {
       console.error('채팅방 목록 가져오기 오류:', error)
+      // fetch 자체가 실패한 경우 (네트워크 오류 등)
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: '백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.' }
+      }
       return { success: false, error: error.message }
     }
   },
@@ -23,15 +46,38 @@ export const chatService = {
   async searchUsers(query, type = 'all') {
     try {
       const response = await fetch(`${API_BASE_URL}/chat/users/search?q=${encodeURIComponent(query)}&type=${type}`)
-      const data = await response.json()
       
       if (!response.ok) {
-        throw new Error(data.error || '사용자 검색에 실패했습니다.')
+        let errorMessage = '사용자 검색에 실패했습니다.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // JSON 파싱 실패 시 HTTP 상태 코드에 따른 메시지 사용
+          if (response.status === 404) {
+            errorMessage = '서버를 찾을 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+          } else if (response.status >= 500) {
+            // Java 컴파일러 에러 메시지 필터링
+            if (errorMessage.includes('-parameters') || errorMessage.includes('reflection')) {
+              errorMessage = '백엔드 서버 설정 오류가 발생했습니다. 서버를 재시작해주세요.'
+            } else {
+              errorMessage = '서버 오류가 발생했습니다.'
+            }
+          } else {
+            errorMessage = `요청 실패 (${response.status})`
+          }
+        }
+        throw new Error(errorMessage)
       }
       
+      const data = await response.json()
       return { success: true, data }
     } catch (error) {
       console.error('사용자 검색 오류:', error)
+      // fetch 자체가 실패한 경우 (네트워크 오류 등)
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: '백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.' }
+      }
       return { success: false, error: error.message }
     }
   },
@@ -51,15 +97,37 @@ export const chatService = {
         })
       })
       
-      const data = await response.json()
-      
       if (!response.ok) {
-        throw new Error(data.error || '채팅방 생성에 실패했습니다.')
+        let errorMessage = '채팅방 생성에 실패했습니다.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // JSON 파싱 실패 시 HTTP 상태 코드에 따른 메시지 사용
+          if (response.status === 404) {
+            errorMessage = '서버를 찾을 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+          } else if (response.status >= 500) {
+            // Java 컴파일러 에러 메시지 필터링
+            if (errorMessage.includes('-parameters') || errorMessage.includes('reflection')) {
+              errorMessage = '백엔드 서버 설정 오류가 발생했습니다. 서버를 재시작해주세요.'
+            } else {
+              errorMessage = '서버 오류가 발생했습니다.'
+            }
+          } else {
+            errorMessage = `요청 실패 (${response.status})`
+          }
+        }
+        throw new Error(errorMessage)
       }
       
+      const data = await response.json()
       return { success: true, data: data.room }
     } catch (error) {
       console.error('채팅방 생성 오류:', error)
+      // fetch 자체가 실패한 경우 (네트워크 오류 등)
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: '백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.' }
+      }
       return { success: false, error: error.message }
     }
   },
@@ -68,15 +136,38 @@ export const chatService = {
   async getMessages(roomId) {
     try {
       const response = await fetch(`${API_BASE_URL}/chat/rooms/${roomId}/messages`)
-      const data = await response.json()
       
       if (!response.ok) {
-        throw new Error(data.error || '메시지를 가져오는데 실패했습니다.')
+        let errorMessage = '메시지를 가져오는데 실패했습니다.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // JSON 파싱 실패 시 HTTP 상태 코드에 따른 메시지 사용
+          if (response.status === 404) {
+            errorMessage = '서버를 찾을 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+          } else if (response.status >= 500) {
+            // Java 컴파일러 에러 메시지 필터링
+            if (errorMessage.includes('-parameters') || errorMessage.includes('reflection')) {
+              errorMessage = '백엔드 서버 설정 오류가 발생했습니다. 서버를 재시작해주세요.'
+            } else {
+              errorMessage = '서버 오류가 발생했습니다.'
+            }
+          } else {
+            errorMessage = `요청 실패 (${response.status})`
+          }
+        }
+        throw new Error(errorMessage)
       }
       
+      const data = await response.json()
       return { success: true, data: data.messages }
     } catch (error) {
       console.error('메시지 가져오기 오류:', error)
+      // fetch 자체가 실패한 경우 (네트워크 오류 등)
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: '백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.' }
+      }
       return { success: false, error: error.message }
     }
   },
@@ -94,15 +185,37 @@ export const chatService = {
         })
       })
       
-      const data = await response.json()
-      
       if (!response.ok) {
-        throw new Error(data.error || '메시지 전송에 실패했습니다.')
+        let errorMessage = '메시지 전송에 실패했습니다.'
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // JSON 파싱 실패 시 HTTP 상태 코드에 따른 메시지 사용
+          if (response.status === 404) {
+            errorMessage = '서버를 찾을 수 없습니다. 백엔드 서버가 실행 중인지 확인해주세요.'
+          } else if (response.status >= 500) {
+            // Java 컴파일러 에러 메시지 필터링
+            if (errorMessage.includes('-parameters') || errorMessage.includes('reflection')) {
+              errorMessage = '백엔드 서버 설정 오류가 발생했습니다. 서버를 재시작해주세요.'
+            } else {
+              errorMessage = '서버 오류가 발생했습니다.'
+            }
+          } else {
+            errorMessage = `요청 실패 (${response.status})`
+          }
+        }
+        throw new Error(errorMessage)
       }
       
+      const data = await response.json()
       return { success: true, data: data.message }
     } catch (error) {
       console.error('메시지 전송 오류:', error)
+      // fetch 자체가 실패한 경우 (네트워크 오류 등)
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: '백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.' }
+      }
       return { success: false, error: error.message }
     }
   }

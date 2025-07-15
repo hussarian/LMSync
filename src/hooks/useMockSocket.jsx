@@ -13,71 +13,101 @@ export const useMockChatRoom = (roomId, currentUserId, currentUserName) => {
   useEffect(() => {
     if (!roomId || !currentUserId) return
 
-    const ws = new WebSocket(`${SOCKET_URL}?roomId=${roomId}&userId=${currentUserId}&userName=${currentUserName}`)
+    let ws = null
+    let connectionTimeout = null
 
-    ws.onopen = () => {
-      console.log('WebSocket 연결됨')
-      setIsConnected(true)
-    }
+    try {
+      ws = new WebSocket(`${SOCKET_URL}?roomId=${roomId}&userId=${currentUserId}&userName=${currentUserName}`)
 
-    ws.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data)
-        
-        switch (data.type) {
-          case 'message':
-            setMessages(prev => [...prev, data.message])
-            break
-          case 'typing':
-            if (data.userId !== currentUserId) {
-              setTypingUsers(prev => {
-                if (data.isTyping) {
-                  return [...prev.filter(user => user.userId !== data.userId), {
-                    userId: data.userId,
-                    userName: data.userName
-                  }]
-                } else {
-                  return prev.filter(user => user.userId !== data.userId)
-                }
-              })
-            }
-            break
-          case 'user_joined':
-            setMessages(prev => [...prev, {
-              id: `system_${Date.now()}`,
-              type: 'system',
-              content: `${data.userName}님이 참여했습니다.`,
-              time: new Date().toISOString()
-            }])
-            break
-          case 'user_left':
-            setMessages(prev => [...prev, {
-              id: `system_${Date.now()}`,
-              type: 'system',
-              content: `${data.userName}님이 나갔습니다.`,
-              time: new Date().toISOString()
-            }])
-            break
+      // 연결 타임아웃 설정 (5초)
+      connectionTimeout = setTimeout(() => {
+        if (ws.readyState === WebSocket.CONNECTING) {
+          console.warn('WebSocket 연결 타임아웃')
+          ws.close()
         }
-      } catch (error) {
-        console.error('WebSocket 메시지 파싱 오류:', error)
+      }, 5000)
+
+      ws.onopen = () => {
+        console.log('WebSocket 연결됨')
+        setIsConnected(true)
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout)
+        }
       }
-    }
 
-    ws.onclose = () => {
-      console.log('WebSocket 연결 해제됨')
+      ws.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data)
+          
+          switch (data.type) {
+            case 'message':
+              setMessages(prev => [...prev, data.message])
+              break
+            case 'typing':
+              if (data.userId !== currentUserId) {
+                setTypingUsers(prev => {
+                  if (data.isTyping) {
+                    return [...prev.filter(user => user.userId !== data.userId), {
+                      userId: data.userId,
+                      userName: data.userName
+                    }]
+                  } else {
+                    return prev.filter(user => user.userId !== data.userId)
+                  }
+                })
+              }
+              break
+            case 'user_joined':
+              setMessages(prev => [...prev, {
+                id: `system_${Date.now()}`,
+                type: 'system',
+                content: `${data.userName}님이 참여했습니다.`,
+                time: new Date().toISOString()
+              }])
+              break
+            case 'user_left':
+              setMessages(prev => [...prev, {
+                id: `system_${Date.now()}`,
+                type: 'system',
+                content: `${data.userName}님이 나갔습니다.`,
+                time: new Date().toISOString()
+              }])
+              break
+          }
+        } catch (error) {
+          console.error('WebSocket 메시지 파싱 오류:', error)
+        }
+      }
+
+      ws.onclose = (event) => {
+        console.log('WebSocket 연결 해제됨', event.code, event.reason)
+        setIsConnected(false)
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout)
+        }
+      }
+
+      ws.onerror = (error) => {
+        console.warn('WebSocket 연결 실패 - 백엔드 서버가 실행되지 않았을 수 있습니다')
+        setIsConnected(false)
+        if (connectionTimeout) {
+          clearTimeout(connectionTimeout)
+        }
+      }
+
+      setSocket(ws)
+    } catch (error) {
+      console.warn('WebSocket 생성 실패:', error.message)
       setIsConnected(false)
     }
-
-    ws.onerror = (error) => {
-      console.error('WebSocket 오류:', error)
-      setIsConnected(false)
-    }
-
-    setSocket(ws)
 
     return () => {
-      ws.close()
+      if (connectionTimeout) {
+        clearTimeout(connectionTimeout)
+      }
+      if (ws) {
+        ws.close()
+      }
     }
   }, [roomId, currentUserId, currentUserName])
 
