@@ -24,8 +24,8 @@ import {
   Download,
   FileSpreadsheet,
 } from "lucide-react"
+import PageLayout from "@/components/ui/page-layout"
 import Sidebar from "@/components/layout/sidebar"
-import Header from "@/components/layout/header"
 
 const equipmentOptions = [
   { id: "projector", name: "프로젝터", icon: Projector },
@@ -56,15 +56,7 @@ export default function ClassroomRegister() {
     { key: "rooms-register", label: "강의실 등록", href: "/attendance/register" },
   ]
 
-  const headerItems = [
-    { key: "account", label: "계정 등록", href: "/account" },
-    { key: "academic", label: "학적부", href: "/academic" },
-    { key: "courses", label: "과정 관리", href: "/courses" },
-    { key: "attendance", label: "강의실 관리", href: "/attendance" },
-    { key: "survey", label: "설문 평가 관리", href: "/survey" },
-    { key: "exam", label: "시험 및 성적", href: "/exam" },
-    { key: "permission", label: "권한 관리", href: "/permission" },
-  ]
+
 
   const [uploadedFile, setUploadedFile] = useState(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -155,19 +147,12 @@ export default function ClassroomRegister() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header
-        title="LMSync"
-        navItems={headerItems}
-        currentPage="attendance"
-        userInfo={{ name: "김철수", role: "학습자" }}
-      />
-
+    <PageLayout currentPage="attendance">
       <div className="flex">
         <Sidebar title="강의실 관리" menuItems={sidebarItems} currentPath="/attendance/register" />
 
-        <main className="flex-1 p-6">
-          <div className="max-w-4xl mx-auto">
+        <main className="flex-1 p-8">
+          <div className="max-w-7xl">
             <div className="mb-6">
               <h1 className="text-2xl font-bold mb-2" style={{ color: "#2C3E50" }}>
                 강의실 등록
@@ -503,6 +488,6 @@ export default function ClassroomRegister() {
           </div>
         </main>
       </div>
-    </div>
+    </PageLayout>
   )
 }
