@@ -2,6 +2,8 @@ package com.lmsync.finalProjectCourse.lnuyasha.entity;
 
 import java.time.LocalDateTime;
 
+import com.lmsync.finalProjectCourse.common.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TemplateQuestionEntity {
+public class TemplateQuestionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "templateQuestionId", columnDefinition = "VARCHAR(100)")
@@ -24,9 +26,6 @@ public class TemplateQuestionEntity {
     
     @Column(name = "templateQuestionScore", columnDefinition = "int")
     private int templateQuestionScore; // 배점점
-
-    private LocalDateTime createdAt;   // 생성일
-    private LocalDateTime updatedAt;   // 수정일
     
     @Column(name = "questionId", columnDefinition = "VARCHAR(100)")
     private String questionId; // 문제 UUID
