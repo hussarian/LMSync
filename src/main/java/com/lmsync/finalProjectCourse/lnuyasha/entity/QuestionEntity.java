@@ -1,6 +1,6 @@
 package com.lmsync.finalProjectCourse.lnuyasha.entity;
 
-import java.time.LocalDateTime;
+import com.lmsync.finalProjectCourse.common.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionEntity {
+public class QuestionEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "questionId", columnDefinition = "VARCHAR(100)")
@@ -33,9 +33,6 @@ public class QuestionEntity {
 
     @Column(name = "explanation", columnDefinition = "TEXT")
     private String explanation;        // 해설
-
-    private LocalDateTime createdAt;   // 생성일
-    private LocalDateTime updatedAt;   // 수정일
 
     @Column(name = "questionActive", columnDefinition = "int default 0")
     private int questionActive;        // 삭제 여부 (0: 미삭제, 1: 삭제 등)

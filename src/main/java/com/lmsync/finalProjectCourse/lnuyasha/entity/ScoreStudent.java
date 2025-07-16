@@ -1,5 +1,6 @@
 package com.lmsync.finalProjectCourse.lnuyasha.entity;
-import java.time.LocalDateTime;
+
+import com.lmsync.finalProjectCourse.common.BaseEntity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ScoreStudent {
+public class ScoreStudent extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "scoreStudentId", columnDefinition = "VARCHAR(100)")
@@ -26,9 +27,6 @@ public class ScoreStudent {
 
     @Column(name = "isChecked", columnDefinition = "int default 0")
     private int isChecked; // 학생 점수 확인 여부  (0: 미확인, 1: 확인)
-
-    private LocalDateTime createdAt; // 생성일
-    private LocalDateTime updatedAt; // 수정일
 
     @Column(name = "memberId", columnDefinition = "VARCHAR(100)")
     private String memberId; // 학생 UUID
