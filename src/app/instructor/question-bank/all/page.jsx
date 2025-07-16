@@ -11,7 +11,7 @@ export default function AllQuestionBankPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSubject, setSelectedSubject] = useState("")
   const [selectedType, setSelectedType] = useState("")
-  const [selectedDifficulty, setSelectedDifficulty] = useState("")
+
   const [selectedInstructor, setSelectedInstructor] = useState("")
   const [loading, setLoading] = useState(true)
   const [currentInstructor] = useState("김강사") // 현재 로그인한 강사명
@@ -45,7 +45,7 @@ export default function AllQuestionBankPage() {
       {
         id: 2,
         question: "React의 useState Hook에 대해 설명하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "웹프로그래밍",
         difficulty: "상",
         points: 10,
@@ -73,7 +73,7 @@ export default function AllQuestionBankPage() {
       {
         id: 4,
         question: "데이터베이스의 정규화에 대해 설명하고, 1NF, 2NF, 3NF의 차이점을 서술하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "데이터베이스",
         difficulty: "상",
         points: 15,
@@ -103,7 +103,7 @@ export default function AllQuestionBankPage() {
       {
         id: 6,
         question: "Java의 상속(Inheritance)과 다형성(Polymorphism)의 개념을 설명하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "자바프로그래밍",
         difficulty: "중",
         points: 12,
@@ -131,7 +131,7 @@ export default function AllQuestionBankPage() {
       {
         id: 8,
         question: "머신러닝에서 과적합(Overfitting)이란 무엇이며, 이를 방지하는 방법을 설명하시오.",
-        type: "주관식",
+        type: "서술형",
         subject: "머신러닝",
         difficulty: "상",
         points: 20,
@@ -160,33 +160,21 @@ export default function AllQuestionBankPage() {
         question.instructor.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesSubject = selectedSubject === "" || question.subject === selectedSubject
       const matchesType = selectedType === "" || question.type === selectedType
-      const matchesDifficulty = selectedDifficulty === "" || question.difficulty === selectedDifficulty
       const matchesInstructor = selectedInstructor === "" || question.instructor === selectedInstructor
 
-      return matchesSearch && matchesSubject && matchesType && matchesDifficulty && matchesInstructor
+      return matchesSearch && matchesSubject && matchesType && matchesInstructor
     })
 
     setFilteredQuestions(filtered)
-  }, [searchTerm, selectedSubject, selectedType, selectedDifficulty, selectedInstructor, questions])
+  }, [searchTerm, selectedSubject, selectedType, selectedInstructor, questions])
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case "상":
-        return "text-red-600 bg-red-50"
-      case "중":
-        return "text-yellow-600 bg-yellow-50"
-      case "하":
-        return "text-green-600 bg-green-50"
-      default:
-        return "text-gray-600 bg-gray-50"
-    }
-  }
+
 
   const getTypeColor = (type) => {
     switch (type) {
       case "객관식":
         return "text-blue-600 bg-blue-50"
-      case "주관식":
+      case "서술형":
         return "text-purple-600 bg-purple-50"
       case "코드형":
         return "text-orange-600 bg-orange-50"
@@ -372,20 +360,11 @@ export default function AllQuestionBankPage() {
                 >
                   <option value="">전체 유형</option>
                   <option value="객관식">객관식</option>
-                  <option value="주관식">주관식</option>
+                  <option value="서술형">서술형</option>
                   <option value="코드형">코드형</option>
                 </select>
 
-                <select
-                  value={selectedDifficulty}
-                  onChange={(e) => setSelectedDifficulty(e.target.value)}
-                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">전체 난이도</option>
-                  <option value="상">상</option>
-                  <option value="중">중</option>
-                  <option value="하">하</option>
-                </select>
+
               </div>
             </div>
 
@@ -406,11 +385,7 @@ export default function AllQuestionBankPage() {
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(question.type)}`}>
                             {question.type}
                           </span>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(question.difficulty)}`}
-                          >
-                            {question.difficulty}
-                          </span>
+
                           <span className="text-sm text-gray-600">{question.subject}</span>
                           <span className="text-sm text-gray-600">{question.points}점</span>
                           <div className="flex items-center gap-1 text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
@@ -522,7 +497,7 @@ export default function AllQuestionBankPage() {
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="객관식">객관식</option>
-                    <option value="주관식">주관식</option>
+                    <option value="서술형">서술형</option>
                     <option value="코드형">코드형</option>
                   </select>
                 </div>
@@ -537,28 +512,14 @@ export default function AllQuestionBankPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">난이도</label>
-                  <select
-                    value={editingQuestion?.difficulty || ""}
-                    onChange={(e) => handleEditChange("difficulty", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="하">하</option>
-                    <option value="중">중</option>
-                    <option value="상">상</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">배점</label>
-                  <input
-                    type="number"
-                    value={editingQuestion?.points || ""}
-                    onChange={(e) => handleEditChange("points", Number.parseInt(e.target.value))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">배점</label>
+                <input
+                  type="number"
+                  value={editingQuestion?.points || ""}
+                  onChange={(e) => handleEditChange("points", Number.parseInt(e.target.value))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
 
               <div>

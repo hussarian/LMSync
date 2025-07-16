@@ -17,9 +17,9 @@ export default function MyExamsPage() {
   const [examStatus, setExamStatus] = useState({})
 
   const sidebarItems = [
-    { key: "my-exams", label: "내 시험 관리", href: "/instructor/exam/my-exams" },
+    { key: "my-exams", label: "시험 관리", href: "/instructor/exam/my-exams" },
     { key: "question-management", label: "문제 관리", href: "/instructor/exam/question-bank" },
-    { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
+    { key: "history", label: "강의 성적", href: "/instructor/exam/lectures/history" },
   ]
 
   const stats = [

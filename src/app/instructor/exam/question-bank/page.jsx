@@ -11,14 +11,12 @@ export default function QuestionBankPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedSubject, setSelectedSubject] = useState("")
   const [selectedType, setSelectedType] = useState("")
-  const [selectedDifficulty, setSelectedDifficulty] = useState("")
   const [loading, setLoading] = useState(true)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [newQuestion, setNewQuestion] = useState({
     question: "",
     type: "객관식",
     subject: "",
-    difficulty: "중",
     points: 5,
     options: ["", "", "", ""],
     correctAnswer: 0,
@@ -29,9 +27,9 @@ export default function QuestionBankPage() {
   const [editingQuestion, setEditingQuestion] = useState(null)
 
   const sidebarItems = [
-    { key: "my-exam", label: "시험 관리", href: "/instructor/exam/my-exams" },
-    { key: "question-bank", label: "문제 은행", href: "/instructor/exam/question-bank" },
-    { key: "history", label: "내 강의 성적", href: "/instructor/exam/lectures/history" },
+    { key: "my-exams", label: "시험 관리", href: "/instructor/exam/my-exams" },
+    { key: "question-management", label: "문제 관리", href: "/instructor/exam/question-bank" },
+    { key: "history", label: "강의 성적", href: "/instructor/exam/lectures/history" },
   ]
 
   // 샘플 문제 데이터
@@ -42,7 +40,6 @@ export default function QuestionBankPage() {
         question: "다음 중 JavaScript의 데이터 타입이 아닌 것은?",
         type: "객관식",
         subject: "웹프로그래밍",
-        difficulty: "중",
         points: 5,
         options: ["string", "number", "boolean", "integer"],
         correctAnswer: 3,
@@ -55,7 +52,6 @@ export default function QuestionBankPage() {
         question: "React의 useState Hook에 대해 설명하시오.",
         type: "서술형",
         subject: "웹프로그래밍",
-        difficulty: "상",
         points: 10,
         createdDate: "2024-01-20",
         usageCount: 8,
@@ -66,7 +62,6 @@ export default function QuestionBankPage() {
         question: "다음 Python 코드의 출력 결과를 작성하시오.\n\nfor i in range(3):\n    print(i * 2)",
         type: "코드형",
         subject: "파이썬프로그래밍",
-        difficulty: "하",
         points: 8,
         createdDate: "2024-01-18",
         usageCount: 15,
@@ -77,7 +72,6 @@ export default function QuestionBankPage() {
         question: "데이터베이스의 정규화에 대해 설명하고, 1NF, 2NF, 3NF의 차이점을 서술하시오.",
         type: "서술형",
         subject: "데이터베이스",
-        difficulty: "상",
         points: 15,
         createdDate: "2024-01-22",
         usageCount: 6,
@@ -88,7 +82,6 @@ export default function QuestionBankPage() {
         question: "다음 중 CSS의 display 속성 값이 아닌 것은?",
         type: "객관식",
         subject: "웹프로그래밍",
-        difficulty: "하",
         points: 3,
         options: ["block", "inline", "flex", "visible"],
         correctAnswer: 3,
@@ -113,13 +106,13 @@ export default function QuestionBankPage() {
         question.subject.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesSubject = selectedSubject === "" || question.subject === selectedSubject
       const matchesType = selectedType === "" || question.type === selectedType
-      const matchesDifficulty = selectedDifficulty === "" || question.difficulty === selectedDifficulty
+      const matchesDifficulty = question.difficulty === "중" // 기본값으로 변경
 
       return matchesSearch && matchesSubject && matchesType && matchesDifficulty
     })
 
     setFilteredQuestions(filtered)
-  }, [searchTerm, selectedSubject, selectedType, selectedDifficulty, questions])
+  }, [searchTerm, selectedSubject, selectedType, questions])
 
   const handleDeleteQuestion = (questionId) => {
     if (confirm("정말로 이 문제를 삭제하시겠습니까?")) {
@@ -178,7 +171,6 @@ export default function QuestionBankPage() {
       question: "",
       type: "객관식",
       subject: "",
-      difficulty: "중",
       points: 5,
       options: ["", "", "", ""],
       correctAnswer: 0,
@@ -372,7 +364,7 @@ export default function QuestionBankPage() {
                 </select>
 
                 <select
-                  value={selectedDifficulty}
+                  value={question.difficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
