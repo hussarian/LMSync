@@ -23,8 +23,11 @@ export default function CourseRegisterPage() {
     schedule: "",
     location: "",
     prerequisites: "",
+    selectedDays: [],
+    startTime: "",
+    endTime: "",
     objectives: [""],
-    curriculum: [{ week: "", topic: "", description: "" }],
+    curriculum: [],
   })
 
   const [isSubjectModalOpen, setIsSubjectModalOpen] = useState(false)
@@ -46,13 +49,22 @@ export default function CourseRegisterPage() {
     { href: "/courses/register", label: "과정 등록", key: "course-register" },
     { href: "/courses/subjects", label: "과목 리스트", key: "subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록", key: "subject-register" },
-    { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
+    { href: "/courses/detail", label: "세부 과목 목록", key: "subject-detail" },
   ]
 
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
+    }))
+  }
+
+  const handleDayToggle = (day) => {
+    setFormData((prev) => ({
+      ...prev,
+      selectedDays: prev.selectedDays.includes(day)
+        ? prev.selectedDays.filter(d => d !== day)
+        : [...prev.selectedDays, day]
     }))
   }
 
@@ -82,28 +94,24 @@ export default function CourseRegisterPage() {
     }
   }
 
-  const handleCurriculumChange = (index, field, value) => {
-    const newCurriculum = [...formData.curriculum]
-    newCurriculum[index] = { ...newCurriculum[index], [field]: value }
-    setFormData((prev) => ({
-      ...prev,
-      curriculum: newCurriculum,
-    }))
-  }
+
 
   const addCurriculumItem = () => {
     setIsSubjectModalOpen(true)
   }
 
   const handleSelectSubject = (subject) => {
-    const newCurriculumItem = {
-      week: subject.duration,
-      topic: subject.name,
-      description: subject.description,
+    // 이미 선택된 과목인지 확인
+    const isAlreadySelected = formData.curriculum.some(item => item.id === subject.id)
+    
+    if (isAlreadySelected) {
+      alert("이미 선택된 과목입니다.")
+      return
     }
+    
     setFormData((prev) => ({
       ...prev,
-      curriculum: [...prev.curriculum, newCurriculumItem],
+      curriculum: [...prev.curriculum, subject],
     }))
     setIsSubjectModalOpen(false)
   }
@@ -113,17 +121,42 @@ export default function CourseRegisterPage() {
   }
 
   const removeCurriculumItem = (index) => {
-    if (formData.curriculum.length > 1) {
-      const newCurriculum = formData.curriculum.filter((_, i) => i !== index)
-      setFormData((prev) => ({
-        ...prev,
-        curriculum: newCurriculum,
-      }))
-    }
+    const newCurriculum = formData.curriculum.filter((_, i) => i !== index)
+    setFormData((prev) => ({
+      ...prev,
+      curriculum: newCurriculum,
+    }))
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
+    // 요일 선택 검증
+    if (formData.selectedDays.length === 0) {
+      alert("최소 하나의 요일을 선택해주세요.")
+      return
+    }
+    
+    // 시간 선택 검증
+    if (!formData.startTime || !formData.endTime) {
+      alert("시작 시간과 종료 시간을 모두 선택해주세요.")
+      return
+    }
+    
+    // 종료 시간이 시작 시간보다 늦은지 검증
+    const startHour = parseInt(formData.startTime.split(':')[0])
+    const endHour = parseInt(formData.endTime.split(':')[0])
+    if (endHour <= startHour) {
+      alert("종료 시간은 시작 시간보다 늦어야 합니다.")
+      return
+    }
+    
+    // 커리큘럼 검증
+    if (formData.curriculum.length === 0) {
+      alert("최소 하나의 과목을 선택해주세요.")
+      return
+    }
+    
     console.log("새 과정 등록 데이터:", formData)
     alert(`${formData.name} 과정이 성공적으로 등록되었습니다!`)
   }
@@ -142,8 +175,11 @@ export default function CourseRegisterPage() {
       schedule: "",
       location: "",
       prerequisites: "",
+      selectedDays: [],
+      startTime: "",
+      endTime: "",
       objectives: [""],
-      curriculum: [{ week: "", topic: "", description: "" }],
+      curriculum: [],
     })
   }
 
@@ -185,53 +221,92 @@ export default function CourseRegisterPage() {
 
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        카테고리 <span className="text-red-500">*</span>
+                        담당 강사 <span className="text-red-500">*</span>
                       </label>
                       <select
-                        value={formData.category}
-                        onChange={(e) => handleInputChange("category", e.target.value)}
+                        value={formData.teacher}
+                        onChange={(e) => handleInputChange("teacher", e.target.value)}
                         className="w-full px-3 py-2 border rounded-md"
                         style={{ borderColor: "#95A5A6" }}
                         required
                       >
-                        <option value="프로그래밍">프로그래밍</option>
-                        <option value="데이터사이언스">데이터사이언스</option>
-                        <option value="디자인">디자인</option>
-                        <option value="마케팅">마케팅</option>
-                        <option value="인프라">인프라</option>
-                        <option value="AI/ML">AI/ML</option>
-                        <option value="보안">보안</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
+                        <option value="김강사">김강사</option>
                       </select>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        담당 강사 <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        placeholder="강사명을 입력하세요"
-                        value={formData.instructor}
-                        onChange={(e) => handleInputChange("instructor", e.target.value)}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        과정 기간 <span className="text-red-500">*</span>
-                      </label>
-                      <Input
-                        placeholder="예: 6개월, 12주"
-                        value={formData.duration}
-                        onChange={(e) => handleInputChange("duration", e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
+                        요일 <span className="text-red-500">*</span>
+                      </label>
+                      <div className="flex flex-wrap gap-3 p-3 border rounded-md" style={{ borderColor: "#95A5A6" }}>
+                        {["월", "화", "수", "목", "금"].map((day) => (
+                          <label key={day} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={formData.selectedDays.includes(day)}
+                              onChange={() => handleDayToggle(day)}
+                              className="w-4 h-4 rounded"
+                              style={{ accentColor: "#1ABC9C" }}
+                            />
+                            <span className="text-sm" style={{ color: "#2C3E50" }}>
+                              {day}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                      {formData.selectedDays.length === 0 && (
+                        <p className="text-xs text-red-500 mt-1">최소 하나의 요일을 선택해주세요.</p>
+                      )}
+                    </div>
+                                             <div className="space-y-2">
+                         <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
+                           시작 시간 선택 <span className="text-red-500">*</span>
+                         </label>
+                         <select
+                           value={formData.startTime}
+                           onChange={(e) => handleInputChange("startTime", e.target.value)}
+                           className="w-full px-3 py-2 border rounded-md"
+                           style={{ borderColor: "#95A5A6" }}
+                           required
+                         >
+                           <option value="">시작 시간 선택</option>
+                           {Array.from({ length: 13 }, (_, i) => i + 9).map((hour) => (
+                             <option key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
+                               {hour.toString().padStart(2, '0')}:00
+                             </option>
+                           ))}
+                         </select>
+                       </div>
+                       <div className="space-y-2">
+                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
+                         종료 시간 선택 <span className="text-red-500">*</span>
+                       </label>
+                       <select
+                         value={formData.endTime}
+                         onChange={(e) => handleInputChange("endTime", e.target.value)}
+                         className="w-full px-3 py-2 border rounded-md"
+                         style={{ borderColor: "#95A5A6" }}
+                         required
+                       >
+                         <option value="">종료 시간 선택</option>
+                         {Array.from({ length: 13 }, (_, i) => i + 9).map((hour) => (
+                           <option key={hour} value={`${hour.toString().padStart(2, '0')}:00`}>
+                             {hour.toString().padStart(2, '0')}:00
+                           </option>
+                         ))}
+                       </select>
+                     </div>
+                  
+                  </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
                         시작일 <span className="text-red-500">*</span>
@@ -241,7 +316,7 @@ export default function CourseRegisterPage() {
                         value={formData.startDate}
                         onChange={(e) => handleInputChange("startDate", e.target.value)}
                         required
-                      />
+                        />
                     </div>
 
                     <div className="space-y-2">
@@ -253,9 +328,10 @@ export default function CourseRegisterPage() {
                         value={formData.endDate}
                         onChange={(e) => handleInputChange("endDate", e.target.value)}
                         required
-                      />
+                        />
                     </div>
-
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
                         최대 수강생 <span className="text-red-500">*</span>
@@ -266,35 +342,21 @@ export default function CourseRegisterPage() {
                         value={formData.maxStudents}
                         onChange={(e) => handleInputChange("maxStudents", e.target.value)}
                         required
-                      />
+                        />
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        수강료 <span className="text-red-500">*</span>
+                        최소 수강생 <span className="text-red-500">*</span>
                       </label>
                       <Input
-                        placeholder="예: 1,200,000원"
-                        value={formData.price}
-                        onChange={(e) => handleInputChange("price", e.target.value)}
+                        type="number"
+                        placeholder="30"
+                        value={formData.maxStudents}
+                        onChange={(e) => handleInputChange("maxStudents", e.target.value)}
                         required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        수업 일정
-                      </label>
-                      <Input
-                        placeholder="예: 월, 수, 금 19:00-22:00"
-                        value={formData.schedule}
-                        onChange={(e) => handleInputChange("schedule", e.target.value)}
-                      />
+                        />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
@@ -306,77 +368,10 @@ export default function CourseRegisterPage() {
                         onChange={(e) => handleInputChange("location", e.target.value)}
                       />
                     </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                        수강 조건
-                      </label>
-                      <Input
-                        placeholder="예: 컴퓨터 기초 지식"
-                        value={formData.prerequisites}
-                        onChange={(e) => handleInputChange("prerequisites", e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                      과정 설명 <span className="text-red-500">*</span>
-                    </label>
-                    <Textarea
-                      placeholder="과정에 대한 상세한 설명을 입력하세요"
-                      value={formData.description}
-                      onChange={(e) => handleInputChange("description", e.target.value)}
-                      rows={4}
-                      required
-                    />
                   </div>
                 </CardContent>
               </Card>
 
-              {/* 학습 목표 */}
-              <Card>
-                <CardHeader>
-                  <CardTitle style={{ color: "#2C3E50" }}>학습 목표</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {formData.objectives.map((objective, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <span className="text-sm font-medium" style={{ color: "#1ABC9C" }}>
-                        {index + 1}.
-                      </span>
-                      <Input
-                        placeholder="학습 목표를 입력하세요"
-                        value={objective}
-                        onChange={(e) => handleObjectiveChange(index, e.target.value)}
-                        className="flex-1"
-                      />
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline"
-                        onClick={() => removeObjective(index)}
-                        disabled={formData.objectives.length === 1}
-                        className="bg-transparent"
-                        style={{ borderColor: "#e74c3c", color: "#e74c3c" }}
-                      >
-                        <Minus className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  ))}
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={addObjective}
-                    className="bg-transparent"
-                    style={{ borderColor: "#1ABC9C", color: "#1ABC9C" }}
-                  >
-                    <Plus className="w-4 h-4 mr-2" />
-                    학습 목표 추가
-                  </Button>
-                </CardContent>
-              </Card>
 
               {/* 커리큘럼 */}
               <Card>
@@ -384,63 +379,63 @@ export default function CourseRegisterPage() {
                   <CardTitle style={{ color: "#2C3E50" }}>커리큘럼</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {formData.curriculum.map((item, index) => (
-                    <div
-                      key={index}
-                      className="p-4 border rounded-lg space-y-4"
-                      style={{ borderColor: "#e0e0e0", backgroundColor: "#f8f9fa" }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-medium" style={{ color: "#2C3E50" }}>
-                          커리큘럼 {index + 1}
-                        </h4>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => removeCurriculumItem(index)}
-                          disabled={formData.curriculum.length === 1}
-                          className="bg-transparent"
-                          style={{ borderColor: "#e74c3c", color: "#e74c3c" }}
-                        >
-                          <Minus className="w-4 h-4" />
-                        </Button>
+                  {formData.curriculum.length === 0 ? (
+                    <div className="text-center py-8">
+                      <div
+                        className="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full"
+                        style={{ backgroundColor: "#f0f0f0" }}
+                      >
+                        <span className="text-2xl">📚</span>
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                            주차
-                          </label>
-                          <Input
-                            placeholder="예: 1-2주"
-                            value={item.week}
-                            onChange={(e) => handleCurriculumChange(index, "week", e.target.value)}
-                          />
-                        </div>
-                        <div className="space-y-2 md:col-span-2">
-                          <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                            주제
-                          </label>
-                          <Input
-                            placeholder="주제를 입력하세요"
-                            value={item.topic}
-                            onChange={(e) => handleCurriculumChange(index, "topic", e.target.value)}
-                          />
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium" style={{ color: "#2C3E50" }}>
-                          설명
-                        </label>
-                        <Textarea
-                          placeholder="상세 설명을 입력하세요"
-                          value={item.description}
-                          onChange={(e) => handleCurriculumChange(index, "description", e.target.value)}
-                          rows={2}
-                        />
-                      </div>
+                      <h3 className="text-lg font-semibold mb-2" style={{ color: "#2C3E50" }}>
+                        선택된 과목이 없습니다
+                      </h3>
+                      <p style={{ color: "#95A5A6" }}>아래 버튼을 클릭하여 과목을 선택해주세요.</p>
                     </div>
-                  ))}
+                  ) : (
+                    formData.curriculum.map((subject, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border rounded-lg space-y-3"
+                        style={{ borderColor: "#e0e0e0", backgroundColor: "#f8f9fa" }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <span
+                              className="px-2 py-1 rounded text-xs font-medium"
+                              style={{ backgroundColor: "#1ABC9C", color: "white" }}
+                            >
+                              과목 {index + 1}
+                            </span>
+                            <span
+                              className="px-2 py-1 rounded text-xs font-medium"
+                              style={{ backgroundColor: "#f0f0f0", color: "#95A5A6" }}
+                            >
+                              {subject.duration}
+                            </span>
+                          </div>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => removeCurriculumItem(index)}
+                            className="bg-transparent"
+                            style={{ borderColor: "#e74c3c", color: "#e74c3c" }}
+                          >
+                            <Minus className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <div>
+                          <h4 className="font-semibold mb-2" style={{ color: "#2C3E50" }}>
+                            {subject.name}
+                          </h4>
+                          <p className="text-sm" style={{ color: "#95A5A6" }}>
+                            {subject.description}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
                   <Button
                     type="button"
                     size="sm"
@@ -450,7 +445,7 @@ export default function CourseRegisterPage() {
                     style={{ borderColor: "#1ABC9C", color: "#1ABC9C" }}
                   >
                     <Plus className="w-4 h-4 mr-2" />
-                    등록된 과목에서 선택하여 추가
+                    과목 선택하여 추가
                   </Button>
                 </CardContent>
               </Card>
@@ -500,7 +495,7 @@ export default function CourseRegisterPage() {
       {/* 과목 선택 모달 */}
       {isSubjectModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto">
+          <Card className="w-full max-w-4xl mx-4 max-h-[80vh] overflow-y-auto bg-white">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle style={{ color: "#2C3E50" }}>등록된 과목에서 선택</CardTitle>

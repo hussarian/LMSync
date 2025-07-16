@@ -7,7 +7,7 @@ export default function SubjectDetailLoading() {
     { href: "/courses/register", label: "과정 등록", key: "course-register" },
     { href: "/courses/subjects", label: "과목 리스트", key: "subject-list" },
     { href: "/courses/subjects/register", label: "과목 등록", key: "subject-register" },
-    { href: "/courses/subjects/detail", label: "세부 과목 등록", key: "subject-detail" },
+    { href: "/courses/detail", label: "세부 과목 목록", key: "subject-detail" },,
   ]
 
   return (

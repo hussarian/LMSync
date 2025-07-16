@@ -50,6 +50,99 @@ export default function AssignmentDetailPage() {
 
       setAssignment(emptyAssignment)
       setSubmissions(emptySubmissions)
+      // 샘플 과제 상세 데이터
+      const sampleAssignment = {
+        id: Number.parseInt(params.id),
+        title: "웹 프로그래밍 기초 과제 1",
+        description:
+          "HTML과 CSS를 활용한 개인 포트폴리오 웹사이트 제작\n\n요구사항:\n1. 반응형 디자인 적용\n2. 최소 3개 페이지 구성\n3. CSS Grid 또는 Flexbox 사용\n4. 개인 정보 및 포트폴리오 내용 포함",
+        courseName: "웹 프로그래밍 기초",
+        courseCode: "WEB101",
+        dueDate: "2024-01-20T23:59:00",
+        createdDate: "2024-01-10T09:00:00",
+        totalStudents: 30,
+        submissionCount: 28,
+        gradingStatus: "completed",
+        maxScore: 100,
+        averageScore: 85.5,
+        attachments: [
+          { id: 1, name: "과제_요구사항.pdf", size: "2.5MB", type: "pdf" },
+          { id: 2, name: "참고_템플릿.zip", size: "15.2MB", type: "zip" },
+        ],
+      }
+
+      // 샘플 제출 현황 데이터
+      const sampleSubmissions = [
+        {
+          id: 1,
+          studentId: "2024001",
+          studentName: "김철수",
+          email: "kim@example.com",
+          submittedAt: "2024-01-18T14:30:00",
+          status: "submitted",
+          score: 92,
+          graded: true,
+          files: [
+            { id: 1, name: "portfolio_김철수.zip", size: "8.5MB", type: "zip" },
+            { id: 2, name: "README.txt", size: "1.2KB", type: "txt" },
+          ],
+          feedback: "전반적으로 우수한 작품입니다. 반응형 디자인이 잘 구현되었습니다.",
+        },
+        {
+          id: 2,
+          studentId: "2024002",
+          studentName: "이영희",
+          email: "lee@example.com",
+          submittedAt: "2024-01-19T16:45:00",
+          status: "submitted",
+          score: 88,
+          graded: true,
+          files: [{ id: 3, name: "my_portfolio.zip", size: "12.3MB", type: "zip" }],
+          feedback: "창의적인 디자인이 돋보입니다. CSS 구조를 더 체계적으로 정리하면 좋겠습니다.",
+        },
+        {
+          id: 3,
+          studentId: "2024003",
+          studentName: "박민수",
+          email: "park@example.com",
+          submittedAt: "2024-01-20T22:15:00",
+          status: "submitted",
+          score: null,
+          graded: false,
+          files: [
+            { id: 4, name: "portfolio_final.zip", size: "6.8MB", type: "zip" },
+            { id: 5, name: "설명서.docx", size: "245KB", type: "docx" },
+          ],
+          feedback: null,
+        },
+        {
+          id: 4,
+          studentId: "2024004",
+          studentName: "정수진",
+          email: "jung@example.com",
+          submittedAt: null,
+          status: "not_submitted",
+          score: null,
+          graded: false,
+          files: [],
+          feedback: null,
+        },
+        {
+          id: 5,
+          studentId: "2024005",
+          studentName: "최동현",
+          email: "choi@example.com",
+          submittedAt: "2024-01-20T23:45:00",
+          status: "late",
+          score: 75,
+          graded: true,
+          files: [{ id: 6, name: "late_submission.zip", size: "4.2MB", type: "zip" }],
+          feedback: "지각 제출이지만 기본 요구사항은 ��족했습니다.",
+        },
+      ]
+
+      setAssignment(sampleAssignment)
+      setSubmissions(sampleSubmissions)
       setLoading(false)
     }
 

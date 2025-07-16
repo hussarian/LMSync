@@ -1,46 +1,130 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Search, Eye, BarChart3, Users, Calendar, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Header from "@/components/layout/header"
 import Sidebar from "@/components/layout/sidebar"
-import { fetchInstructorLectures, transformLectureData, handleApiError } from "../../courses/api"
 
 export default function InstructorSurveyLecturesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedStatus, setSelectedStatus] = useState("all")
   const [selectedPeriod, setSelectedPeriod] = useState("all")
-  const [lectures, setLectures] = useState([])
-  const [loading, setLoading] = useState(true)
 
   // 사이드바 메뉴 항목
   const sidebarItems = [
     { key: "survey-lectures", label: "담당 강의 설문", href: "/instructor/survey/lectures" },
   ]
 
-  useEffect(() => {
-    const userData = localStorage.getItem("currentUser")
-    if (userData) {
-      const parsed = JSON.parse(userData)
-      const memberId = Number(parsed.memberId)
-      if (isNaN(memberId)) {
-        setLoading(false)
-        return
-      }
-      fetchInstructorLectures(memberId)
-        .then((data) => {
-          const lecturesData = transformLectureData(data)
-          setLectures(lecturesData)
-        })
-        .catch((err) => {
-          handleApiError(err)
-          setLectures([])
-        })
-        .finally(() => setLoading(false))
-    }
-  }, [])
+  // 담당 강의 설문 데이터
+  const [lectures, setLectures] = useState([
+    {
+      id: 1,
+      code: "CS101",
+      name: "JavaScript 기초",
+      period: "2024-01학기",
+      startDate: "2024-01-15",
+      endDate: "2024-03-15",
+      students: 25,
+      surveyActive: true,
+      surveyStartDate: "2024-03-10",
+      surveyEndDate: "2024-03-20",
+      responses: 18,
+      responseRate: 72,
+      averageScore: 4.2,
+      status: "진행중",
+      category: "프로그래밍",
+      room: "A101",
+      schedule: "월,수,금 09:00-12:00",
+      completionRate: 85,
+      satisfaction: 4.3,
+    },
+    {
+      id: 2,
+      code: "CS102",
+      name: "React 심화",
+      period: "2024-01학기",
+      startDate: "2024-02-01",
+      endDate: "2024-04-01",
+      students: 20,
+      surveyActive: false,
+      surveyStartDate: "2024-04-05",
+      surveyEndDate: "2024-04-15",
+      responses: 0,
+      responseRate: 0,
+      averageScore: 0,
+      status: "설문 예정",
+      category: "프로그래밍",
+      room: "B201",
+      schedule: "화,목 14:00-17:00",
+      completionRate: 90,
+      satisfaction: 0,
+    },
+    {
+      id: 3,
+      code: "WEB201",
+      name: "웹 개발 실무",
+      period: "2023-02학기",
+      startDate: "2023-09-01",
+      endDate: "2023-12-15",
+      students: 22,
+      surveyActive: false,
+      surveyStartDate: "2023-12-10",
+      surveyEndDate: "2023-12-20",
+      responses: 20,
+      responseRate: 91,
+      averageScore: 4.5,
+      status: "완료",
+      category: "프로그래밍",
+      room: "C301",
+      schedule: "월,수,금 13:00-16:00",
+      completionRate: 95,
+      satisfaction: 4.6,
+    },
+    {
+      id: 4,
+      code: "DB301",
+      name: "데이터베이스 설계",
+      period: "2023-02학기",
+      startDate: "2023-09-15",
+      endDate: "2023-12-30",
+      students: 18,
+      surveyActive: false,
+      surveyStartDate: "2023-12-25",
+      surveyEndDate: "2024-01-05",
+      responses: 16,
+      responseRate: 89,
+      averageScore: 4.1,
+      status: "완료",
+      category: "데이터베이스",
+      room: "D102",
+      schedule: "화,목 10:00-13:00",
+      completionRate: 88,
+      satisfaction: 4.2,
+    },
+    {
+      id: 5,
+      code: "AI401",
+      name: "인공지능 기초",
+      period: "2024-01학기",
+      startDate: "2024-03-01",
+      endDate: "2024-05-15",
+      students: 15,
+      surveyActive: true,
+      surveyStartDate: "2024-05-10",
+      surveyEndDate: "2024-05-20",
+      responses: 8,
+      responseRate: 53,
+      averageScore: 3.9,
+      status: "진행중",
+      category: "인공지능",
+      room: "E201",
+      schedule: "월,수 15:00-18:00",
+      completionRate: 78,
+      satisfaction: 3.8,
+    },
+  ])
 
   // 강의 상세보기
   const handleViewDetails = (lectureId) => {
@@ -96,8 +180,6 @@ export default function InstructorSurveyLecturesPage() {
     if (score >= 3.5) return "text-yellow-600"
     return "text-red-600"
   }
-
-  if (loading) return <div>로딩 중...</div>
 
   return (
     <div className="min-h-screen bg-gray-50">

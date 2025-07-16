@@ -16,13 +16,13 @@ export default function LoginForm() {
 
   const router = useRouter()
 
-  // 더미 계정 정보 (memberId: 숫자 추가)
+  // 더미 계정 정보
   const dummyAccounts = {
-    admin: { id: "admin", password: "admin123", name: "시스템관리자", role: "admin", memberId: 1 },
-    director: { id: "director", password: "director123", name: "이지원", role: "director", memberId: 2 },
-    staff: { id: "staff", password: "staff123", name: "김직원", role: "staff", memberId: 3 },
-    instructor: { id: "instructor", password: "instructor123", name: "박강사", role: "instructor", memberId: 8 },
-    student: { id: "student", password: "student123", name: "최학생", role: "student", memberId: 20 },
+    admin: { id: "admin", password: "admin123", name: "시스템관리자", role: "admin" },
+    director: { id: "director", password: "director123", name: "이지원", role: "director" },
+    staff: { id: "staff", password: "staff123", name: "김직원", role: "staff" },
+    instructor: { id: "instructor", password: "instructor123", name: "박강사", role: "instructor" },
+    student: { id: "student", password: "student123", name: "최학생", role: "student" },
   }
 
   const handleLogin = (e) => {
@@ -39,7 +39,6 @@ export default function LoginForm() {
           name: selectedAccount.name,
           role: selectedAccount.role,
           userType: userType,
-          memberId: selectedAccount.memberId, // 숫자형 memberId 저장
         }),
       )
 

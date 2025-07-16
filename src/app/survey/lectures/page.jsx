@@ -1,18 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Search, Eye, ToggleLeft, ToggleRight, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import Sidebar from "@/components/layout/sidebar"
-import { fetchInstructorLectures, transformLectureData, handleApiError } from "../../instructor/courses/api"
 
 export default function SurveyLecturesPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedStatus, setSelectedStatus] = useState("all")
   const [selectedCategory, setSelectedCategory] = useState("all")
-  const [lectures, setLectures] = useState([])
-  const [loading, setLoading] = useState(true)
 
   // 사이드바 메뉴 항목
   const menuItems = [
@@ -21,27 +18,89 @@ export default function SurveyLecturesPage() {
     { key: "survey-templates", label: "템플릿 목록", href: "/survey/templates" },
   ]
 
-  useEffect(() => {
-    const userData = localStorage.getItem("currentUser")
-    if (userData) {
-      const parsed = JSON.parse(userData)
-      const memberId = Number(parsed.memberId)
-      if (isNaN(memberId)) {
-        setLoading(false)
-        return
-      }
-      fetchInstructorLectures(memberId)
-        .then((data) => {
-          const lecturesData = transformLectureData(data)
-          setLectures(lecturesData)
-        })
-        .catch((err) => {
-          handleApiError(err)
-          setLectures([])
-        })
-        .finally(() => setLoading(false))
-    }
-  }, [])
+  // 샘플 강의 데이터
+  const [lectures, setLectures] = useState([
+    {
+      id: 1,
+      code: "CS101",
+      name: "JavaScript 기초",
+      instructor: "김강사",
+      category: "프로그래밍",
+      startDate: "2024-01-15",
+      endDate: "2024-03-15",
+      students: 25,
+      maxStudents: 30,
+      template: "기본 강의 평가",
+      templateId: "TPL001",
+      surveyActive: true,
+      surveyResponses: 18,
+      status: "진행중",
+    },
+    {
+      id: 2,
+      code: "CS102",
+      name: "React 심화",
+      instructor: "이강사",
+      category: "프로그래밍",
+      startDate: "2024-02-01",
+      endDate: "2024-04-01",
+      students: 20,
+      maxStudents: 25,
+      template: "실습 중심 평가",
+      templateId: "TPL002",
+      surveyActive: false,
+      surveyResponses: 0,
+      status: "진행중",
+    },
+    {
+      id: 3,
+      code: "DS201",
+      name: "데이터 분석 기초",
+      instructor: "박강사",
+      category: "데이터사이언스",
+      startDate: "2024-01-20",
+      endDate: "2024-03-20",
+      students: 15,
+      maxStudents: 20,
+      template: "이론 및 실습 평가",
+      templateId: "TPL003",
+      surveyActive: true,
+      surveyResponses: 12,
+      status: "진행중",
+    },
+    {
+      id: 4,
+      code: "UI301",
+      name: "UI/UX 디자인",
+      instructor: "���강사",
+      category: "디자인",
+      startDate: "2023-11-01",
+      endDate: "2024-01-01",
+      students: 18,
+      maxStudents: 20,
+      template: "창작 활동 평가",
+      templateId: "TPL004",
+      surveyActive: false,
+      surveyResponses: 18,
+      status: "완료",
+    },
+    {
+      id: 5,
+      code: "ML401",
+      name: "머신러닝 실무",
+      instructor: "정강사",
+      category: "인공지능",
+      startDate: "2024-03-01",
+      endDate: "2024-05-01",
+      students: 12,
+      maxStudents: 15,
+      template: "프로젝트 기반 평가",
+      templateId: "TPL005",
+      surveyActive: true,
+      surveyResponses: 8,
+      status: "진행중",
+    },
+  ])
 
   // 설문 활성/비활성 토글
   const toggleSurvey = (lectureId) => {
@@ -78,8 +137,6 @@ export default function SurveyLecturesPage() {
   const totalLectures = lectures.length
   const activeSurveys = lectures.filter((l) => l.surveyActive).length
   const completedSurveys = lectures.filter((l) => l.status === "완료" && l.surveyResponses > 0).length
-
-  if (loading) return <div>로딩 중...</div>
 
   return (
     <div className="flex min-h-screen bg-gray-50">

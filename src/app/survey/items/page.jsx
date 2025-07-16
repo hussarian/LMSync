@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Plus, Eye, Edit, Trash2, FileText, Star, Clock, Users, BarChart3, X } from "lucide-react"
+import PageLayout from "@/components/ui/page-layout"
 
 export default function SurveyItemsPage() {
   const [currentPath] = useState("/survey/items")
@@ -97,7 +98,7 @@ export default function SurveyItemsPage() {
     },
     {
       id: 4,
-      question: "과정 전반에 대한 만족���는 어떠신가요?",
+      question: "과정 전반에 대한 만족도는 어떠신가요?",
       category: "전반적 만족도",
       type: "5점 척도",
       usageCount: 67,
@@ -229,184 +230,179 @@ export default function SurveyItemsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header currentPage="survey" userRole="staff" userName="관리자" />
-
+    <PageLayout currentPage="survey">
       <div className="flex">
         <Sidebar title="설문 평가 관리" menuItems={sidebarMenuItems} currentPath={currentPath} />
-
         <main className="flex-1 p-6">
-          <div className="max-w-7xl mx-auto">
-            {/* 페이지 헤더 */}
-            <div className="mb-6">
-              <h1 className="text-2xl font-bold mb-2" style={{ color: "#2C3E50" }}>
-                평가 항목 관리
-              </h1>
-              <p className="text-gray-600">설문에 사용할 ��문들을 관리합니다.</p>
-            </div>
-
-            {/* 통계 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-              {stats.map((stat, index) => (
-                <Card key={index} className="border-l-4 hover:shadow-lg transition-shadow">
-                  <div
-                    className="border-l-4 absolute left-0 top-0 bottom-0 w-1"
-                    style={{ backgroundColor: stat.color }}
-                  />
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
-                        <p className="text-3xl font-bold" style={{ color: "#e74c3c" }}>
-                          {stat.value}
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">{stat.description}</p>
-                      </div>
-                      <div className="p-3 rounded-full" style={{ backgroundColor: "#fdf2f2" }}>
-                        <stat.icon className="w-6 h-6" style={{ color: "#e74c3c" }} />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-
-            {/* 검색 및 필터 */}
-            <Card className="mb-6">
-              <CardContent className="p-6">
-                <div className="flex flex-col md:flex-row gap-4">
-                  <div className="flex-1">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                      <Input
-                        placeholder="질문 내용이나 카테고리로 검색..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <select
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                    >
-                      {categories.map((category) => (
-                        <option key={category} value={category}>
-                          {category}
-                        </option>
-                      ))}
-                    </select>
-                    <Button
-                      onClick={() => setShowTemplateModal(true)}
-                      className="bg-green-600 hover:bg-green-700 text-white"
-                    >
-                      <FileText className="w-4 h-4 mr-2" />
-                      템플릿 만들기
-                    </Button>
-                    <Button onClick={() => setShowCreateModal(true)} className="hover:bg-red-700 text-white bg-red-600">
-                      <Plus className="w-4 h-4 mr-2" />새 질문 추가
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 질문 목록 */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5" style={{ color: "#e74c3c" }} />
-                    질문 목록 ({filteredItems.length}개)
-                  </span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-center py-3 px-4 font-medium text-gray-600 w-12">선택</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-600">질문 내용</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-600">카테고리</th>
-                        <th className="text-left py-3 px-4 font-medium text-gray-600">유형</th>
-                        <th className="text-center py-3 px-4 font-medium text-gray-600">사용 횟수</th>
-                        <th className="text-center py-3 px-4 font-medium text-gray-600">최근 사용</th>
-                        <th className="text-center py-3 px-4 font-medium text-gray-600">상태</th>
-                        <th className="text-center py-3 px-4 font-medium text-gray-600">관리</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredItems.map((item) => (
-                        <tr key={item.id} className="border-b hover:bg-gray-50">
-                          <td className="py-3 px-4 text-center">
-                            <input
-                              type="checkbox"
-                              checked={selectedQuestions.includes(item.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedQuestions([...selectedQuestions, item.id])
-                                } else {
-                                  setSelectedQuestions(selectedQuestions.filter((id) => id !== item.id))
-                                }
-                              }}
-                              className="w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-                            />
-                          </td>
-                          <td className="py-3 px-4">
-                            <div>
-                              <p className="font-medium text-sm">{item.question}</p>
-                              <p className="text-xs text-gray-500 mt-1">{item.description}</p>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4">
-                            <Badge variant="outline" className="text-xs">
-                              {item.category}
-                            </Badge>
-                          </td>
-                          <td className="py-3 px-4">
-                            <Badge className={`text-xs ${getTypeColor(item.type)}`}>{item.type}</Badge>
-                          </td>
-                          <td className="py-3 px-4 text-center">
-                            <div className="flex items-center justify-center gap-1">
-                              <Users className="w-4 h-4 text-gray-400" />
-                              <span className="text-sm font-medium">{item.usageCount}</span>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4 text-center text-sm text-gray-600">{item.lastUsed}</td>
-                          <td className="py-3 px-4 text-center">
-                            <Badge className={`text-xs ${getStatusColor(item.status)}`}>{item.status}</Badge>
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex justify-center space-x-2">
-                              <Button size="sm" variant="ghost" onClick={() => handleView(item.id)} className="p-1">
-                                <Eye className="w-4 h-4" style={{ color: "#e74c3c" }} />
-                              </Button>
-                              <Button size="sm" variant="ghost" onClick={() => handleEdit(item.id)} className="p-1">
-                                <Edit className="w-4 h-4" style={{ color: "#f39c12" }} />
-                              </Button>
-                              <Button size="sm" variant="ghost" onClick={() => handleDelete(item.id)} className="p-1">
-                                <Trash2 className="w-4 h-4" style={{ color: "#e74c3c" }} />
-                              </Button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {filteredItems.length === 0 && (
-                  <div className="text-center py-8">
-                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">검색 조건에 맞는 질문이 없습니다.</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+          {/* 페이지 헤더 */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold mb-2" style={{ color: "#2C3E50" }}>
+              평가 항목 관리
+            </h1>
+            <p className="text-gray-600">설문에 사용할 질문들을 관리합니다.</p>
           </div>
+
+          {/* 통계 카드 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {stats.map((stat, index) => (
+              <Card key={index} className="border-l-4 hover:shadow-lg transition-shadow">
+                <div
+                  className="border-l-4 absolute left-0 top-0 bottom-0 w-1"
+                  style={{ backgroundColor: stat.color }}
+                />
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600 mb-1">{stat.title}</p>
+                      <p className="text-3xl font-bold" style={{ color: "#e74c3c" }}>
+                        {stat.value}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">{stat.description}</p>
+                    </div>
+                    <div className="p-3 rounded-full" style={{ backgroundColor: "#fdf2f2" }}>
+                      <stat.icon className="w-6 h-6" style={{ color: "#e74c3c" }} />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* 검색 및 필터 */}
+          <Card className="mb-6">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                    <Input
+                      placeholder="질문 내용이나 카테고리로 검색..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                  <Button
+                    onClick={() => setShowTemplateModal(true)}
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    템플릿 만들기
+                  </Button>
+                  <Button onClick={() => setShowCreateModal(true)} className="hover:bg-red-700 text-white bg-red-600">
+                    <Plus className="w-4 h-4 mr-2" />새 질문 추가
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* 질문 목록 */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span className="flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5" style={{ color: "#e74c3c" }} />
+                  질문 목록 ({filteredItems.length}개)
+                </span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b">
+                      <th className="text-center py-3 px-4 font-medium text-gray-600 w-12">선택</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">질문 내용</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">카테고리</th>
+                      <th className="text-left py-3 px-4 font-medium text-gray-600">유형</th>
+                      <th className="text-center py-3 px-4 font-medium text-gray-600">사용 횟수</th>
+                      <th className="text-center py-3 px-4 font-medium text-gray-600">최근 사용</th>
+                      <th className="text-center py-3 px-4 font-medium text-gray-600">상태</th>
+                      <th className="text-center py-3 px-4 font-medium text-gray-600">관리</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredItems.map((item) => (
+                      <tr key={item.id} className="border-b hover:bg-gray-50">
+                        <td className="py-3 px-4 text-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedQuestions.includes(item.id)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedQuestions([...selectedQuestions, item.id])
+                              } else {
+                                setSelectedQuestions(selectedQuestions.filter((id) => id !== item.id))
+                              }
+                            }}
+                            className="w-4 h-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+                          />
+                        </td>
+                        <td className="py-3 px-4">
+                          <div>
+                            <p className="font-medium text-sm">{item.question}</p>
+                            <p className="text-xs text-gray-500 mt-1">{item.description}</p>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <Badge variant="outline" className="text-xs">
+                            {item.category}
+                          </Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <Badge className={`text-xs ${getTypeColor(item.type)}`}>{item.type}</Badge>
+                        </td>
+                        <td className="py-3 px-4 text-center">
+                          <div className="flex items-center justify-center gap-1">
+                            <Users className="w-4 h-4 text-gray-400" />
+                            <span className="text-sm font-medium">{item.usageCount}</span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-center text-sm text-gray-600">{item.lastUsed}</td>
+                        <td className="py-3 px-4 text-center">
+                          <Badge className={`text-xs ${getStatusColor(item.status)}`}>{item.status}</Badge>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex justify-center space-x-2">
+                            <Button size="sm" variant="ghost" onClick={() => handleView(item.id)} className="p-1">
+                              <Eye className="w-4 h-4" style={{ color: "#e74c3c" }} />
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => handleEdit(item.id)} className="p-1">
+                              <Edit className="w-4 h-4" style={{ color: "#f39c12" }} />
+                            </Button>
+                            <Button size="sm" variant="ghost" onClick={() => handleDelete(item.id)} className="p-1">
+                              <Trash2 className="w-4 h-4" style={{ color: "#e74c3c" }} />
+                            </Button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {filteredItems.length === 0 && (
+                <div className="text-center py-8">
+                  <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">검색 조건에 맞는 질문이 없습니다.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </main>
       </div>
       {/* 새 질문 생성 모달 */}
@@ -564,7 +560,7 @@ export default function SurveyItemsPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* 템���릿 정보 */}
+              {/* 템플릿 정보 */}
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-gray-800">템플릿 정보</h3>
 
@@ -677,6 +673,6 @@ export default function SurveyItemsPage() {
           </div>
         </div>
       )}
-    </div>
+    </PageLayout>
   )
 }
