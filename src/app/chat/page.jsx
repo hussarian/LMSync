@@ -7,9 +7,13 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import PageLayout from "@/components/ui/page-layout"
 
+import { useStompChatRoom } from "@/hooks/useStompSocket.jsx"
+import { chatService } from "@/lib/chatService.jsx"
+
 export default function ChatPage() {
   const [newMessage, setNewMessage] = useState("")
-  const [activeChat, setActiveChat] = useState("김선생님")
+  const [activeChat, setActiveChat] = useState("")
+  const [activeRoomId, setActiveRoomId] = useState("")
   const messagesEndRef = useRef(null)
 
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -21,63 +25,20 @@ export default function ChatPage() {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [chatRoomName, setChatRoomName] = useState("")
 
-  const [chatList, setChatList] = useState([
-    { name: "김선생님", lastMessage: "좋습니다! 그럼 15분 후에...", time: "14:33", unread: 0 },
-    { name: "박원장님", lastMessage: "내일 회의 시간 확인 부탁드립니다.", time: "13:45", unread: 2 },
-    { name: "이강사님", lastMessage: "수업 자료 공유드렸습니다.", time: "12:20", unread: 1 },
-    { name: "전체 공지", lastMessage: "다음 주 휴무 안내", time: "11:30", unread: 0 },
-  ])
+  const [chatList, setChatList] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const dummyUsers = [
-    // 학생 데이터
-    { id: "20240001", name: "김학생", type: "student", department: "컴퓨터공학과" },
-    { id: "20240002", name: "이학생", type: "student", department: "경영학과" },
-    { id: "20240003", name: "박민수", type: "student", department: "전자공학과" },
-    { id: "20240004", name: "최지영", type: "student", department: "디자인학과" },
-    { id: "20240005", name: "정수현", type: "student", department: "영어영문학과" },
-    { id: "20240006", name: "한소영", type: "student", department: "수학과" },
-    { id: "20240007", name: "윤태호", type: "student", department: "물리학과" },
-    { id: "20240008", name: "강미래", type: "student", department: "화학과" },
-
-    // 교직원 데이터
-    { id: "T001", name: "박교수", type: "teacher", department: "수학과" },
-    { id: "T002", name: "최강사", type: "teacher", department: "영어과" },
-    { id: "T003", name: "김원장", type: "teacher", department: "행정부" },
-    { id: "T004", name: "이선생", type: "teacher", department: "컴퓨터공학과" },
-    { id: "T005", name: "정교수", type: "teacher", department: "경영학과" },
-    { id: "T006", name: "한부장", type: "teacher", department: "학생부" },
-    { id: "T007", name: "윤강사", type: "teacher", department: "디자인학과" },
-    { id: "T008", name: "송교수", type: "teacher", department: "전자공학과" },
-  ]
-
-  const [allMessages, setAllMessages] = useState({
-    김선생님: [
-      {
-        id: 1,
-        sender: "김선생님",
-        content: "안녕하세요! 오늘 수업 준비는 어떻게 되고 있나요?",
-        time: "14:30",
-        isMe: false,
-      },
-      {
-        id: 2,
-        sender: "나",
-        content: "네, 준비 완료했습니다. 학생들 출석 확인도 마쳤어요.",
-        time: "14:32",
-        isMe: true,
-      },
-      {
-        id: 3,
-        sender: "김선생님",
-        content: "좋습니다! 그럼 15분 후에 시작하겠습니다.",
-        time: "14:33",
-        isMe: false,
-      },
-    ],
-  })
-
-  // messages 변수를 현재 활성 채팅의 메시지로 설정
-  const messages = allMessages[activeChat] || []
+  // STOMP WebSocket 훅 사용
+  const currentUserId = "current_user"
+  const currentUserName = "나"
+  const { 
+    messages, 
+    typingUsers, 
+    onlineUsers, 
+    sendMessage, 
+    handleTyping, 
+    isConnected 
+  } = useStompChatRoom(activeRoomId, currentUserId, currentUserName)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -87,15 +48,55 @@ export default function ChatPage() {
     scrollToBottom()
   }, [messages])
 
-  const handleSearch = () => {
+  // 채팅방 목록 가져오기
+  const fetchChatRooms = async () => {
+    try {
+      setLoading(true)
+      const result = await chatService.getChatRooms()
+      
+      if (result && result.success && result.data) {
+        setChatList(result.data)
+        // 첫 번째 채팅방을 기본으로 선택
+        if (result.data.length > 0 && !activeChat) {
+          setActiveChat(result.data[0].name)
+          setActiveRoomId(result.data[0].id)
+        }
+      } else {
+        console.warn('채팅방 목록을 가져올 수 없습니다:', result?.error || '알 수 없는 오류')
+        setChatList([])
+      }
+    } catch (error) {
+      console.error('채팅방 목록 가져오기 오류:', error)
+      setChatList([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // 컴포넌트 마운트 시 채팅방 목록 가져오기
+  useEffect(() => {
+    fetchChatRooms()
+  }, [])
+
+  const handleSearch = async () => {
     if (searchQuery.trim()) {
-      const filtered = dummyUsers.filter((user) => {
-        const matchesId = user.id.toLowerCase().includes(searchQuery.toLowerCase())
-        const matchesName = user.name.toLowerCase().includes(searchQuery.toLowerCase())
-        const matchesType = searchType === "all" || user.type === searchType
-        return (matchesId || matchesName) && matchesType
-      })
-      setSearchResults(filtered)
+      try {
+        const result = await chatService.searchUsers(searchQuery, searchType)
+        
+        if (result && result.success && result.data && result.data.users) {
+          setSearchResults(result.data.users)
+        } else {
+          console.warn('사용자 검색 결과를 가져올 수 없습니다:', result?.error || '알 수 없는 오류')
+          setSearchResults([])
+          // 사용자에게 알림 (선택사항)
+          if (result?.error && result.error.includes('백엔드 서버')) {
+            alert('백엔드 서버에 연결할 수 없습니다. 서버가 실행 중인지 확인해주세요.')
+          }
+        }
+      } catch (error) {
+        console.error('사용자 검색 오류:', error)
+        setSearchResults([])
+      }
     } else {
       setSearchResults([])
     }
@@ -120,26 +121,31 @@ export default function ChatPage() {
     }
   }
 
-  const handleFinalCreateChatRoom = () => {
-    // 새 채팅방을 chatList에 추가
-    const newChatRoom = {
-      name: chatRoomName,
-      lastMessage: "채팅방이 생성되었습니다.",
-      time: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }),
-      unread: 0,
-      members: selectedMembers,
+  const handleFinalCreateChatRoom = async () => {
+    try {
+      const participantIds = selectedMembers.map(member => member.id)
+      
+      const result = await chatService.createChatRoom(
+        selectedMembers.length === 1 ? 'individual' : 'group',
+        chatRoomName,
+        participantIds
+      )
+      
+      if (result.success) {
+        // 새 채팅방을 chatList에 추가
+        setChatList((prev) => [result.data, ...prev])
+        
+        // 새로 생성된 채팅방을 활성화
+        setActiveChat(result.data.name)
+        setActiveRoomId(result.data.id)
+
+        console.log("채팅방 생성 완료:", result.data)
+      } else {
+        console.error('채팅방 생성 실패:', result.error)
+      }
+    } catch (error) {
+      console.error('채팅방 생성 오류:', error)
     }
-
-    // chatList 상태를 업데이트하기 위해 setChatList 함수 추가 필요
-    setChatList((prev) => [newChatRoom, ...prev])
-
-    // 새로 생성된 채팅방을 활성화
-    setActiveChat(chatRoomName)
-
-    console.log("최종 채팅방 생성:", {
-      name: chatRoomName,
-      members: selectedMembers,
-    })
 
     setIsModalOpen(false)
     setShowConfirmModal(false)
@@ -151,22 +157,15 @@ export default function ChatPage() {
 
   const handleSendMessage = (e) => {
     e.preventDefault()
-    if (newMessage.trim()) {
-      const newMsg = {
-        id: Date.now(),
-        sender: "나",
-        content: newMessage,
-        time: new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" }),
-        isMe: true,
-      }
-
-      setAllMessages((prev) => ({
-        ...prev,
-        [activeChat]: [...(prev[activeChat] || []), newMsg],
-      }))
-
+    if (newMessage.trim() && activeRoomId) {
+      sendMessage(newMessage)
       setNewMessage("")
     }
+  }
+
+  const handleChatSelect = (chat) => {
+    setActiveChat(chat.name)
+    setActiveRoomId(chat.id)
   }
 
   return (
@@ -191,52 +190,71 @@ export default function ChatPage() {
               </CardHeader>
               <CardContent className="p-0">
                 <div className="space-y-1">
-                  {chatList.map((chat, index) => (
-                    <div
-                      key={index}
-                      className={`p-3 cursor-pointer hover:bg-gray-50 border-b ${
-                        activeChat === chat.name ? "bg-gray-100" : ""
-                      }`}
-                      onClick={() => setActiveChat(chat.name)}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <div className="flex justify-between items-center mb-1">
-                            <h4 className="font-medium text-sm" style={{ color: "#2C3E50" }}>
-                              {chat.name}
-                            </h4>
-                            <span className="text-xs" style={{ color: "#95A5A6" }}>
-                              {chat.time}
-                            </span>
-                          </div>
-                          <p className="text-xs truncate" style={{ color: "#95A5A6" }}>
-                            {chat.lastMessage}
-                          </p>
-                        </div>
-                        {chat.unread > 0 && (
-                          <span
-                            className="ml-2 px-2 py-1 rounded-full text-xs text-white"
-                            style={{ backgroundColor: "#1ABC9C" }}
-                          >
-                            {chat.unread}
-                          </span>
-                        )}
-                      </div>
+                  {loading ? (
+                    <div className="p-4 text-center">
+                      <p className="text-sm" style={{ color: "#95A5A6" }}>채팅방 목록을 불러오는 중...</p>
                     </div>
-                  ))}
+                  ) : !chatList || chatList.length === 0 ? (
+                    <div className="p-4 text-center">
+                      <p className="text-sm" style={{ color: "#95A5A6" }}>채팅방이 없습니다.</p>
+                    </div>
+                  ) : (
+                    chatList.map((chat, index) => (
+                      <div
+                        key={chat.id || index}
+                        className={`p-3 cursor-pointer hover:bg-gray-50 border-b ${
+                          activeChat === chat.name ? "bg-gray-100" : ""
+                        }`}
+                        onClick={() => handleChatSelect(chat)}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex justify-between items-center mb-1">
+                              <h4 className="font-medium text-sm" style={{ color: "#2C3E50" }}>
+                                {chat.name}
+                              </h4>
+                              <span className="text-xs" style={{ color: "#95A5A6" }}>
+                                {chat.time}
+                              </span>
+                            </div>
+                            <p className="text-xs truncate" style={{ color: "#95A5A6" }}>
+                              {chat.lastMessage}
+                            </p>
+                          </div>
+                          {chat.unread > 0 && (
+                            <span
+                              className="ml-2 px-2 py-1 rounded-full text-xs text-white"
+                              style={{ backgroundColor: "#1ABC9C" }}
+                            >
+                              {chat.unread}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
 
             {/* 채팅 화면 */}
-            <Card className="lg:col-span-3 flex flex-col">
+            <Card className="lg:col-span-2 flex flex-col">
               <CardHeader className="border-b">
                 <div className="flex items-center justify-between">
-                  <CardTitle style={{ color: "#2C3E50" }}>{activeChat}</CardTitle>
+                  <div>
+                    <CardTitle style={{ color: "#2C3E50" }}>{activeChat || "채팅"}</CardTitle>
+                    {onlineUsers.length > 0 && (
+                      <p className="text-xs mt-1" style={{ color: "#95A5A6" }}>
+                        온라인 {onlineUsers.length}명
+                      </p>
+                    )}
+                  </div>
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: "#1ABC9C" }}></div>
+                    <div 
+                      className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`}
+                    ></div>
                     <span className="text-sm" style={{ color: "#95A5A6" }}>
-                      온라인
+                      {isConnected ? "연결됨" : "연결 끊김"}
                     </span>
                   </div>
                 </div>
@@ -245,32 +263,76 @@ export default function ChatPage() {
               {/* 메시지 영역 */}
               <CardContent className="flex-1 overflow-y-auto p-4">
                 <div className="space-y-4">
-                  {messages.map((message) => (
-                    <div key={message.id} className={`flex ${message.isMe ? "justify-end" : "justify-start"}`}>
-                      <div className={`max-w-xs lg:max-w-md ${message.isMe ? "order-2" : "order-1"}`}>
-                        {!message.isMe && (
-                          <p className="text-xs mb-1" style={{ color: "#95A5A6" }}>
-                            {message.sender}
+                  {messages.length === 0 ? (
+                    <div className="text-center py-8">
+                      <p className="text-sm" style={{ color: "#95A5A6" }}>
+                        {activeChat ? "메시지를 입력해보세요!" : "채팅방을 선택해주세요."}
+                      </p>
+                    </div>
+                  ) : (
+                    messages.map((message) => (
+                      <div key={message.id} className={`flex ${message.isMe ? "justify-end" : "justify-start"}`}>
+                        <div className={`max-w-xs lg:max-w-md ${message.isMe ? "order-2" : "order-1"}`}>
+                          {!message.isMe && message.sender && (
+                            <p className="text-xs mb-1" style={{ color: "#95A5A6" }}>
+                              {message.sender.name}
+                            </p>
+                          )}
+                          <div
+                            className={`px-4 py-2 rounded-lg ${
+                              message.type === 'system' 
+                                ? 'bg-gray-200 text-center text-xs' 
+                                : message.isMe 
+                                  ? "text-white" 
+                                  : "bg-gray-100"
+                            }`}
+                            style={{
+                              backgroundColor: message.type === 'system' 
+                                ? '#f8f9fa' 
+                                : message.isMe 
+                                  ? "#1ABC9C" 
+                                  : "#f1f2f6",
+                              color: message.type === 'system' 
+                                ? '#6c757d' 
+                                : message.isMe 
+                                  ? "white" 
+                                  : "#2C3E50",
+                            }}
+                          >
+                            <p className="text-sm">{message.content}</p>
+                          </div>
+                          <p
+                            className={`text-xs mt-1 ${message.isMe ? "text-right" : "text-left"}`}
+                            style={{ color: "#95A5A6" }}
+                          >
+                            {new Date(message.time).toLocaleTimeString('ko-KR', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
                           </p>
-                        )}
-                        <div
-                          className={`px-4 py-2 rounded-lg ${message.isMe ? "text-white" : "bg-gray-100"}`}
-                          style={{
-                            backgroundColor: message.isMe ? "#1ABC9C" : "#f1f2f6",
-                            color: message.isMe ? "white" : "#2C3E50",
-                          }}
-                        >
-                          <p className="text-sm">{message.content}</p>
                         </div>
-                        <p
-                          className={`text-xs mt-1 ${message.isMe ? "text-right" : "text-left"}`}
-                          style={{ color: "#95A5A6" }}
-                        >
-                          {message.time}
+                      </div>
+                    ))
+                  )}
+                  
+                  {/* 타이핑 표시 */}
+                  {typingUsers.length > 0 && (
+                    <div className="flex justify-start">
+                      <div className="max-w-xs lg:max-w-md">
+                        <p className="text-xs mb-1" style={{ color: "#95A5A6" }}>
+                          {typingUsers.map(user => user.userName).join(', ')}님이 입력 중...
                         </p>
+                        <div className="px-4 py-2 rounded-lg bg-gray-100">
+                          <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  )}
+                  
                   <div ref={messagesEndRef} />
                 </div>
               </CardContent>
@@ -287,8 +349,13 @@ export default function ChatPage() {
                   <Input
                     placeholder="메시지를 입력하세요..."
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    onChange={(e) => {
+                      setNewMessage(e.target.value)
+                      handleTyping()
+                    }}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(e)}
                     className="flex-1"
+                    disabled={!activeRoomId}
                   />
                   <Button type="submit" size="sm" className="text-white" style={{ backgroundColor: "#1ABC9C" }}>
                     <Send className="w-4 h-4" />
@@ -296,13 +363,51 @@ export default function ChatPage() {
                 </form>
               </div>
             </Card>
+
+            {/* 온라인 사용자 목록 */}
+            <Card className="lg:col-span-1">
+              <CardHeader>
+                <CardTitle style={{ color: "#2C3E50" }}>온라인 사용자</CardTitle>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="space-y-1">
+                  {onlineUsers.length === 0 ? (
+                    <div className="p-4 text-center">
+                      <p className="text-sm" style={{ color: "#95A5A6" }}>온라인 사용자가 없습니다.</p>
+                    </div>
+                  ) : (
+                    onlineUsers.map((user) => (
+                      <div
+                        key={user.userId}
+                        className="p-3 border-b"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium" style={{ color: "#2C3E50" }}>
+                              {user.userName}
+                            </p>
+                            <p className="text-xs" style={{ color: "#95A5A6" }}>
+                              {new Date(user.joinedAt).toLocaleTimeString('ko-KR', { 
+                                hour: '2-digit', 
+                                minute: '2-digit' 
+                              })}에 참여
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
         {/* 채팅방 만들기 모달 */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md mx-4">
+            <Card className="w-full max-w-md mx-4 bg-white">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle style={{ color: "#2C3E50" }}>새 채팅방 만들기</CardTitle>
@@ -464,7 +569,7 @@ export default function ChatPage() {
         {/* 채팅방 생성 확인 모달 */}
         {showConfirmModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <Card className="w-full max-w-md mx-4">
+            <Card className="w-full max-w-md mx-4 bg-white">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle style={{ color: "#2C3E50" }}>채팅방 생성 확인</CardTitle>
