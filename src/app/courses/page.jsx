@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
+import React from "react"
 
+// 과정(코스) 메인 페이지 컴포넌트
 export default function CoursesPage() {
   const router = useRouter()
 
@@ -11,6 +13,7 @@ export default function CoursesPage() {
     router.push("/courses/list")
   }, [router])
 
-  return null
+  // 렌더링: 간단한 안내 메시지
+  return <div>과정(코스) 메인 페이지입니다.</div>
 }
  
