@@ -174,7 +174,7 @@ export default function SubjectsListPage() {
                         style={{ color: "#95A5A6" }}
                       />
                       <Input
-                        placeholder="과목명, 과목코드, 세부과목명 으로 검색..."
+                        placeholder="과목명, 세부과목명 으로 검색..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="pl-10"

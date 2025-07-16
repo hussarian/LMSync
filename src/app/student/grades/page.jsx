@@ -174,9 +174,9 @@ export default function StudentGradesPage() {
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         과목명
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         과목코드
-                      </th>
+                      </th> */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         학점
                       </th>
@@ -184,17 +184,17 @@ export default function StudentGradesPage() {
                         담당강사
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        중간고사
+                        객관식
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        기말고사
+                        서술형
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        과제
+                        코드형형
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         출석
-                      </th>
+                      </th> */}
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         최종성적
                       </th>
@@ -206,13 +206,13 @@ export default function StudentGradesPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="font-medium text-gray-900">{course.name}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{course.code}</td>
+                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{course.code}</td> */}
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.credits}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.instructor}</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.midterm}점</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.final}점</td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.assignments}점</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.attendance}점</td>
+                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{course.attendance}점</td> */}
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span
                             className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getGradeColor(course.finalGrade)}`}

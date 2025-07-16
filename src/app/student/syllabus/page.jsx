@@ -249,7 +249,7 @@ export default function StudentSyllabusPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="과목명, 과목코드, 강사명으로 검색..."
+                    placeholder="과목명, 강사명으로 검색..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -370,9 +370,9 @@ export default function StudentSyllabusPage() {
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">기본 정보</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                  <div>
+                  {/* <div>
                     <span className="font-medium">과목코드:</span> {selectedCourse.courseCode}
-                  </div>
+                  </div> */}
                   <div>
                     <span className="font-medium">담당교수:</span> {selectedCourse.instructor}
                   </div>

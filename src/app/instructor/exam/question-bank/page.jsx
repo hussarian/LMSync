@@ -363,7 +363,7 @@ export default function QuestionBankPage() {
                   <option value="코드형">코드형</option>
                 </select>
 
-                <select
+                {/* <select
                   value={question.difficulty}
                   onChange={(e) => setSelectedDifficulty(e.target.value)}
                   className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -372,7 +372,7 @@ export default function QuestionBankPage() {
                   <option value="상">상</option>
                   <option value="중">중</option>
                   <option value="하">하</option>
-                </select>
+                </select> */}
               </div>
             </div>
 
@@ -514,7 +514,7 @@ export default function QuestionBankPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">난이도</label>
                     <select
                       value={newQuestion.difficulty}
@@ -525,7 +525,7 @@ export default function QuestionBankPage() {
                       <option value="중">중</option>
                       <option value="상">상</option>
                     </select>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>
@@ -656,7 +656,7 @@ export default function QuestionBankPage() {
                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">난이도</label>
                     <select
                       value={editingQuestion.difficulty}
@@ -667,7 +667,7 @@ export default function QuestionBankPage() {
                       <option value="중">중</option>
                       <option value="상">상</option>
                     </select>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div>

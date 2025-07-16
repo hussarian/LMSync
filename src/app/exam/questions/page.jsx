@@ -210,7 +210,7 @@ export default function ExamQuestionsPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="과목명, 과목코드, 강사명으로 검색..."
+                    placeholder="과목명, 강사명으로 검색..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -229,7 +229,7 @@ export default function ExamQuestionsPage() {
                 <option value="데이터베이스">데이터베이스</option>
                 <option value="데이터 분석">데이터 분석</option>
               </select>
-              <select
+              {/* <select
                 value={selectedDifficulty}
                 onChange={(e) => setSelectedDifficulty(e.target.value)}
                 className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
@@ -238,7 +238,7 @@ export default function ExamQuestionsPage() {
                 <option value="easy">쉬움</option>
                 <option value="medium">보통</option>
                 <option value="hard">어려움</option>
-              </select>
+              </select> */}
             </div>
           </div>
 
@@ -276,7 +276,8 @@ export default function ExamQuestionsPage() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredSubjects.map((subject) => (
-                    <Fragment key={course.id}>
+                    // <Fragment key={course.id}>
+                    <>
                       <tr key={subject.id} className="hover:bg-gray-50">
                         <td className="py-3 px-4">
                           <div>
@@ -379,7 +380,8 @@ export default function ExamQuestionsPage() {
                           </td>
                         </tr>
                       )}
-                    </Fragment>
+                    </>
+                    // </Fragment>
                   ))}
                 </tbody>
               </table>

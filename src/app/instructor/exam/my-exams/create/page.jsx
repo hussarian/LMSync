@@ -730,7 +730,7 @@ export default function CreateExamPage() {
                     <option value="백엔드 개발">백엔드 개발</option>
                     <option value="데이터베이스">데이터베이스</option>
                   </select>
-                  <select
+                  {/* <select
                     value={bankSelectedDifficulty}
                     onChange={(e) => setBankSelectedDifficulty(e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -739,7 +739,7 @@ export default function CreateExamPage() {
                     <option value="쉬움">쉬움</option>
                     <option value="보통">보통</option>
                     <option value="어려움">어려움</option>
-                  </select>
+                  </select> */}
                 </div>
               </div>
 
