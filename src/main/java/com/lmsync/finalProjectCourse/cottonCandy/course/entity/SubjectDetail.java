@@ -15,32 +15,37 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** 과목 그룹 엔티티 */
+/** 세부 과목 정보 엔티티 */
 @Entity
-@Table(name = "subGroup")
+@Table(name = "subjectDetail")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SubGroupEntity extends BaseEntity {
+public class SubjectDetail extends BaseEntity {
 
     @Id
     @Column(length = 100)
-    private String subGroupId; // 과목 그룹 ID
+    private String subDetailId; // 과목 상세 ID
 
     @Column(length = 100, nullable = false)
-    private String courseId; // 강의 ID
+    private String educationId; // 교육과정 ID
+
+    @Column(nullable = false)
+    private int subDetailName; // 과목명
 
     @Column(length = 100, nullable = false)
-    private String subjectId; // 과목 ID
+    private String subDetailInfo; // 과목 정보
+
+    @Column(nullable = false)
+    private int subDetailActive; // 활성화 상태
 
     // UUID 자동 생성
     @PrePersist
     public void generateUUID() {
-        if (this.subGroupId == null) {
-            this.subGroupId = UUID.randomUUID().toString();
+        if (this.subDetailId == null) {
+            this.subDetailId = UUID.randomUUID().toString();
         }
     }
 }
-

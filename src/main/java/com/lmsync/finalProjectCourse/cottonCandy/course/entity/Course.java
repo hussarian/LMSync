@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** 강의 정보 엔티티 */
+/** 과정 정보 엔티티 */
 @Entity
 @Table(name="course")
 @Getter
@@ -26,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CourseEntity extends BaseEntity{
+public class Course extends BaseEntity{
     
     @Id
     @Column(length = 100)

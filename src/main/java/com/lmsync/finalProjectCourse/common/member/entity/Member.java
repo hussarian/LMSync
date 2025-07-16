@@ -23,7 +23,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MmemberEntity {
+public class Member {
     
     @Id
     @Column(length = 100)
