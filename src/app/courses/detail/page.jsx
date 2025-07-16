@@ -184,7 +184,7 @@ export default function DetailSubjectsListPage() {
               </CardContent>
             </Card>
 
-            {/* 세부 과목 통계 카드: 전체 개수 등 */}
+            {/* 세부 과목 통계 카드: 전체 개수  */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
               <Card>
                 <CardContent className="p-4 text-center">
